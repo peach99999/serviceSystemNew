@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.jantd.modules.demo.test.mapper.JantdDemoMapper">
+
+	<!-- 根据用户名查询 -->
+	<select id="getDemoByName" resultType="cn.jantd.modules.demo.test.entity.JantdDemo">
+		select * from  demo  where name = #{name}
+	</select>
+
+	<insert id="saveBatch">
+		insert into demo (
+		id,
+		name,
+		sex,
+		age,
+		create_time
+		) VALUES
+		<foreach collection ="objs" item="obj" separator =",">
+			(
+			#{obj.id,jdbcType=VARCHAR},
+			#{obj.name,jdbcType=VARCHAR},
+			#{obj.sex,jdbcType=VARCHAR},
+			#{obj.age,jdbcType=INTEGER},
+			#{obj.createTime,jdbcType=DATE}
+			)
+		</foreach >
+	</insert>
+</mapper>
