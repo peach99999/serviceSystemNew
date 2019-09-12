@@ -2,6 +2,7 @@ package cn.jantd.modules.communication.service;
 
 import cn.jantd.core.api.vo.Result;
 import cn.jantd.modules.communication.dto.communication.QueryServicesDTO;
+import cn.jantd.modules.communication.dto.communication.ServiceDetailDTO;
 import cn.jantd.modules.communication.param.RegisterParam;
 
 /**
@@ -32,4 +33,12 @@ public interface IServitizationService {
      * @return
      */
     Result<String> registerService(RegisterParam registerParam);
+
+    /**
+     * 查询单个服务
+     *
+     * @param serviceId
+     * @return
+     */
+    Result<ServiceDetailDTO> getServiceDetail(String serviceId);
 }

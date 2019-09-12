@@ -2,6 +2,7 @@ package cn.jantd.modules.communication.controller;
 
 import cn.jantd.core.api.vo.Result;
 import cn.jantd.modules.communication.dto.communication.QueryServicesDTO;
+import cn.jantd.modules.communication.dto.communication.ServiceDetailDTO;
 import cn.jantd.modules.communication.param.RegisterParam;
 import cn.jantd.modules.communication.service.IServitizationService;
 import io.swagger.annotations.Api;
@@ -39,6 +40,12 @@ public class ServitizationController {
     @ApiOperation("注册一个服务")
     public Result<String> registerService(@RequestBody RegisterParam registerParam) {
         return servitizationService.registerService(registerParam);
+    }
+
+    @GetMapping(value = "/ger-service-detail")
+    @ApiOperation("查询单个服务")
+    public Result<ServiceDetailDTO> getServiceDetail(@RequestParam(name = "serviceId") String serviceId) {
+        return servitizationService.getServiceDetail(serviceId);
     }
 
 }

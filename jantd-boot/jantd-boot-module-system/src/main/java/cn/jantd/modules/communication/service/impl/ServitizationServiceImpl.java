@@ -5,6 +5,7 @@ import cn.jantd.core.properties.CommunicationProperties;
 import cn.jantd.modules.communication.constant.CommunicationMsgCode;
 import cn.jantd.modules.communication.dto.communication.QueryServicesDTO;
 import cn.jantd.modules.communication.dto.communication.RegisterServicesDTO;
+import cn.jantd.modules.communication.dto.communication.ServiceDetailDTO;
 import cn.jantd.modules.communication.param.RegisterParam;
 import cn.jantd.modules.communication.service.IServitizationService;
 import com.alibaba.fastjson.JSON;
@@ -42,7 +43,7 @@ public class ServitizationServiceImpl implements IServitizationService {
      */
     public static final String RESPONSE_CODE_FAILED = "1";
 
-    @Autowired(required=true)
+    @Autowired(required = true)
     private RestTemplate restTemplate;
 
     @Autowired
@@ -101,6 +102,12 @@ public class ServitizationServiceImpl implements IServitizationService {
         return result;
     }
 
+    /**
+     * 注册一个服务
+     *
+     * @param registerParam
+     * @return
+     */
     @Override
     public Result<String> registerService(RegisterParam registerParam) {
         Result<String> result = new Result<>();
@@ -130,13 +137,13 @@ public class ServitizationServiceImpl implements IServitizationService {
             return result;
         }
         RegisterServicesDTO registerServicesDTO = JSON.parseObject(registerServiceResult.getBody(), RegisterServicesDTO.class);
-        // 返回响应结果描述
-        String msg = registerServicesDTO.getError_description();
         // 结果状态码
         String code = registerServicesDTO.getCode();
-        logger.info("结果状态码:[{}]响应结果描述[{}]", code, msg);
+        // 返回响应结果描述
+        String msg = registerServicesDTO.getError_description();
         // 若结果状态码不等于0,返回错误信息
         if (!RESPONSE_CODE_SUCCESS.equals(code)) {
+            logger.info("结果状态码:[{}]响应结果描述[{}]", code, msg);
             result.error500(msg);
             return result;
         }
@@ -146,17 +153,55 @@ public class ServitizationServiceImpl implements IServitizationService {
         return result;
     }
 
+    /**
+     * 查询单个服务
+     *
+     * @param serviceId
+     * @return
+     */
+    @Override
+    public Result<ServiceDetailDTO> getServiceDetail(String serviceId) {
+        Result<ServiceDetailDTO> result = new Result<>();
+        // 查询所有服接口url
+        String url = communicationProperties.getGetServiceDetail();
+        logger.info("查询某个节点上的服务开始，接口名[{}]:", url);
+        ResponseEntity<String> serviceDetailResult = restTemplate.getForEntity(url, String.class, serviceId);
+        // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
+        if (!HttpStatus.OK.equals(serviceDetailResult.getStatusCode())) {
+            result.error500(CommunicationMsgCode.GET_SERVICE_DETAIL_FAILED.getMsg());
+            return result;
+        }
+
+        ServiceDetailDTO serviceDetailDTO = JSON.parseObject(serviceDetailResult.getBody(), ServiceDetailDTO.class);
+
+        // 结果状态码
+        String code = serviceDetailDTO.getCode();
+        // 若结果状态码不等于0,返回错误信息
+        if (!RESPONSE_CODE_SUCCESS.equals(code)) {
+            // 返回响应结果描述
+            String msg = serviceDetailDTO.getError_description();
+            logger.info("结果状态码:[{}]响应结果描述[{}]", code, msg);
+            result.error500(msg);
+            return result;
+        }
+        result.setResult(serviceDetailDTO);
+        result.setSuccess(true);
+        result.success("操作成功");
+        return result;
+    }
+
     private boolean isFailed(Result<QueryServicesDTO> result, ResponseEntity<String> queryNodeServicesResult) {
         // 解析请求返回结果
         QueryServicesDTO queryAllServicesDTO = JSON.parseObject(queryNodeServicesResult.getBody(), QueryServicesDTO.class);
 
-        // 返回响应结果描述
-        String msg = queryAllServicesDTO.getError_description();
         // 结果状态码
         String code = queryAllServicesDTO.getCode();
-        logger.info("结果状态码:[{}]响应结果描述[{}]", code, msg);
+
         // 若结果状态码不等于0,返回错误信息
         if (!RESPONSE_CODE_SUCCESS.equals(code)) {
+            // 返回响应结果描述
+            String msg = queryAllServicesDTO.getError_description();
+            logger.info("结果状态码:[{}]响应结果描述[{}]", code, msg);
             result.error500(msg);
             return true;
         }

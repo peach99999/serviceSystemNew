@@ -18,5 +18,6 @@ public class CommunicationMsgCode {
     public static final BaseMsgCode QUERY_ALL_SERVICES_FAILED = new BaseMsgCode("1200011", "查询所有服务失败!");
     public static final BaseMsgCode QUERY_NODE_SERVICES_FAILED = new BaseMsgCode("1200021", "查询某个节点上的服务失败!");
     public static final BaseMsgCode REGISTER_SERVICE_FAILED = new BaseMsgCode("1200031", "注册服务失败!");
+    public static final BaseMsgCode GET_SERVICE_DETAIL_FAILED = new BaseMsgCode("1200041", "查询单个服务失败!");
 
 }

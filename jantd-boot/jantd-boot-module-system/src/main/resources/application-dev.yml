@@ -110,45 +110,45 @@ jantd :
 communication:
   # 服务块接口
   # 查询所有服务
-  queryAllServices: https://xxxxxxx/v1/services
+  queryAllServices: https://119.57.73.147:3306/v1/services
   # 查询某个节点上的服务
-  queryNodeServices: https://xxxxxxx/v1/services?nodeid={node_id}
+  queryNodeServices: https://119.57.73.147:3306/v1/services?nodeid={node_id}
   # 查询某个节点上的服务
-  registerService: https://xxxxxxx/v1/services/register
+  registerService: https://119.57.73.147:3306/v1/services/register
   # 查询单个服务
-  getServiceDetail: https://xxxxxxx/v1/service/{service_id}
+  getServiceDetail: https://119.57.73.147:3306/v1/service/{service_id}
   # 删除一个服务
-  deleteService: https://xxxxxxx/v1/service/{service_id}
+  deleteService: https://119.57.73.147:3306/v1/service/{service_id}
   # 更新服务信息
-  updateService: https://xxxxxxx/v1/service/{service_id}
+  updateService: https://119.57.73.147:3306/v1/service/{service_id}
   # 启动一个服务
-  startService: https://xxxxxxx/v1/service/{service_id}/start
+  startService: https://119.57.73.147:3306/v1/service/{service_id}/start
   # 停止一个服务
-  stopService: https://xxxxxxx/v1/service/{service_id}/stop
+  stopService: https://119.57.73.147:3306/v1/service/{service_id}/stop
   # 部署一个服务
-  deployService: https://xxxxxxx/v1/service/{service_id}/deploy
+  deployService: https://119.57.73.147:3306/v1/service/{service_id}/deploy
   # 移除一个服务的部署
-  removedeploy: https://xxxxxxx/v1/service/{service_id}/removedeploy
+  removedeploy: https://119.57.73.147:3306/v1/service/{service_id}/removedeploy
   # 服务文件上传
-  uploadServiceFile: https://xxxxxxx/v1/upload
+  uploadServiceFile: https://119.57.73.147:3306/v1/upload
   #节点接口
   # 查询所有节点
-  queryAllNodes: https://xxxxxxx/v1/nodes
+  queryAllNodes: https://119.57.73.147:3306/v1/nodes
   # 查询节点信息
-  queryNodeDetail: https://xxxxxxx/v1/node/{node_id}
+  queryNodeDetail: https://119.57.73.147:3306/v1/node/{node_id}
   # 统计
   # 总体统计信息
-  aggregateStatistics: https://xxxxxxx/v1/stats
+  aggregateStatistics: https://119.57.73.147:3306/v1/stats
   # 单个服务统计
-  individualServiceStatistics: https://xxxxxxx/v1/stats/service/{service_id}
+  individualServiceStatistics: https://119.57.73.147:3306/v1/stats/service/{service_id}
   # 单个节点统计信息
-  individualNodeStatistics: https://xxxxxxx/v1/stats/node/{node_id}
+  individualNodeStatistics: https://119.57.73.147:3306/v1/stats/node/{node_id}
   # 单个节点的单个服务的统计信息
-  individualNodeServiceStatistics: https://xxxxxxx/v1/stats/service/{service_id}?node_id={node_id}
+  individualNodeServiceStatistics: https://119.57.73.147:3306/v1/stats/service/{service_id}?node_id={node_id}
   #
   # 获取最近的日志
-  getLastLogs: https://xxxxxxx/v1/log?last={count}
+  getLastLogs: https://119.57.73.147:3306/v1/log?last={count}
   # 下载日志文件
-  downloadLogFile: https://xxxxxxx/v1/logfile
+  downloadLogFile: https://119.57.73.147:3306/v1/logfile
 
 
