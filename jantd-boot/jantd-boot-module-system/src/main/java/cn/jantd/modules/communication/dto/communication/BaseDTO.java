@@ -1,5 +1,6 @@
 package cn.jantd.modules.communication.dto.communication;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
@@ -9,6 +10,7 @@ import lombok.Data;
  * @date 2019/09/11
  */
 @Data
+@ApiModel("基础DTO")
 public class BaseDTO {
     /**
      * 结果状态码 1:操作成功 0:操作失败

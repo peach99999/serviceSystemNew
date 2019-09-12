@@ -15,41 +15,41 @@ public class CommunicationProperties {
     /**
      * 查询所有服务
      */
-    @Value("${communication.queryAllServices}")
+    @Value("${communication.gatewayUrl}${communication.queryAllServices}")
     private String queryAllServices;
 
     /**
      * 查询某个节点上的服务
      */
-    @Value("${communication.queryNodeServices}")
+    @Value("${communication.gatewayUrl}${communication.queryNodeServices}")
     private String queryNodeServices;
 
 
     /**
      * 查询某个节点上的服务
      */
-    @Value("${communication.registerService}")
+    @Value("${communication.gatewayUrl}${communication.registerService}")
     private String registerService;
 
 
     /**
      * 查询单个服务
      */
-    @Value("${communication.getServiceDetail}")
+    @Value("${communication.gatewayUrl}${communication.getServiceDetail}")
     private String getServiceDetail;
 
 
     /**
      * 删除一个服务
      */
-    @Value("${communication.deleteService}")
+    @Value("${communication.gatewayUrl}${communication.deleteService}")
     private String deleteService;
 
 
     /**
      * 更新服务信息
      */
-    @Value("${communication.updateService}")
+    @Value("${communication.gatewayUrl}${communication.updateService}")
     private String updateService;
 
 
@@ -57,14 +57,14 @@ public class CommunicationProperties {
      * 启动一个服务
      */
 
-    @Value("${communication.startService}")
+    @Value("${communication.gatewayUrl}${communication.startService}")
     private String startService;
 
 
     /**
      * 停止一个服务
      */
-    @Value("${communication.stopService}")
+    @Value("${communication.gatewayUrl}${communication.stopService}")
     private String stopService;
 
 
@@ -72,7 +72,7 @@ public class CommunicationProperties {
      * 部署一个服务
      */
 
-    @Value("${communication.deployService}")
+    @Value("${communication.gatewayUrl}${communication.deployService}")
     private String deployService;
 
 
@@ -80,15 +80,15 @@ public class CommunicationProperties {
      * 移除一个服务的部署
      */
 
-    @Value("${communication.removedeploy}")
-    private String removedeploy;
+    @Value("${communication.gatewayUrl}${communication.removeDeployService}")
+    private String removeDeployService;
 
 
     /**
      * 服务文件上传
      */
 
-    @Value("${communication.uploadServiceFile}")
+    @Value("${communication.gatewayUrl}${communication.uploadServiceFile}")
     private String uploadServiceFile;
 
 
@@ -96,56 +96,56 @@ public class CommunicationProperties {
      * queryAllNodes
      */
 
-    @Value("${communication.queryAllNodes}")
+    @Value("${communication.gatewayUrl}${communication.queryAllNodes}")
     private String queryAllNodes;
 
     /**
      * 查询节点信息
      */
 
-    @Value("${communication.queryNodeDetail}")
+    @Value("${communication.gatewayUrl}${communication.queryNodeDetail}")
     private String queryNodeDetail;
 
     /**
      * 总体统计信息
      */
 
-    @Value("${communication.aggregateStatistics}")
+    @Value("${communication.gatewayUrl}${communication.aggregateStatistics}")
     private String aggregateStatistics;
 
 
     /**
      * 单个服务统计
      */
-    @Value("${communication.individualServiceStatistics}")
+    @Value("${communication.gatewayUrl}${communication.individualServiceStatistics}")
     private String individualServiceStatistics;
 
     /**
      * 单个节点统计信息
      */
 
-    @Value("${communication.individualNodeStatistics}")
+    @Value("${communication.gatewayUrl}${communication.individualNodeStatistics}")
     private String individualNodeStatistics;
 
     /**
      * 单个节点的单个服务的统计信息
      */
 
-    @Value("${communication.individualNodeServiceStatistics}")
+    @Value("${communication.gatewayUrl}${communication.individualNodeServiceStatistics}")
     private String individualNodeServiceStatistics;
 
     /**
      * 获取最近的日志
      */
 
-    @Value("${communication.getLastLogs}")
+    @Value("${communication.gatewayUrl}${communication.getLastLogs}")
     private String getLastLogs;
 
     /**
      * 下载日志文件
      */
 
-    @Value("${communication.downloadLogFile}")
+    @Value("${communication.gatewayUrl}${communication.downloadLogFile}")
     private String downloadLogFile;
 
 }

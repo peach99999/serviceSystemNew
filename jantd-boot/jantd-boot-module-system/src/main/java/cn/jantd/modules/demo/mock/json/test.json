@@ -1,0 +1,21 @@
+{
+  "code": "0",
+  "error_code":"0",
+  "error_description":"",
+  "node_id":"11",
+  "host_name":"test",
+  "ip":"185.16.25.22",
+  "cpu_count":"5",
+  "thread_count":"15",
+  "cpu_frequency":"326",
+  "memory_size":"246565",
+  "disk_size":{
+    "C":"2134",
+    "D":"2435"
+  },
+  "deployed_services":["1","2"],
+  "running_services":{
+    "SERVICE_ID1": "1",
+    "SERVICE_ID2":"2"
+  }
+}
