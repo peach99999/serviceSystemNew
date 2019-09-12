@@ -88,11 +88,7 @@ public class ServitizationServiceImpl implements IServitizationService {
         // 查询所有服接口url
         String url = communicationProperties.getQueryNodeServices();
         log.info("查询某个节点上的服务，接口名[{}]:", url);
-        JSONObject json = new JSONObject();
-        // 节点id
-        json.put("node_id", nodeId);
-        String requestJson = json.toJSONString();
-        ResponseEntity<String> queryNodeServicesResult = restTemplate.getForEntity(url, String.class, requestJson);
+        ResponseEntity<String> queryNodeServicesResult = restTemplate.getForEntity(url, String.class, nodeId);
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(queryNodeServicesResult.getStatusCode())) {
             result.error500(CommunicationMsgCode.QUERY_NODE_SERVICES_FAILED.getMsg());
