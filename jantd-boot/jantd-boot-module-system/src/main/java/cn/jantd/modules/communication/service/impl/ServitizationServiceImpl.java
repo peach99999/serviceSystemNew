@@ -42,8 +42,8 @@ public class ServitizationServiceImpl implements IServitizationService {
      */
     public static final String RESPONSE_CODE_FAILED = "1";
 
-    @Autowired
-    private RestTemplate httpsRestTemplate;
+    @Autowired(required=true)
+    private RestTemplate restTemplate;
 
     @Autowired
     private CommunicationProperties communicationProperties;
@@ -60,7 +60,7 @@ public class ServitizationServiceImpl implements IServitizationService {
         // 查询所有服接口url
         String url = communicationProperties.getQueryAllServices();
         logger.info("查询所有服务开始，接口名[{}]:", url);
-        ResponseEntity<String> queryAllServicesResult = httpsRestTemplate.getForEntity(url, String.class);
+        ResponseEntity<String> queryAllServicesResult = restTemplate.getForEntity(url, String.class);
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(queryAllServicesResult.getStatusCode())) {
             result.error500(CommunicationMsgCode.QUERY_ALL_SERVICES_FAILED.getMsg());
@@ -87,7 +87,7 @@ public class ServitizationServiceImpl implements IServitizationService {
         // 查询所有服接口url
         String url = communicationProperties.getQueryNodeServices();
         logger.info("查询某个节点上的服务开始，接口名[{}]:", url);
-        ResponseEntity<String> queryNodeServicesResult = httpsRestTemplate.getForEntity(url, String.class, nodeId);
+        ResponseEntity<String> queryNodeServicesResult = restTemplate.getForEntity(url, String.class, nodeId);
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(queryNodeServicesResult.getStatusCode())) {
             result.error500(CommunicationMsgCode.QUERY_NODE_SERVICES_FAILED.getMsg());
@@ -122,7 +122,7 @@ public class ServitizationServiceImpl implements IServitizationService {
         // 订单退款到钱包接口url
         String url = communicationProperties.getRegisterService();
         // 调用订单退款到钱包接口,请求返回结果
-        ResponseEntity<String> registerServiceResult = httpsRestTemplate.postForEntity(url, entity, String.class);
+        ResponseEntity<String> registerServiceResult = restTemplate.postForEntity(url, entity, String.class);
 
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(registerServiceResult.getStatusCode())) {

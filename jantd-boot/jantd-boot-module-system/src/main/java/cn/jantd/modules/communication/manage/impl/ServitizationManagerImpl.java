@@ -1,8 +1,6 @@
 package cn.jantd.modules.communication.manage.impl;
 
 
-import cn.jantd.core.api.vo.Result;
-import cn.jantd.modules.communication.dto.communication.QueryAllServicesDTO;
 import cn.jantd.modules.communication.manage.ServitizationManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

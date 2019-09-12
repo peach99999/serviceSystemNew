@@ -5,7 +5,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+import org.springframework.web.client.RestTemplate;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.net.InetAddress;
@@ -36,5 +38,9 @@ public class JantdApplication {
                 "Doc: \t\thttp://" + ip + ":" + port + path + "/doc.html\n" +
                 "----------------------------------------------------------");
 
+    }
+    @Bean
+    public RestTemplate restTemplate(){
+        return new RestTemplate();
     }
 }
