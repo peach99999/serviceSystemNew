@@ -114,7 +114,7 @@ communication:
   # 查询所有服务
   queryAllServices: /v1/services
   # 查询某个节点上的服务
-  queryNodeServices: /v1/services?nodeid={node_id}
+  queryNodeServices: /v1/services
   # 查询某个节点上的服务
   registerService: /v1/services/register
   # 查询单个服务
@@ -146,10 +146,10 @@ communication:
   # 单个节点统计信息
   individualNodeStatistics: /v1/stats/node/{node_id}
   # 单个节点的单个服务的统计信息
-  individualNodeServiceStatistics: /v1/stats/service/{service_id}?node_id={node_id}
+  individualNodeServiceStatistics: /v1/stats/service/{service_id}
   #
   # 获取最近的日志
-  getLastLogs: /v1/log?last={count}
+  getLastLogs: /v1/log
   # 下载日志文件
   downloadLogFile: /v1/logfile
 

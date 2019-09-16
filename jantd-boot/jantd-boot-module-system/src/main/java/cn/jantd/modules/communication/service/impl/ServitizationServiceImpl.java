@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -88,8 +89,9 @@ public class ServitizationServiceImpl implements IServitizationService {
         Result<QueryServicesDTO> result = new Result<>();
         // 查询所有服接口url
         String url = communicationProperties.getQueryNodeServices();
+        url = UriComponentsBuilder.fromUriString(url).queryParam("nodeid", nodeId).build().toString();
         log.info("查询某个节点上的服务，接口名[{}]:", url);
-        ResponseEntity<String> queryNodeServicesResult = restTemplate.getForEntity(url, String.class, nodeId);
+        ResponseEntity<String> queryNodeServicesResult = restTemplate.getForEntity(url, String.class);
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(queryNodeServicesResult.getStatusCode())) {
             result.error500(CommunicationMsgCode.QUERY_NODE_SERVICES_FAILED.getMsg());
@@ -560,14 +562,15 @@ public class ServitizationServiceImpl implements IServitizationService {
         Result<IndividualNodeServiceStatisticsDTO> result = new Result<>();
         // 查询所有服接口url
         String url = communicationProperties.getIndividualNodeServiceStatistics();
+        url = UriComponentsBuilder.fromUriString(url).queryParam("node_id", nodeId).build().toString();
         log.info("单个节点的单个服务的统计信息，接口名[{}]:", url);
-        // 参数处理
-        JSONObject json = new JSONObject();
-        // 服务id
-        json.put("service_id", serviceId);
-        json.put("node_id", nodeId);
-        HttpEntity<String> entity = servitizationManager.getStringHttpEntity(json);
-        ResponseEntity<String> individualNodeServiceStatisticsResult = restTemplate.getForEntity(url, String.class, entity);
+//        // 参数处理
+//        JSONObject json = new JSONObject();
+//        // 服务id
+//        json.put("service_id", serviceId);
+//        json.put("node_id", nodeId);
+//        HttpEntity<String> entity = servitizationManager.getStringHttpEntity(json);
+        ResponseEntity<String> individualNodeServiceStatisticsResult = restTemplate.getForEntity(url, String.class, serviceId);
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(individualNodeServiceStatisticsResult.getStatusCode())) {
             result.error500(CommunicationMsgCode.INDIVIDUAL_NODE_SERVICE_STATISTICS_FAILED.getMsg());
@@ -596,8 +599,9 @@ public class ServitizationServiceImpl implements IServitizationService {
         Result<LastLogDTO> result = new Result<>();
         // 查询所有服接口url
         String url = communicationProperties.getGetLastLogs();
+        url = UriComponentsBuilder.fromUriString(url).queryParam("last", count).build().toString();
         log.info("获取最近的日志，接口名[{}]:", url);
-        ResponseEntity<String> getLastLogsResult = restTemplate.getForEntity(url, String.class, count);
+        ResponseEntity<String> getLastLogsResult = restTemplate.getForEntity(url, String.class);
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(getLastLogsResult.getStatusCode())) {
             result.error500(CommunicationMsgCode.GRT_LAST_LOG_FAILED.getMsg());
