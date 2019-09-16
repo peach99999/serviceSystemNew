@@ -48,7 +48,7 @@ public class ServitizationController {
         return servitizationService.getServiceDetail(serviceId);
     }
 
-    @GetMapping(value = "/delete-Service")
+    @DeleteMapping(value = "/delete-Service")
     @ApiOperation("删除一个服务")
     public Result<Object> deleteService(@RequestParam(name = "serviceId") String serviceId) {
         return servitizationService.deleteService(serviceId);
@@ -126,5 +126,17 @@ public class ServitizationController {
     public Result<IndividualNodeServiceStatisticsDTO> individualNodeServiceStatistics(@RequestParam(name = "nodeId") String nodeId,
                                                                                @RequestParam(name = "serviceId") String serviceId) {
         return servitizationService.individualNodeServiceStatistics(nodeId,serviceId);
+    }
+
+    @GetMapping(value = "/get-last-log")
+    @ApiOperation("获取最近的日志")
+    public Result<LastLogDTO> getLastLogs(@RequestParam(name = "count") String count) {
+        return servitizationService.getLastLogs(count);
+    }
+
+    @GetMapping(value = "/download-Log-File")
+    @ApiOperation("下载日志文件")
+    public Result<Object> downloadLogFile() {
+        return servitizationService.downloadLogFile();
     }
 }

@@ -143,4 +143,19 @@ public interface IServitizationService {
      * @return
      */
     Result<IndividualNodeServiceStatisticsDTO> individualNodeServiceStatistics(String nodeId, String serviceId);
+
+    /**
+     * 获取最近的日志
+     *
+     * @param count
+     * @return
+     */
+    Result<LastLogDTO> getLastLogs(String count);
+
+    /**
+     * 下载日志文件
+     *
+     * @return
+     */
+    Result<Object> downloadLogFile();
 }

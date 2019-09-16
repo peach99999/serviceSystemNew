@@ -9,6 +9,7 @@ import cn.jantd.modules.communication.param.*;
 import cn.jantd.modules.communication.service.IServitizationService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -582,6 +583,63 @@ public class ServitizationServiceImpl implements IServitizationService {
         result.setResult(individualNodeServiceStatisticsDTO);
         result.success(OPERATION_SUCCESS);
         return result;
+    }
+
+    /**
+     * 获取最近的日志
+     *
+     * @param count
+     * @return
+     */
+    @Override
+    public Result<LastLogDTO> getLastLogs(String count) {
+        Result<LastLogDTO> result = new Result<>();
+        // 查询所有服接口url
+        String url = communicationProperties.getGetLastLogs();
+        log.info("获取最近的日志，接口名[{}]:", url);
+        ResponseEntity<String> getLastLogsResult = restTemplate.getForEntity(url, String.class, count);
+        // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
+        if (!HttpStatus.OK.equals(getLastLogsResult.getStatusCode())) {
+            result.error500(CommunicationMsgCode.GRT_LAST_LOG_FAILED.getMsg());
+            return result;
+        }
+
+        LastLogDTO lastLogDTO = JSON.parseObject(getLastLogsResult.getBody(), LastLogDTO.class);
+        BaseDTO baseDTO = new BaseDTO();
+        BeanUtils.copyProperties(lastLogDTO, baseDTO);
+        // 返回结果判断
+        if (servitizationManager.requestjudgment(result, baseDTO)) {
+            return result;
+        }
+        result.setResult(lastLogDTO);
+        result.success(OPERATION_SUCCESS);
+        return result;
+    }
+
+    /**
+     * 下载日志文件
+     *
+     * @return
+     */
+    @Override
+    public Result<Object> downloadLogFile() {
+        Result result = new Result<>();
+        // 查询所有服接口url
+        String url = communicationProperties.getDownloadLogFile();
+        log.info("查询所有节点，接口名[{}]:", url);
+        ResponseEntity<String> downloadLogFileResult = restTemplate.getForEntity(url, String.class);
+        // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
+        if (!HttpStatus.OK.equals(downloadLogFileResult.getStatusCode())) {
+            result.error500(CommunicationMsgCode.DOWNLOAD_LOG_FILR_FAILED.getMsg());
+            return result;
+        }
+        BaseDTO baseDTO = JSON.parseObject(downloadLogFileResult.getBody(), BaseDTO.class);
+
+        // 返回结果判断
+        if (servitizationManager.requestjudgment(result, baseDTO)) {
+            return result;
+        }
+        return Result.ok();
     }
 
     private boolean isFailed(Result<QueryServicesDTO> result, ResponseEntity<String> queryNodeServicesResult) {

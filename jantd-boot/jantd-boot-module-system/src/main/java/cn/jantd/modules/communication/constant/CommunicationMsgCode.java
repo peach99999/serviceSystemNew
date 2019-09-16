@@ -32,5 +32,7 @@ public class CommunicationMsgCode {
     public static final BaseMsgCode INDIVIDUAL_SERVICE_STATISTICS_FAILED = new BaseMsgCode("1200151", "查询单个服务统计信息失败!");
     public static final BaseMsgCode INDIVIDUAL_NODE_STATISTICS_FAILED = new BaseMsgCode("1200161", "查询单个节点统计信息失败!");
     public static final BaseMsgCode INDIVIDUAL_NODE_SERVICE_STATISTICS_FAILED = new BaseMsgCode("1200171", "查询单个节点的单个服务的统计信息失败!");
+    public static final BaseMsgCode GRT_LAST_LOG_FAILED = new BaseMsgCode("1200181", "获取最近的日志信息失败!");
+    public static final BaseMsgCode DOWNLOAD_LOG_FILR_FAILED = new BaseMsgCode("1200191", "下载日志文件失败!");
 
 }
