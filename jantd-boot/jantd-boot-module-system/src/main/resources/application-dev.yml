@@ -109,7 +109,7 @@ jantd :
     webapp: D://webapp
 communication:
   # 服务器地址
-  gatewayUrl: sairendevdb.mksoftapp.com
+  gatewayUrl: https://119.57.73.147:3306
   # 服务器接口
   # 查询所有服务
   queryAllServices: /v1/services
