@@ -1,0 +1,15 @@
+{
+  "code": "0",
+  "error_code":"0",
+  "error_description":"",
+  "node_id":"11",
+  "stats_time":"2019-05-06",
+  "host_up_time":"2019-06-08",
+  "agent_up_time":"2019-06-02",
+  "cpu_available":"80",
+  "disk_available":{
+    "C":"80",
+    "D":"60"
+  },
+  "running_services_count":"2"
+}

@@ -1,0 +1,14 @@
+{
+  "code": "0",
+  "error_code":"0",
+  "error_description":"",
+  "service_id": "11",
+  "status": "running",
+  "stats_time":"2019-05-06",
+  "instance_count": "100",
+  "running_nodes_count":"80",
+  "total_call_count":"20",
+  "total_cpu_used":"80",
+  "total_memory_used":"80",
+  "average_time_cost":"10"
+}
