@@ -67,7 +67,8 @@ public class ServiceCategory implements Serializable {
     /**
      * 更新时间
      */
-    @Excel(name = "更新时间", width = 15)
+	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "更新时间")
 	private Date updateTime;
 
