@@ -18,14 +18,14 @@
       <a-layout>
         <a-layout-content>
           <a-table :dataSource="models" :show-header="false" :fit="true">
-            <el-table-column min-width="140px">
+            <a-table-column min-width="140px">
               <template slot-scope="scope">
                 <a href="#">
                   <img src="../../../../src/assets/img/img.jpg" width="80px" height="80px">
                 </a>
               </template>
-            </el-table-column>
-            <el-table-column min-width="140px">
+            </a-table-column>
+            <a-table-column min-width="140px">
               <template slot-scope="scope">
                 <a-row type="flex" justify="space-around" align="middle">
                   <a-col :span="4">
@@ -82,7 +82,7 @@
                   发布时间： {{scope.row.createTime.substring(0,10)}}
                 </div>
               </template>
-            </el-table-column>
+            </a-table-column>
           </a-table>
         </a-layout-content>
         <a-layout-footer>{{'12'}}</a-layout-footer>
