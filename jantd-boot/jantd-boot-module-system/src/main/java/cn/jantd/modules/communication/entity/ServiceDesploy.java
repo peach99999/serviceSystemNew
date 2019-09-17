@@ -41,7 +41,7 @@ public class ServiceDesploy implements Serializable {
      */
     @Excel(name = "服务ID", width = 15)
     @ApiModelProperty(value = "服务ID")
-	private Long serviceId;
+	private String serviceId;
 
     /**
      * 节点ID
