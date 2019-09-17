@@ -87,7 +87,7 @@ public class Result<T> implements Serializable {
         Result<Object> r = new Result<Object>();
         r.setSuccess(true);
         r.setCode(CommonConstant.SC_OK_200);
-        r.setMessage("成功");
+        r.setMessage("操作成功");
         return r;
     }
 

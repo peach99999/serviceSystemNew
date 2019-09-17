@@ -1,0 +1,14 @@
+{
+  "code": "0",
+  "error_code":"0",
+  "error_description":"",
+  "stats_time":"2019-01-24",
+  "total_service_count":"20",
+  "deployed_service_count":"20",
+  "running_service_count":"20",
+  "running_service_instance_count":"20",
+  "host_count":"100",
+  "used_host_count":"80",
+  "total_call_count":"90",
+  "up_time":"2019-05-06"
+}
