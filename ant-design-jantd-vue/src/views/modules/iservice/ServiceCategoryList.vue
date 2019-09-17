@@ -112,14 +112,14 @@
             dataIndex: 'name'
            },
 		   {
-            title: '创建人ID',
+            title: '创建人',
             align:"center",
-            dataIndex: 'createUserid'
+            dataIndex: 'createBy'
            },
 		   {
-            title: '更新人ID',
+            title: '创建日期',
             align:"center",
-            dataIndex: 'updateUserid'
+            dataIndex: 'createTime'
            },
           {
             title: '操作',
