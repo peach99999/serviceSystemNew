@@ -2,28 +2,23 @@
   <div>
     <a-row type="flex" justify="center">
       <a-col :span="6" offset="6">
-        <a-input-search placeholder="搜索你想的日志" @search="onSearch" enterButton="搜索" size="smill"/>
+        <a-input-search placeholder="搜索你想的日志" @search="onSearch" enterButton="搜索" size="smill" />
       </a-col>
       <a-col :span="6">
         <a-button size="medium" label="right" @click="addService" icon="el-icon-download" style="float: right">下载日志文件
         </a-button>
       </a-col>
     </a-row>
-    <div v-if="contentArray.length > 0">
-      <div v-for="(item,i) in contentArray">
-        <div :class="showTotal ? 'total-introduce' : 'detailed-introduce'">
-          <div class="intro-content" :title="item.content" ref="desc">
-        <span class="merchant-desc" v-if="item">
-          {{item.content}}
+    <div :class="showTotal ? 'total-introduce' : 'detailed-introduce'">
+      <div class="intro-content" :title="introduce" ref="desc">
+        <span class="merchant-desc" v-if="introduce">
+          {{introduce}}
         </span>
-            <div class="unfold" @click="showTotalIntro" v-if="showExchangeButton">
-              <p>{{exchangeButton ? '展开' : '收起'}}</p>
-            </div>
-          </div>
+        <div class="unfold" @click="showTotalIntro" v-if="showExchangeButton">
+          <p>{{exchangeButton ? '展开' : '收起'}}</p>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -40,39 +35,7 @@
         exchangeButton: true,
         // 是否显示展开收起按钮
         showExchangeButton: false,
-        rem: '',
-        contentArray: [{ content:'拥有财富、11111111111111111111111111111111111111111111111111'+
-            '11222润444444444444444反反复复风付付付付付付付付付付付付付柔柔弱弱若若若若' +
-          '若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若' +
-          '若若若付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付' +
-          '付付付付付付名声、声、名声、式框架。Vue拥名声、式框架。Vue拥有财富、名声、式框架。Vue拥有' +
-          '财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、' +
-          '名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框' +
-          '架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富' +
-          '、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。V' +
-          'ue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、' +
-          '式框架。拥有财富、名声、式框架。Vue拥有财富、名声、式框架。VueVueVue'
-
-    },{  content:'拥有财富、1111111111111111111111111111111111111111111111111111222润4444444' +
-            '44444444反反复复风付付付付付付付付付付付付付柔柔弱弱若若若若若若若若若若若若' +
-          '若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若付付付付付' +
-          '付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付名声、' +
-          '声、名声、式框架。Vue拥名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。V' +
-          'ue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声' +
-          '、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财' +
-          '富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥' +
-          '有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vu' +
-          'e拥有财富、名声、式框架。V' +
-          'ue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。拥有财富、名ue拥有财富、名' +
-          '声、式框架。Vue拥有财富、名声、式框架。拥有财富、名声、式框架。Vue拥有财富、名声' +
-          '、式框架。Vueue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。拥有财富、名声、' +
-          '式框架。Vue拥有财富、名声、式框架。Vueue拥有财富、名声、式框架。Vue拥有财富、名声、式框' +
-          '架。拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vueue拥有财富、名声、式框架。Vue拥' +
-          '有财富、名声、式框架。拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vueue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vueue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vueue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vueue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vueue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vueue拥有财富、名声、式框架。Vue拥有财富、名' +
-          '声、式框架。拥有财富、名声、式框架。Vue拥有财富、名声' +
-          '、式框架。Vue声、式框架。Vue拥有财富、名声、式框架。Vue' +
-          'VueVue'
-    }]
+        rem: ''
       };
     },
     mounted() {
@@ -97,40 +60,36 @@
       },
     },
     watch: {
-      contentArray: {
-        hander (val) {
-          this.$nextTick(function () {
-            console.log('nextTick');
-            // 判断介绍是否超过四行
-            let rem = parseFloat(this.getRem());
-            console.log('watch 中的rem', rem);
-            if (!this.$refs.desc) {
-              console.log('desc null');
-              return;
-            }
-            let descHeight = window.getComputedStyle(this.$refs.desc).height.replace('px', '');
-            console.log('descHeight:' + descHeight);
-            console.log('如果 descHeight 超过' + (5.25 * rem) + '就要显示展开按钮');
-            if (descHeight > 5.25 * rem) {
-              console.log('超过了四行');
-              // 显示展开收起按钮
-              this.showExchangeButton = true;
-              this.exchangeButton = true;
-              // 不是显示所有
-              this.showTotal = false;
-            } else {
-              // 不显示展开收起按钮
-              this.showExchangeButton = false;
-              // 没有超过四行就显示所有
-              this.showTotal = true;
-              console.log('showExchangeButton', this.showExchangeButton);
-              console.log('showTotal', this.showTotal);
-            }
-          }.bind(this));
-        },
-        deep: true
+      'introduce': function () {
+        this.$nextTick(function () {
+          console.log('nextTick');
+          // 判断介绍是否超过四行
+          let rem = parseFloat(this.getRem());
+          console.log('watch 中的rem', rem);
+          if (!this.$refs.desc) {
+            console.log('desc null');
+            return;
+          }
+          let descHeight = window.getComputedStyle(this.$refs.desc).height.replace('px', '');
+          console.log('descHeight:' + descHeight);
+          console.log('如果 descHeight 超过' + (5.25 * rem) + '就要显示展开按钮');
+          if (descHeight > 5.25 * rem) {
+            console.log('超过了四行');
+            // 显示展开收起按钮
+            this.showExchangeButton = true;
+            this.exchangeButton = true;
+            // 不是显示所有
+            this.showTotal = false;
+          } else {
+            // 不显示展开收起按钮
+            this.showExchangeButton = false;
+            // 没有超过四行就显示所有
+            this.showTotal = true;
+            console.log('showExchangeButton', this.showExchangeButton);
+            console.log('showTotal', this.showTotal);
+          }
+        }.bind(this));
       }
-
     }
   };
 </script>
@@ -147,7 +106,7 @@
   .total-introduce {
     height: auto;
     overflow: hidden;
-    font-size: 13px;
+    font-size: 14px;
     color: #434343;
     margin: 10px;
     .intro-content {
