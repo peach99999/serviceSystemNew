@@ -51,6 +51,6 @@ public class ServiceDetailDTO extends BaseDTO {
     /**
      * 运行节点信息
      */
-    private RunningOnNodesDTO runningOnNodesDTO;
+    private RunningOnNodesDTO running_on_nodes;
 
 }

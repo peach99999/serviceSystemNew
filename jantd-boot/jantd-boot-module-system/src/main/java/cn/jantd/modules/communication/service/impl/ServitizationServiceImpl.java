@@ -9,19 +9,14 @@ import cn.jantd.modules.communication.param.*;
 import cn.jantd.modules.communication.service.IServitizationService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * @Description 服务化前端通信接口实现类
@@ -402,9 +397,7 @@ public class ServitizationServiceImpl implements IServitizationService {
         if (servitizationManager.requestjudgment(result, baseDTO)) {
             return result;
         }
-        result.setMessage(OPERATION_SUCCESS);
-        result.setResult(uploadServiceFileDTO.getService_id());
-        return Result.ok();
+        return Result.ok(uploadServiceFileDTO.getService_id());
     }
 
     /**
@@ -455,7 +448,6 @@ public class ServitizationServiceImpl implements IServitizationService {
             return result;
         }
         QueryNodeDetailDTO queryNodeDetailDTO = JSON.parseObject(queryNodeDetailResult.getBody(), QueryNodeDetailDTO.class);
-//        QueryNodeDetailDTO queryNodeDetailDTO = JSON.parseObject(readJson("classpath:cn/jantd/modules/demo/mock/json/test.json"), QueryNodeDetailDTO.class);
         BaseDTO baseDTO = new BaseDTO();
         BeanUtils.copyProperties(queryNodeDetailDTO, baseDTO);
         // 返回结果判断
@@ -660,22 +652,5 @@ public class ServitizationServiceImpl implements IServitizationService {
         return false;
     }
 
-    /**
-     * 读取json格式文件
-     *
-     * @param jsonSrc
-     * @return
-     */
-    private String readJson(String jsonSrc) {
-        String json = "";
-        try {
-            // 换个写法，解决springboot读取jar包中文件的问题
-            InputStream stream = getClass().getClassLoader().getResourceAsStream(jsonSrc.replace("classpath:", ""));
-            json = IOUtils.toString(stream, "UTF-8");
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        }
-        return json;
-    }
 
 }
