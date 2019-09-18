@@ -17,7 +17,7 @@
         :type="collapsed ? 'menu-unfold' : 'menu-fold'"
         @click.native="toggle"/>
 
-      <span v-if="device === 'desktop'">欢迎进入 Jantd-Boot 后台管理系统</span>
+      <span v-if="device === 'desktop'" style="font-size:20px; font-wight:bold">欢迎进入 服务综合管理系统</span>
       <span v-else>Jantd-Boot</span>
 
       <user-menu :theme="theme"/>

@@ -15,7 +15,7 @@
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="分类名称">
-          <a-input placeholder="请输入分类名称" v-decorator="['name', {}]" />
+          <a-input placeholder="请输入分类名称" v-decorator="['name', validatorRules.name]" />
         </a-form-item>
 		
       </a-form>
@@ -47,8 +47,7 @@
         confirmLoading: false,
         form: this.$form.createForm(this),
         validatorRules:{
-        createTime:{rules: [{ required: true, message: '请输入创建时间!' }]},
-        updateTime:{rules: [{ required: true, message: '请输入更新时间!' }]},
+          name:{rules: [{ required: true, message: '请输入分类名称!' }]},
         },
         url: {
           add: "/serviceCategory/serviceCategory/add",
