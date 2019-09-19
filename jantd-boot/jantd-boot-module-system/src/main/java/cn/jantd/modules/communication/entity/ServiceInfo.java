@@ -19,7 +19,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 /**
  * @Description: 服务基本信息
  * @Author: xiagf
- * @Date: 2019-09-17
+ * @Date: 2019-09-19
  */
 @Data
 @TableName("service_info")
@@ -69,7 +69,7 @@ public class ServiceInfo implements Serializable {
      */
     @Excel(name = "设计人员ID", width = 15)
     @ApiModelProperty(value = "设计人员ID")
-	private Long designerId;
+	private String designerId;
 
     /**
      * 设计人员单位
@@ -111,7 +111,7 @@ public class ServiceInfo implements Serializable {
      */
     @Excel(name = "开发人员ID", width = 15)
     @ApiModelProperty(value = "开发人员ID")
-	private Long developerId;
+	private String developerId;
 
     /**
      * 设计状态0:草稿;1:提交
@@ -149,28 +149,28 @@ public class ServiceInfo implements Serializable {
      */
     @Excel(name = "设计提交人ID", width = 15)
     @ApiModelProperty(value = "设计提交人ID")
-	private Long designSubmissionUserId;
+	private String designSubmissionUserId;
 
     /**
      * 服务实现ID
      */
     @Excel(name = "服务实现ID", width = 15)
     @ApiModelProperty(value = "服务实现ID")
-	private Long serviceImplementationFileId;
+	private String serviceImplementationFileId;
 
     /**
      * 用户文档ID
      */
     @Excel(name = "用户文档ID", width = 15)
     @ApiModelProperty(value = "用户文档ID")
-	private Long userManualFileId;
+	private String userManualFileId;
 
     /**
      * 使用案例文档ID
      */
     @Excel(name = "使用案例文档ID", width = 15)
     @ApiModelProperty(value = "使用案例文档ID")
-	private Long demoFileId;
+	private String demoFileId;
 
     /**
      * 最小实例数
@@ -207,7 +207,7 @@ public class ServiceInfo implements Serializable {
      */
     @Excel(name = "开发提交人ID", width = 15)
     @ApiModelProperty(value = "开发提交人ID")
-	private Long developerSubmissionUserId;
+	private String developerSubmissionUserId;
 
     /**
      * 开发状态 0:草稿;1:提交
@@ -237,7 +237,7 @@ public class ServiceInfo implements Serializable {
      */
     @Excel(name = "部署提交人ID", width = 15)
     @ApiModelProperty(value = "部署提交人ID")
-	private Long deploySubmissionUserId;
+	private String deploySubmissionUserId;
 
     /**
      * 部署状态 0:草稿;1:提交
