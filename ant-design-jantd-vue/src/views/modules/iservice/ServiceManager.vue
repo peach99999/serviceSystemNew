@@ -72,67 +72,12 @@
 <script>
   import ATableColumn from "ant-design-vue/es/table/Column";
   import ARow from "ant-design-vue/es/grid/Row";
-  const treeData = [{
-    title: 'parent 1',
-    key: '0-0',
-    children: [{
-      title: 'parent 1-0',
-      key: '0-0-0',
-      disabled: true,
-      children: [
-        { title: 'leaf', key: '0-0-0-0', disableCheckbox: true },
-        { title: 'leaf', key: '0-0-0-1' },
-      ],
-    }, {
-      title: 'parent 1-1',
-      key: '0-0-1',
-      children: [
-        { key: '0-0-1-0', slots: { title: 'title0010' }},
-      ],
-    }],
-  },
-    {
-      title: 'parent 1',
-      key: '0-0',
-      children: [{
-        title: 'parent 1-0',
-        key: '0-0-0',
-        disabled: true,
-        children: [
-          { title: 'leaf', key: '0-0-0-0', disableCheckbox: true },
-          { title: 'leaf', key: '0-0-0-1' },
-        ],
-      }, {
-        title: 'parent 1-1',
-        key: '0-0-1',
-        children: [
-          { key: '0-0-1-0', slots: { title: 'title0010' }},
-        ],
-      }],
-    },{
-      title: 'parent 1',
-      key: '0-0',
-      children: [{
-        title: 'parent 1-0',
-        key: '0-0-0',
-        disabled: true,
-        children: [
-          { title: 'leaf', key: '0-0-0-0', disableCheckbox: true },
-          { title: 'leaf', key: '0-0-0-1' },
-        ],
-      }, {
-        title: 'parent 1-1',
-        key: '0-0-1',
-        children: [
-          { key: '0-0-1-0', slots: { title: 'title0010' }},
-        ],
-      }],
-    }]
+  import {querySerciceCategery} from '@/api/api'  
   export default {
     components: {ARow, ATableColumn},
     data() {
       return {
-        treeData,
+        treeData: [],
         rootSubmenuKeys: ['sub1', 'sub2', 'sub4'],
         openKeys: ['sub1'],
         labelid: "",
@@ -316,10 +261,22 @@
           .catch(e => {
 
           })
-      }
+      },
+      // 获取服务分类
+      listServiceCategory() {
+        querySerciceCategery().then((res) => {
+          if (res.success) {
+            console.log(res.results)
+            res.result.forEach(data => {
+              this.treeData.push({"title":data.name,"key":data.id})
+            })
+          }
+        })
+      },
 
     },
     mounted() {
+      this.listServiceCategory();
       this.getModelList(1);
       this.fetchLabels();
       this.getPage();
