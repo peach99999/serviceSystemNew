@@ -88,7 +88,7 @@ const queryUserRoleMap = (params)=>getAction("/sys/user/queryUserRoleMap",params
 // 重复校验
 const duplicateCheck = (params)=>getAction("/sys/duplicate/check",params);
 // 获取服务分类
-const querySerciceCategery = (params)=>getAction("/serviceCategory/serviceCategory/list-all",params);
+const querySerciceCategery = (params)=>getAction("/serviceCategory/list-all",params);
 
 export {
   // imgView,

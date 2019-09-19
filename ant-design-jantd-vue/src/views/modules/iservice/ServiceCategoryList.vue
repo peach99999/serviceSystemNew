@@ -129,11 +129,11 @@
           }
         ],
 		url: {
-          list: "/serviceCategory/serviceCategory/list",
-          delete: "/serviceCategory/serviceCategory/delete",
-          deleteBatch: "/serviceCategory/serviceCategory/deleteBatch",
-          exportXlsUrl: "serviceCategory/serviceCategory/exportXls",
-          importExcelUrl: "serviceCategory/serviceCategory/importExcel",
+          list: "/serviceCategory/list",
+          delete: "/serviceCategory/delete",
+          deleteBatch: "/serviceCategory/deleteBatch",
+          exportXlsUrl: "serviceCategory/exportXls",
+          importExcelUrl: "serviceCategory/importExcel",
        },
     }
   },

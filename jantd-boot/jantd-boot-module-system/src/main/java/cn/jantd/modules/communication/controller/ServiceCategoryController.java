@@ -37,7 +37,7 @@ import java.util.*;
 @Slf4j
 @Api(tags = "服务分类")
 @RestController
-@RequestMapping("/serviceCategory/serviceCategory")
+@RequestMapping("/serviceCategory")
 public class ServiceCategoryController {
     @Autowired
     private IServiceCategoryService serviceCategoryService;

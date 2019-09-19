@@ -1,11 +1,14 @@
 <template>
   <div id="components-layout-demo-basic">
     <a-row type="flex">
-      <a-col :span="8" :offset="8">
-        <a-input-search placeholder="搜索你想要的服务" @search="onSearch" enterButton="搜索" size="smill"/>
+      <a-col :md="10" :sm="12" :offset="5">
+          <a-input-search placeholder="搜索你想要的服务" v-model="queryParam.name" @search="onSearch" enterButton="搜索"/>
       </a-col>
-      <a-col :offset="6" :span="2">
-        <a-button><a-icon type="plus" />新增</a-button>
+      <a-col :md="1" :sm="1">
+          <a-button type="primary"  @click="searchReset" icon="reload" style="margin-left: 8px;left: 10px">重置</a-button>
+      </a-col>
+      <a-col :md="8" :sm="6">
+        <a-button type="primary"><a-icon type="plus" />新增</a-button>
       </a-col>
     </a-row>
 
@@ -18,25 +21,16 @@
           @check="this.onCheck"
         >
         </a-tree>
-        <a-menu
-          style="width: 256px"
-          :defaultSelectedKeys="['1']"
-          :defaultOpenKeys="['sub1']"
-          :mode="mode"
-          :theme="theme"
-        >
-          <a-tree
-            showLine
-            :treeData="treeData"
-            @select="this.onSelect"
-            @check="this.onCheck"
-          >
-          </a-tree>
-        </a-menu>
       </a-layout-sider>
       <a-layout>
         <a-layout-content>
-          <a-table :dataSource="models" :show-header="false" :fit="true">
+          <a-table 
+            :dataSource="models" 
+            :show-header="false" 
+            :fit="true" 
+            :pagination="ipagination" 
+            :loading="loading"
+            @change="handleTableChange">
             <a-table-column min-width="140px">
               <template slot-scope="scope">
                 <a href="#">
@@ -45,17 +39,17 @@
               </template>
             </a-table-column>
             <a-table-column min-width="140px">
-              <template slot-scope="scope">
-                <a-row type="flex" justify="space-around" align="middle">
-                  <a-col :span="4">
+              <template v-for="(service,index) in models" slot-scope="service">
+                <a-row type="flex" :key="index" justify="space-around" align="middle">
+                  <a-col :span="6">
                     <span style="font-weight: bold;font-size: 16px" >
-                       {{scope.row.name}}
+                       {{service.name}}
                     </span>
                     <span style="font-size: 10px;color: #cf1322">
-                      {{scope.row.designerStatus}}
+                      {{service.designerStatus_dictText}}
                     </span>
                   </a-col>
-                  <a-col :span="2" :offset="14">
+                  <a-col :span="2" :offset="12">
                     <a-icon type="copy"/>
                     <span>文件</span>
                   </a-col>
@@ -68,21 +62,22 @@
                     <span>删除</span>
                   </a-col>
                 </a-row>
-                <p class="text">
-                  <a href="#">{{scope.row.description}}</a>
+                <div class="divLine" :key="index"/>
+                <p class="text" :key="index" >
+                  <a href="#">{{service.description}}</a>
                 </p>
-                <div class="can_div">
+                <div class="can_div" :key="index" >
                   <div class="can_left">标签：
-                    <span v-if="scope.row.serviceLabel">
-                       <h4 v-for="tag in scope.row.serviceLabel.split(',')" class="biaoshi" :key="tag">
+                    <span v-if="service.serviceLabel">
+                       <h4 v-for="tag in service.serviceLabel.split(',')" class="biaoshi" :key="tag">
                           {{tag}}
                        </h4>
                      </span>
                   </div>
                 </div>
-                <div class="subit">
-                  上传者：{{scope.row.designer}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  发布时间： {{scope.row.createTime.substring(0,10)}}
+                <div class="subit" :key="index" >
+                  上传者：{{service.designer}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  发布时间： {{service.createTime.substring(0,10)}}
                 </div>
               </template>
             </a-table-column>
@@ -96,85 +91,19 @@
 <script>
   import ATableColumn from "ant-design-vue/es/table/Column";
   import ARow from "ant-design-vue/es/grid/Row";
-  const treeData = [{
-    title: 'parent 1',
-    key: '0-0',
-    children: [{
-      title: 'parent 1-0',
-      key: '0-0-0',
-      disabled: true,
-      children: [
-        { title: 'leaf', key: '0-0-0-0', disableCheckbox: true },
-        { title: 'leaf', key: '0-0-0-1' },
-      ],
-    }, {
-      title: 'parent 1-1',
-      key: '0-0-1',
-      children: [
-        { key: '0-0-1-0', slots: { title: 'title0010' }},
-      ],
-    }],
-  },
-    {
-      title: 'parent 1',
-      key: '0-0',
-      children: [{
-        title: 'parent 1-0',
-        key: '0-0-0',
-        disabled: true,
-        children: [
-          { title: 'leaf', key: '0-0-0-0', disableCheckbox: true },
-          { title: 'leaf', key: '0-0-0-1' },
-        ],
-      }, {
-        title: 'parent 1-1',
-        key: '0-0-1',
-        children: [
-          { key: '0-0-1-0', slots: { title: 'title0010' }},
-        ],
-      }],
-    },{
-      title: 'parent 1',
-      key: '0-0',
-      children: [{
-        title: 'parent 1-0',
-        key: '0-0-0',
-        disabled: true,
-        children: [
-          { title: 'leaf', key: '0-0-0-0', disableCheckbox: true },
-          { title: 'leaf', key: '0-0-0-1' },
-        ],
-      }, {
-        title: 'parent 1-1',
-        key: '0-0-1',
-        children: [
-          { key: '0-0-1-0', slots: { title: 'title0010' }},
-        ],
-      }],
-    }]
+  import { querySerciceCategery } from '@/api/api';
+  import { deleteAction, postAction, getAction } from '@/api/manage';
   export default {
     components: {ARow, ATableColumn},
     data() {
       return {
-        treeData,
+        treeData: [],
         rootSubmenuKeys: ['sub1', 'sub2', 'sub4'],
         openKeys: ['sub1'],
         labelid: "",
         keys: "",
         pageSize: 10,
-        models: [
-          {
-            row: {
-              name: '测试服务',
-              designerStatus: '描述状态',
-              description: '服务说明',
-              serviceLabel: '标签',
-              designer: '上传者',
-              createTime: '发布时间'
-
-            }
-          }
-        ],
+        models: [],
         collapse: false,
         categoryId: "",
         labels: "",
@@ -183,10 +112,68 @@
         searchKey: "",
         searchCategory: "0",
         total: 0,
-        currentPage: 1
+        currentPage: 1,
+        queryParam: {
+          name:'',
+          categoryId:this.categoryId
+        },
+        loading: false,
+        ipagination: {
+          current: 1,
+          pageSize: 10,
+          pageSizeOptions: ['10', '20', '30'],
+          showTotal: (total, range) => {
+            return range[0] + '-' + range[1] + ' 共' + total + '条'
+          },
+          showQuickJumper: true,
+          showSizeChanger: true,
+          total: 0
+        },
+        url: {
+          queryServiceInfo: '/serviceInfo/list',
+        }
       }
+     
     },
     methods: {
+      // 搜索
+      onSearch() {
+        this.ipagination.current = 1
+        this.getModelList();
+      },
+      handleTableChange(pagination){
+        this.ipagination = pagination;
+        this.getModelList();
+      },
+      // 重置
+      searchReset(){
+        var that = this;
+        that.queryParam = {} //清空查询区域参数
+        this.categoryId = ''
+        this.ipagination.current = 1
+        that.getModelList();
+      },
+      // 获取服务分类
+      listServiceCategory() {
+        querySerciceCategery().then((res) => {
+          if (res.success) {
+            console.log(res.results)
+            res.result.forEach(data => {
+              this.treeData.push({"title":data.name,"key":data.id})
+            })
+          }
+        })
+      },
+      onSelect (selectedKeys, info) {
+        console.log(selectedKeys[0])
+        this.categoryId = selectedKeys[0];
+        this.ipagination.current = 1
+        this.getModelList();
+        console.log(this.categoryId);
+      },
+      onCheck (checkedKeys, info) {
+        console.log('onCheck', checkedKeys)
+      },
       onOpenChange(openKeys) {
         const latestOpenKey = openKeys.find(key => this.openKeys.indexOf(key) === -1)
         if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
@@ -196,24 +183,22 @@
         }
       },
       getModelList(pageNum) {
-        var vm = this;
-        var categoryId = vm.categoryId;
-        vm.$axios
-          .post("/all/getServiceModelListAll?pageNum=" +
-            pageNum +
-            "&pageSize=" +
-            this.pageSize,
-            {keys: this.keys}
-          )
-          .then(data => {
-
-            vm.models = [].concat(data.list);
-            vm.total = data.total;
-
-          })
-          .catch(e => {
-            // vm.$alert("login failure !!!", "tips");
-          });
+        //加载数据 若传入参数1则加载第一页的内容
+        var param = Object.assign({}, this.queryParam)
+        param.pageNo = this.ipagination.current
+        param.pageSize = this.ipagination.pageSize
+        param.categoryId = this.categoryId
+        this.loading = true
+        console.log(param)
+        getAction(this.url.queryServiceInfo, param).then((res) => {
+          if (res.success) {
+            console.log(res)
+            this.models = res.result.records
+            this.ipagination.total = res.result.total
+          }
+          this.loading = false
+        })
+        
       },
       createLabel() {
         var vm = this;
@@ -238,7 +223,7 @@
       fetchData(pageNum, nodeobj, node, nodecomp) {
         var vm = this;
         this.$axios
-          .post("/all/getLabelServiceUser?pageNum=" + pageNum + "&pageSize=" + this.size,
+          .post("/all/getLabelServiceUser?pageNum=" + pageNum + "&pageSize=" + this.pageSize,
             {labelid: nodeobj.id, keys: this.searchKey})
           .then(data => {
             vm.models = [].concat(data.list);
@@ -344,6 +329,7 @@
 
     },
     mounted() {
+      this.listServiceCategory();
       this.getModelList(1);
       this.fetchLabels();
       this.getPage();
@@ -490,4 +476,8 @@
     line-height: 28px;
     float: left;
   }
+  .divLine {
+    margin-bottom: 10px;
+		border-bottom: 1px solid #f1f1f1;
+  }  
 </style>

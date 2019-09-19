@@ -50,8 +50,8 @@
           name:{rules: [{ required: true, message: '请输入分类名称!' }]},
         },
         url: {
-          add: "/serviceCategory/serviceCategory/add",
-          edit: "/serviceCategory/serviceCategory/edit",
+          add: "/serviceCategory/add",
+          edit: "/serviceCategory/edit",
         },
       }
     },

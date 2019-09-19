@@ -147,9 +147,7 @@
       // 重置
       searchReset(){
         var that = this;
-        var logType = that.queryParam.logType;
         that.queryParam = {}; //清空查询区域参数
-        that.queryParam.logType = logType;
         that.loadData(this.ipagination.current);
       },
       onDateOk(value) {

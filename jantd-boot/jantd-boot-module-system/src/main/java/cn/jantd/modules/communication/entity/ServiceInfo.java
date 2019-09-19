@@ -3,6 +3,8 @@ package cn.jantd.modules.communication.entity;
 import java.util.Date;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import cn.jantd.core.annotation.Dict;
 import cn.jantd.core.poi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -116,9 +118,10 @@ public class ServiceInfo implements Serializable {
     /**
      * 设计状态0:草稿;1:提交
      */
-    @Excel(name = "设计状态0:草稿;1:提交", width = 15)
+    @Excel(name = "设计状态0:草稿;1:提交", width = 15, dicCode="designer_status")
     @ApiModelProperty(value = "设计状态0:草稿;1:提交")
-	private Boolean designerStatus;
+    @Dict(dicCode = "designer_status")
+	private String designerStatus;
 
     /**
      * 创建时间
@@ -212,8 +215,9 @@ public class ServiceInfo implements Serializable {
     /**
      * 开发状态 0:草稿;1:提交
      */
-    @Excel(name = "开发状态 0:草稿;1:提交", width = 15)
+    @Excel(name = "开发状态 0:草稿;1:提交", width = 15, dicCode = "developer_status")
     @ApiModelProperty(value = "开发状态 0:草稿;1:提交")
+    @Dict(dicCode = "developer_status")
 	private Boolean developerStatus;
 
     /**
@@ -242,8 +246,9 @@ public class ServiceInfo implements Serializable {
     /**
      * 部署状态 0:草稿;1:提交
      */
-    @Excel(name = "部署状态 0:草稿;1:提交", width = 15)
+    @Excel(name = "部署状态 0:草稿;1:提交", width = 15, dicCode = "deploy_status")
     @ApiModelProperty(value = "部署状态 0:草稿;1:提交")
+    @Dict(dicCode = "deploy_status")
 	private Boolean deployStatus;
 
     /**
