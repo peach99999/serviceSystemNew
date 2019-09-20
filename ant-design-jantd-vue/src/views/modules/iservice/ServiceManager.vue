@@ -46,10 +46,10 @@
                     <a-button type="primary" style="margin-left:5px">部署</a-button>
                   </a-col>
                   <a-col :span="2">
-                    <a-button type="primary" style="margin-left:5px">启动</a-button>
+                    <a-button type="primary" style="margin-left:5px" @click="startService(service.serviceId)">启动</a-button>
                   </a-col>
                   <a-col :span="2">
-                    <a-button type="primary" style="margin-left:5px">停用</a-button>
+                    <a-button type="primary" style="margin-left:5px" @click="stopService(service.serviceId)">停用</a-button>
                   </a-col>
 
                 </a-row>
@@ -82,7 +82,7 @@
 <script>
   import ATableColumn from "ant-design-vue/es/table/Column";
   import ARow from "ant-design-vue/es/grid/Row";
-  import {querySerciceCategery} from '@/api/api';
+  import { querySerciceCategery, stopService, startService } from '@/api/api';
   import { deleteAction, postAction, getAction } from '@/api/manage';
   export default {
     components: {ARow, ATableColumn},
@@ -126,6 +126,36 @@
       }
     },
     methods: {
+      // 启动服务
+      startService(serviceId){
+        let that = this
+        console.log(serviceId)
+        let params = {
+          serviceId: serviceId
+        }
+        startService(params).then((res)=>{
+          if(res.success){
+            that.$message.success(res.message);
+          }else {
+            that.$message.error(res.message);
+          }
+        })
+      },
+      // 停止服务
+      stopService(serviceId){
+        let that = this
+        console.log(serviceId)
+        let params = {
+          serviceId: serviceId
+        }
+        stopService(params).then((res)=>{
+          if(res.success){
+            that.$message.success(res.message);
+          }else {
+            that.$message.error(res.message);
+          }
+        })
+      },
       // 搜索
       onSearch() {
         this.ipagination.current = 1

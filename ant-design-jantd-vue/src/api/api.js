@@ -89,7 +89,8 @@ const queryUserRoleMap = (params)=>getAction("/sys/user/queryUserRoleMap",params
 const duplicateCheck = (params)=>getAction("/sys/duplicate/check",params);
 // 获取服务分类
 const querySerciceCategery = (params)=>getAction("/serviceCategory/list-all",params);
-
+const startService = (params)=>postAction("/communication/start-service",params);
+const stopService = (params)=>postAction("/communication/stop-service",params);
 export {
   // imgView,
   // doMian,
@@ -136,6 +137,8 @@ export {
   queryTreeListForRole,
   getVisitInfo,
   querySerciceCategery,
+  startService,
+  stopService,
 }
 
 
