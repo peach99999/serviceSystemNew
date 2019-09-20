@@ -4,7 +4,7 @@
       <a-form-item
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
-        label="名称"
+        label="服务明细"
       >
         <a-input placeholder="请输入名称"/>
       </a-form-item>
@@ -15,77 +15,63 @@
         label="标签"
       >
         <div style="float: left">
-            <template v-for="(tag, index) in tags">
-              <a-tooltip v-if="tag.length > 20" :key="tag" :title="tag">
-                <a-tag
-                  :key="tag"
-                  :closable="index !== 0"
-                  :afterClose="() => handleTagClose(tag)"
-                >{{ `${tag.slice(0, 20)}...` }}
-                </a-tag>
-              </a-tooltip>
+          <template v-for="(tag, index) in tags">
+            <a-tooltip v-if="tag.length > 20" :key="tag" :title="tag">
               <a-tag
-                v-else
                 :key="tag"
                 :closable="index !== 0"
                 :afterClose="() => handleTagClose(tag)"
-              >{{ tag }}
+              >{{ `${tag.slice(0, 20)}...` }}
               </a-tag>
-            </template>
-            <a-input
-              v-if="tagInputVisible"
-              ref="tagInput"
-              type="text"
-              size="small"
-              :style="{ width: '78px' }"
-              :value="tagInputValue"
-              @change="handleInputChange"
-              @blur="handleTagInputConfirm"
-              @keyup.enter="handleTagInputConfirm"
-            />
-            <a-tag v-else @click="showTagInput" style="background: #fff; borderStyle: dashed;">
-              <a-icon type="plus"/>
-              New Tag
+            </a-tooltip>
+            <a-tag
+              v-else
+              :key="tag"
+              :closable="index !== 0"
+              :afterClose="() => handleTagClose(tag)"
+            >{{ tag }}
             </a-tag>
+          </template>
+          <a-input
+            v-if="tagInputVisible"
+            ref="tagInput"
+            type="text"
+            size="small"
+            :style="{ width: '78px' }"
+            :value="tagInputValue"
+            @change="handleInputChange"
+            @blur="handleTagInputConfirm"
+            @keyup.enter="handleTagInputConfirm"
+          />
+          <a-tag v-else @click="showTagInput" style="background: #fff; borderStyle: dashed;">
+            <a-icon type="plus"/>
+            New Tag
+          </a-tag>
         </div>
       </a-form-item>
 
       <a-form-item
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
-        label="设计人员"
+        label="服务开发人员"
       >
         <a-input/>
       </a-form-item>
 
-      <a-form-item
-        :label-col="labelCol"
-        :wrapper-col="wrapperCol"
-        label="单位"
-      >
-        <a-input/>
-      </a-form-item>
+
+        <a-row type="flex" style="margin-top: 20px;margin-bottom: 20px">
+          <a-col :span="4" :offset="5">
+            <a-button type="primary">服务调用代码框架</a-button>
+          </a-col>
+          <a-col :span="4">
+            <a-button type="primary">服务实现代码框架</a-button>
+          </a-col>
+        </a-row>
 
       <a-form-item
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
-        label="联系方式"
-      >
-        <a-input/>
-      </a-form-item>
-
-      <a-form-item
-        :label-col="labelCol"
-        :wrapper-col="wrapperCol"
-        label="描述"
-      >
-        <a-input/>
-      </a-form-item>
-
-      <a-form-item
-        :label-col="labelCol"
-        :wrapper-col="wrapperCol"
-        label="接口描述文件"
+        label="服务实现"
       >
         <a-row type="flex">
           <a-col :span="21">
@@ -114,12 +100,79 @@
       <a-form-item
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
-        label="开发人员"
+        label="用户文档"
+      >
+        <a-row type="flex">
+          <a-col :span="21">
+            <a-input/>
+          </a-col>
+          <a-col :span="3">
+            <a-upload
+              v-decorator="['upload', {
+          valuePropName: 'fileList',
+          getValueFromEvent: normFile,
+        }]"
+              name="logo"
+              action="/upload.do"
+              list-type="picture"
+              showUploadList="false"
+            >
+              <a-button>
+                <a-icon type="upload"/>
+                浏览
+              </a-button>
+            </a-upload>
+          </a-col>
+        </a-row>
+      </a-form-item>
+
+
+      <a-form-item
+        :label-col="labelCol"
+        :wrapper-col="wrapperCol"
+        label="使用案例"
+      >
+        <a-row type="flex">
+          <a-col :span="21">
+            <a-input/>
+          </a-col>
+          <a-col :span="3">
+            <a-upload
+              v-decorator="['upload', {
+          valuePropName: 'fileList',
+          getValueFromEvent: normFile,
+        }]"
+              name="logo"
+              action="/upload.do"
+              list-type="picture"
+              showUploadList="false"
+            >
+              <a-button>
+                <a-icon type="upload"/>
+                浏览
+              </a-button>
+            </a-upload>
+          </a-col>
+        </a-row>
+      </a-form-item>
+
+
+      <a-form-item
+        :label-col="labelCol"
+        :wrapper-col="wrapperCol"
+        label="最小实例数"
+      >
+        <a-input/>
+      </a-form-item>
+      <a-form-item
+        :label-col="labelCol"
+        :wrapper-col="wrapperCol"
+        label="最大实例数"
       >
         <a-input/>
       </a-form-item>
       <a-form-item>
-        <a-row type="flex">
+        <a-row type="flex" >
           <a-col :span="2" :offset="8">
             <a-button type="primary" @click="onSubmit">提交</a-button>
           </a-col>
