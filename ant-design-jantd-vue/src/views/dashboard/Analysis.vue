@@ -131,8 +131,7 @@
   import ARow from "ant-design-vue/es/grid/Row"
   import './analysis.less'
   import { deleteAction, postAction, getAction } from '@/api/manage'
-  import {timeFromNow} from '@/utils/util'
-  import {timeToChina} from '@/utils/util'
+  import { timeFromNow, timeToChina} from '@/utils/util'
 
   export default {
     components: {

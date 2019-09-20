@@ -3,6 +3,8 @@ package cn.jantd.modules.communication.service;
 import cn.jantd.modules.communication.entity.ServiceCategory;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * @Description: 服务分类服务类
  * @Author: xiagf
@@ -10,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IServiceCategoryService extends IService<ServiceCategory> {
 
+    List<ServiceCategory> queryListAll();
 }

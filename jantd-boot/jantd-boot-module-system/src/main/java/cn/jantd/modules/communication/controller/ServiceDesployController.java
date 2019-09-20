@@ -37,7 +37,7 @@ import java.util.*;
 @Slf4j
 @Api(tags = "服务部署")
 @RestController
-@RequestMapping("/serviceDesploy/serviceDesploy")
+@RequestMapping("/serviceDesploy")
 public class ServiceDesployController {
 	@Autowired
 	private IServiceDesployService serviceDesployService;
