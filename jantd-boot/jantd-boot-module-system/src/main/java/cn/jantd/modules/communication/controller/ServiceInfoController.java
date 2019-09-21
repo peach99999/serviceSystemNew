@@ -37,7 +37,7 @@ import java.util.*;
 @Slf4j
 @Api(tags = "服务基本信息")
 @RestController
-@RequestMapping("/serviceInfo/serviceInfo")
+@RequestMapping("/serviceInfo")
 public class ServiceInfoController {
 	@Autowired
 	private IServiceInfoService serviceInfoService;

@@ -1,268 +1,161 @@
 <template>
-  <div>
-    <a-row type="flex" justify="center">
-      <a-col :span="6" offset="6">
-        <a-input-search placeholder="搜索你想的日志" @search="onSearch" enterButton="搜索" size="smill"/>
-      </a-col>
-      <a-col :span="6">
-        <a-button size="medium" label="right" @click="addService" icon="el-icon-download" style="float: right">下载日志文件
-        </a-button>
-      </a-col>
-    </a-row>
-    <div v-if="contentArray.length > 0">
-      <div v-for="(item,i) in contentArray">
-        <div :class="showTotal ? 'total-introduce' : 'detailed-introduce'">
-          <div class="intro-content" :title="item.content" ref="desc">
-        <span class="merchant-desc" v-if="item">
-          {{item.content}}
-        </span>
-            <div class="unfold" @click="showTotalIntro" v-if="showExchangeButton">
-              <p>{{exchangeButton ? '展开' : '收起'}}</p>
-            </div>
-          </div>
-        </div>
-      </div>
+  <a-card :bordered="false">
+    <!-- 查询区域 -->
+    <div class="table-page-search-wrapper">
+      <a-form layout="inline">
+        <a-row :gutter="24">
+
+          <a-col :md="6" :sm="8">
+            <a-form-item label="搜索日志">
+              <a-input placeholder="请输入搜索关键词" v-model="queryParam.keyWord"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :md="8" :sm="10" >
+            <span style="float: right;" class="table-page-search-submitButtons">
+              <a-button type="primary" style="left: 10px" @click="search" icon="search">查询</a-button>
+              <a-button type="primary"  @click="searchReset" icon="reload" style="margin-left: 8px;left: 10px">重置</a-button>
+              <a-button type="primary"  @click="downloadFile" icon="download" style="margin-left: 8px;left: 10px">下载日志文件</a-button>
+            </span>
+          </a-col>
+
+        </a-row>
+      </a-form>
     </div>
 
-  </div>
+    <!-- table区域-begin -->
+      <a-table
+        ref="table"
+        size="middle"
+        rowKey="id"
+        :columns="columns"
+        :dataSource="dataSource"
+        :pagination="ipagination"
+        :loading="loading"
+        @change="handleTableChange">
+
+      </a-table>
+    <!-- table区域-end -->
+  </a-card>
 </template>
 
 <script>
+  import { filterObj } from '@/utils/util';
+  import { JantdListMixin } from '@/mixins/JantdListMixin'
+  import { deleteAction, postAction, getAction } from '@/api/manage'
+
   export default {
-    name: 'Spread',
-    data() {
+    name: "LogList",
+    mixins:[JantdListMixin],
+    data () {
       return {
-        title: '演示展开收起',
-        introduce: '',
-        // 是否展示所有文本内容
-        showTotal: true,
-        // 显示展开还是收起
-        exchangeButton: true,
-        // 是否显示展开收起按钮
-        showExchangeButton: false,
-        rem: '',
-        contentArray: [{ content:'拥有财富、11111111111111111111111111111111111111111111111111'+
-            '11222润444444444444444反反复复风付付付付付付付付付付付付付柔柔弱弱若若若若' +
-          '若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若' +
-          '若若若付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付' +
-          '付付付付付付名声、声、名声、式框架。Vue拥名声、式框架。Vue拥有财富、名声、式框架。Vue拥有' +
-          '财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、' +
-          '名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框' +
-          '架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富' +
-          '、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。V' +
-          'ue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、' +
-          '式框架。拥有财富、名声、式框架。Vue拥有财富、名声、式框架。VueVueVue'
-
-    },{  content:'拥有财富、1111111111111111111111111111111111111111111111111111222润4444444' +
-            '44444444反反复复风付付付付付付付付付付付付付柔柔弱弱若若若若若若若若若若若若' +
-          '若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若付付付付付' +
-          '付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付名声、' +
-          '声、名声、式框架。Vue拥名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。V' +
-          'ue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声' +
-          '、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财' +
-          '富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥' +
-          '有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vu' +
-          'e拥有财富、名声、式框架。V' +
-          'ue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。拥有财富、名ue拥有财富、名' +
-          '声、式框架。Vue拥有财富、名声、式框架。拥有财富、名声、式框架。Vue拥有财富、名声' +
-          '、式框架。Vueue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。拥有财富、名声、' +
-          '式框架。Vue拥有财富、名声、式框架。Vueue拥有财富、名声、式框架。Vue拥有财富、名声、式框' +
-          '架。拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vueue拥有财富、名声、式框架。Vue拥' +
-          '有财富、名声、式框架。拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vueue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vueue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vueue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vueue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vueue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vueue拥有财富、名声、式框架。Vue拥有财富、名' +
-          '声、式框架。拥有财富、名声、式框架。Vue拥有财富、名声' +
-          '、式框架。Vue声、式框架。Vue拥有财富、名声、式框架。Vue' +
-          'VueVue'
-    }]
-      };
-    },
-    mounted() {
-      this.init();
-    },
-    methods: {
-      showTotalIntro() {
-        console.log(this.showTotal);
-        this.showTotal = !this.showTotal;
-        this.exchangeButton = !this.exchangeButton;
-      },
-      getRem() {
-        console.log('getRem');
-        const defaultRem = 16;
-        let winWidth = window.innerWidth;
-        console.log('winWidth:' + winWidth);
-        let rem = winWidth / 1225 * defaultRem;
-        return rem;
-      },
-      init() {
-        this.introduce = '拥有财富、1111111111111111111111111111111111111111111111111111222润444444444444444反反复复风付付付付付付付付付付付付付柔柔弱弱若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若若付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付付名声、声、名声、式框架。Vue拥名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。Vue拥有财富、名声、式框架。拥有财富、名声、式框架。Vue拥有财富、名声、式框架。VueVueVue';
-      },
-    },
-    watch: {
-      contentArray: {
-        hander (val) {
-          this.$nextTick(function () {
-            console.log('nextTick');
-            // 判断介绍是否超过四行
-            let rem = parseFloat(this.getRem());
-            console.log('watch 中的rem', rem);
-            if (!this.$refs.desc) {
-              console.log('desc null');
-              return;
-            }
-            let descHeight = window.getComputedStyle(this.$refs.desc).height.replace('px', '');
-            console.log('descHeight:' + descHeight);
-            console.log('如果 descHeight 超过' + (5.25 * rem) + '就要显示展开按钮');
-            if (descHeight > 5.25 * rem) {
-              console.log('超过了四行');
-              // 显示展开收起按钮
-              this.showExchangeButton = true;
-              this.exchangeButton = true;
-              // 不是显示所有
-              this.showTotal = false;
-            } else {
-              // 不显示展开收起按钮
-              this.showExchangeButton = false;
-              // 没有超过四行就显示所有
-              this.showTotal = true;
-              console.log('showExchangeButton', this.showExchangeButton);
-              console.log('showTotal', this.showTotal);
-            }
-          }.bind(this));
+        description: '这是日志管理页面',
+        // 查询条件
+        queryParam: {
+          keyWord:'',
         },
-        deep: true
+        lastQueryData:[],
+        // 表头
+        columns: [
+          {
+            title: '#',
+            dataIndex: '',
+            key:'rowIndex',
+            align:"left",
+            customRender:function (t,r,index) {
+              return parseInt(index)+1;
+            }
+          },
+          {
+            title: '日志内容',
+            align:"center",
+            dataIndex: 'logContent',
+            sorter: false
+          }
+        ],
+        labelCol: {
+          xs: { span: 1 },
+          sm: { span: 2 },
+        },
+        wrapperCol: {
+          xs: { span: 10 },
+          sm: { span: 16 },
+        },
+        url: {
+          list: "/communication/get-last-log",
+        },
       }
-
-    }
-  };
-</script>
-
-<style lang="less" scoped rel="stylesheet/less">
-  .top-prove {
-    height: 100px;
-    width: 100%;
-    background: #dddddd;
-    text-align: center;
-    line-height: 100px;
-  }
-
-  .total-introduce {
-    height: auto;
-    overflow: hidden;
-    font-size: 13px;
-    color: #434343;
-    margin: 10px;
-    .intro-content {
-      background: #ffffff;
-      .merchant-desc {
-        width: 100%;
-        line-height: 21px;
-      }
-    }
-    .unfold {
-      display: block;
-      z-index: 11;
-      float: right;
-      width: 40px;
-      height: 21px;
-      p {
-        margin: 0;
-        line-height: 21px;
-        color: #7fbe87;
-      }
-    }
-  }
-
-  .detailed-introduce {
-    font-size: 13px;
-    color: #434343;
-    position: relative;
-    overflow: hidden;
-    margin: 10px;
-    .intro-content {
-      // 最大高度设为4倍的行间距
-      max-height: 84px;
-      line-height: 21px;
-      word-wrap: break-word;
-      /*强制打散字符*/
-      word-break: break-all;
-      background: #ffffff;
-      /*同背景色*/
-      color: #ffffff;
-      overflow: hidden;
-      .merchant-desc {
-        width: 100%;
-        line-height: 21px;
-      }
-      &:after,
-        // 这是展开前实际显示的内容
-      &:before {
-        content: attr(title);
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        color: #434343
-        // overflow: hidden;
-      }
-      // 把最后最后一行自身的上面三行遮住
-      &:before {
-        display: block;
-        overflow: hidden;
-        z-index: 1;
-        max-height: 63px;
-        background: #ffffff;
-      }
-      &:after {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        height: 81px;
-        /*截取行数*/
-        -webkit-line-clamp: 4;
-        text-overflow: ellipsis;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-        /*行首缩进字符数，值为[(截取行数-1)*尾部留空字符数]*/
-        text-indent: -12em;
-        /*尾部留空字符数*/
-        padding-right: 4em;
-      }
-      .unfold {
-        z-index: 11;
-        width: 40px;
-        height: 21px;
-        outline: 0;
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        p {
-          margin: 0;
-          line-height: 21px;
-          color: #7fbe87;
+    },
+    created() {
+      // this.loadData(1);
+    },
+    
+    methods: {
+      getQueryParams(){
+        var param = Object.assign({}, this.queryParam,this.isorter);
+        param.pageNo = this.ipagination.current;
+        param.pageSize = this.ipagination.pageSize;
+        param.couuumt = '100';
+        return filterObj(param);
+      },
+      loadData(arg) {
+        if (!this.url.list) {
+          this.$message.error('请设置url.list属性!')
+          return
         }
-      }
-    }
-  }
+        getAction(this.url.list, {count:"100"}).then((res) => {
+          if (res.success) {
+            this.lastQueryData = []
+            console.log(res.result.logs)
+            for (let i = 0; i < res.result.logs.length; i++) {
+              this.lastQueryData.push({"logContent":res.result.logs[i]})
+            }
+            // this.lastQueryData = this.dataSource
+            this.search()
+            // this.ipagination.total = parseInt(res.result.log_record_count)
 
-  .bottom-prove {
-    height: 100px;
-    width: 100%;
-    background: #dddddd;
-    text-align: center;
-    line-height: 100px;
-  }
+          }
+          this.loading = false
+        })
 
-  .change-buttom {
-    font-size: 14px;
-    color: #2371be;
-    .long {
-      text-align: right;
-      text-align: center;
-      height: 21px;
-    }
-    .short {
-      text-align: right;
-      text-align: center;
-      height: 20px;
+      },
+      // 搜索
+      search(){
+        var searchData = this.queryParam.keyWord;
+        var tempData = [];
+        console.log(searchData,this.lastQueryData.length)
+        if(searchData != '' && searchData != undefined && searchData != null){
+            for (let i = 0; i < this.lastQueryData.length; i++) {
+              console.log(this.lastQueryData[i].logContent)
+              if(this.lastQueryData[i].logContent.indexOf(searchData) != -1){
+                tempData.push(this.lastQueryData[i])
+              }
+            }
+        }
+        console.log(tempData)
+        if(tempData.length){
+          this.dataSource = tempData
+          this.ipagination.total = tempData.length
+        }else{
+          this.dataSource = this.lastQueryData
+          this.ipagination.total = this.lastQueryData.length
+        }
+      },
+      // 下载
+      downloadFile(){
+        
+      },
+      // 重置
+      searchReset(){
+        var that = this;
+        that.queryParam = {}; //清空查询区域参数
+        that.loadData(this.ipagination.current);
+      },
+      onDateOk(value) {
+        console.log(value);
+      },
     }
   }
+</script>
+<style scoped>
+  @import '~@assets/less/common.less'
 </style>

@@ -87,7 +87,10 @@ const queryUserByDepId = (params)=>getAction("/sys/user/queryUserByDepId",params
 const queryUserRoleMap = (params)=>getAction("/sys/user/queryUserRoleMap",params);
 // 重复校验
 const duplicateCheck = (params)=>getAction("/sys/duplicate/check",params);
-
+// 获取服务分类
+const querySerciceCategery = (params)=>getAction("/serviceCategory/list-all",params);
+const startService = (params)=>postAction("/communication/start-service",params);
+const stopService = (params)=>postAction("/communication/stop-service",params);
 export {
   // imgView,
   // doMian,
@@ -133,6 +136,9 @@ export {
   duplicateCheck,
   queryTreeListForRole,
   getVisitInfo,
+  querySerciceCategery,
+  startService,
+  stopService,
 }
 
 
