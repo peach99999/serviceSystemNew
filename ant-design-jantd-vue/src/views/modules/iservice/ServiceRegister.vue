@@ -8,7 +8,7 @@
           <a-button type="primary"  @click="searchReset" icon="reload" style="margin-left: 8px;left: 10px">重置</a-button>
       </a-col>
       <a-col :md="8" :sm="6">
-        <a-button type="primary"><a-icon type="plus" />新增</a-button>
+        <a-button type="primary" @click="handleAdd"><a-icon type="plus" />新增</a-button>
       </a-col>
     </a-row>
 
@@ -86,15 +86,20 @@
         <a-layout-footer>{{'12'}}</a-layout-footer>
       </a-layout>
     </a-layout>
+    <!-- 表单区域 -->
+    <serviceRegister-modal ref="modalForm" @ok="modalFormOk"></serviceRegister-modal>
   </div>
 </template>
 <script>
   import ATableColumn from "ant-design-vue/es/table/Column";
   import ARow from "ant-design-vue/es/grid/Row";
+  import ServiceRegisterModal from './modules/ServiceRegisterModal'
+    import { JantdListMixin } from '@/mixins/JantdListMixin'
   import { querySerciceCategery } from '@/api/api';
   import { deleteAction, postAction, getAction } from '@/api/manage';
   export default {
-    components: {ARow, ATableColumn},
+    mixins:[JantdListMixin],
+    components: {ARow, ATableColumn,ServiceRegisterModal},
     data() {
       return {
         treeData: [],
