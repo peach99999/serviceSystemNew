@@ -133,7 +133,7 @@
 </template>
 <script>
   import ARow from "ant-design-vue/es/grid/Row";
-  import './ServiceRegisterDetail.less'
+  import './ServiceRegisterModal.less'
 
   export default {
     components: {ARow},
