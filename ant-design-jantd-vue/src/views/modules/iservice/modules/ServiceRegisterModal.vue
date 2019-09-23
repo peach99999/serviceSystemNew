@@ -15,7 +15,7 @@
           :wrapperCol="wrapperCol"
           label="名称"
           hasFeedback >
-          <a-input placeholder="请输入名称" v-decorator="['name', {}]" />
+          <a-input placeholder="请输入名称" v-decorator="['name', {}]" :value="" />
         </a-form-item>
         <a-form-item
         :label-col="labelCol"
@@ -132,6 +132,16 @@
           add: "/test/jantdDemo/add",
           edit: "/test/jantdDemo/edit",
         },
+        formValue:{
+          name: "",
+          serviceLabel:"",
+          designer:"",
+          designerDepartment:"",
+          contactInformation:"",
+          description:"",
+          interfaceDescriptionFileId:"",
+          developer:""
+        }
       }
     },
     created () {

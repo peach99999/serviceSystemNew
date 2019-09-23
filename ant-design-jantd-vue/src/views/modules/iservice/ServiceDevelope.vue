@@ -64,7 +64,7 @@
 
 
                   <a-col :span="2" >
-                    <a-button type="primary" style="margin-left:5px">开发</a-button>
+                    <a-button type="primary" @click="handleAdd" style="margin-left:5px">开发</a-button>
                   </a-col>
                   <a-col :span="2">
                     <a-button type="primary" style="margin-left:5px">提交</a-button>
@@ -98,6 +98,8 @@
         <a-layout-footer>{{'12'}}</a-layout-footer>
       </a-layout>
     </a-layout>
+    <!-- 表单区域 -->
+    <ServiceDevelope-modal ref="modalForm" @ok="modalFormOk"></ServiceDevelope-modal>
   </div>
 </template>
 <script>
@@ -105,8 +107,11 @@
   import ARow from "ant-design-vue/es/grid/Row";
   import {querySerciceCategery} from '@/api/api';
   import { deleteAction, postAction, getAction } from '@/api/manage';
+  import {JantdListMixin} from '@/mixins/JantdListMixin'
+  import ServiceDevelopeModal from './modules/ServiceDevelopeModal'
   export default {
-    components: {ARow, ATableColumn},
+    components: {ARow, ATableColumn,ServiceDevelopeModal},
+    mixins: [JantdListMixin],
     data() {
       return {
         treeData:[],

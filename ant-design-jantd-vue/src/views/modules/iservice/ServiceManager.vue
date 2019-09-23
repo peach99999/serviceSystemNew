@@ -43,7 +43,7 @@
                     </span>
                   </a-col>
                   <a-col :span="2" :offset="12">
-                    <a-button type="primary" style="margin-left:5px">部署</a-button>
+                    <a-button type="primary" style="margin-left:5px" @click="deploy">部署</a-button>
                   </a-col>
                   <a-col :span="2">
                     <a-button type="primary" style="margin-left:5px" @click="startService(service.serviceId)">启动</a-button>
@@ -345,6 +345,9 @@
           }
         })
       },
+      deploy(){
+        this.$router.push({ path:'/iservice/modules/ServiceManagerModal'})
+      }
 
     },
     mounted() {

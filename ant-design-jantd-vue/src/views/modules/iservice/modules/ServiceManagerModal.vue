@@ -52,7 +52,7 @@
 <script>
   import ATableColumn from "ant-design-vue/es/table/Column";
   import ARow from "ant-design-vue/es/grid/Row";
-  import './ServiceManagerDetail.less'
+  import './ServiceManagerModal.less'
   const data = [{
     key: '1',
     name: 'John Brown',

@@ -2,13 +2,16 @@
   <div id="components-layout-demo-basic">
     <a-row type="flex">
       <a-col :md="10" :sm="12" :offset="5">
-          <a-input-search placeholder="搜索你想要的服务" v-model="queryParam.name" @search="onSearch" enterButton="搜索"/>
+        <a-input-search placeholder="搜索你想要的服务" v-model="queryParam.name" @search="onSearch" enterButton="搜索"/>
       </a-col>
       <a-col :md="1" :sm="1">
-          <a-button type="primary"  @click="searchReset" icon="reload" style="margin-left: 8px;left: 10px">重置</a-button>
+        <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px;left: 10px">重置</a-button>
       </a-col>
       <a-col :md="8" :sm="6">
-        <a-button type="primary" @click="handleAdd"><a-icon type="plus" />新增</a-button>
+        <a-button type="primary" @click="handleAdd">
+          <a-icon type="plus"/>
+          新增
+        </a-button>
       </a-col>
     </a-row>
 
@@ -24,11 +27,11 @@
       </a-layout-sider>
       <a-layout>
         <a-layout-content>
-          <a-table 
-            :dataSource="models" 
-            :show-header="false" 
-            :fit="true" 
-            :pagination="ipagination" 
+          <a-table
+            :dataSource="models"
+            :show-header="false"
+            :fit="true"
+            :pagination="ipagination"
             :loading="loading"
             @change="handleTableChange">
             <a-table-column min-width="140px">
@@ -42,7 +45,7 @@
               <template v-for="(service,index) in models" slot-scope="service">
                 <a-row type="flex" :key="index" justify="space-around" align="middle">
                   <a-col :span="6">
-                    <span style="font-weight: bold;font-size: 16px" >
+                    <span style="font-weight: bold;font-size: 16px">
                        {{service.name}}
                     </span>
                     <span style="font-size: 10px;color: #cf1322">
@@ -63,10 +66,10 @@
                   </a-col>
                 </a-row>
                 <div class="divLine" :key="index"/>
-                <p class="text" :key="index" >
+                <p class="text" :key="index">
                   <a href="#">{{service.description}}</a>
                 </p>
-                <div class="can_div" :key="index" >
+                <div class="can_div" :key="index">
                   <div class="can_left">标签：
                     <span v-if="service.serviceLabel">
                        <h4 v-for="tag in service.serviceLabel.split(',')" class="biaoshi" :key="tag">
@@ -75,7 +78,7 @@
                      </span>
                   </div>
                 </div>
-                <div class="subit" :key="index" >
+                <div class="subit" :key="index">
                   上传者：{{service.designer}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   发布时间： {{service.createTime.substring(0,10)}}
                 </div>
@@ -94,12 +97,13 @@
   import ATableColumn from "ant-design-vue/es/table/Column";
   import ARow from "ant-design-vue/es/grid/Row";
   import ServiceRegisterModal from './modules/ServiceRegisterModal'
-    import { JantdListMixin } from '@/mixins/JantdListMixin'
-  import { querySerciceCategery } from '@/api/api';
-  import { deleteAction, postAction, getAction } from '@/api/manage';
+  import {JantdListMixin} from '@/mixins/JantdListMixin'
+  import {querySerciceCategery} from '@/api/api';
+  import {deleteAction, postAction, getAction} from '@/api/manage';
+
   export default {
-    mixins:[JantdListMixin],
-    components: {ARow, ATableColumn,ServiceRegisterModal},
+    mixins: [JantdListMixin],
+    components: {ARow, ATableColumn, ServiceRegisterModal},
     data() {
       return {
         treeData: [],
@@ -119,8 +123,8 @@
         total: 0,
         currentPage: 1,
         queryParam: {
-          name:'',
-          categoryId:this.categoryId
+          name: '',
+          categoryId: this.categoryId
         },
         loading: false,
         ipagination: {
@@ -138,7 +142,7 @@
           queryServiceInfo: '/serviceInfo/list',
         }
       }
-     
+
     },
     methods: {
       // 搜索
@@ -146,12 +150,12 @@
         this.ipagination.current = 1
         this.getModelList();
       },
-      handleTableChange(pagination){
+      handleTableChange(pagination) {
         this.ipagination = pagination;
         this.getModelList();
       },
       // 重置
-      searchReset(){
+      searchReset() {
         var that = this;
         that.queryParam = {} //清空查询区域参数
         this.categoryId = ''
@@ -164,19 +168,19 @@
           if (res.success) {
             console.log(res.results)
             res.result.forEach(data => {
-              this.treeData.push({"title":data.name,"key":data.id})
+              this.treeData.push({"title": data.name, "key": data.id})
             })
           }
         })
       },
-      onSelect (selectedKeys, info) {
+      onSelect(selectedKeys, info) {
         console.log(selectedKeys[0])
         this.categoryId = selectedKeys[0];
         this.ipagination.current = 1
         this.getModelList();
         console.log(this.categoryId);
       },
-      onCheck (checkedKeys, info) {
+      onCheck(checkedKeys, info) {
         console.log('onCheck', checkedKeys)
       },
       onOpenChange(openKeys) {
@@ -203,7 +207,7 @@
           }
           this.loading = false
         })
-        
+
       },
       createLabel() {
         var vm = this;
@@ -481,8 +485,9 @@
     line-height: 28px;
     float: left;
   }
+
   .divLine {
     margin-bottom: 10px;
-		border-bottom: 1px solid #f1f1f1;
-  }  
+    border-bottom: 1px solid #f1f1f1;
+  }
 </style>
