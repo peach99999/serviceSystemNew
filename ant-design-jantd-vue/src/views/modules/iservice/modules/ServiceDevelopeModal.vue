@@ -217,14 +217,14 @@
         form: this.$form.createForm(this),
         confirmLoading: false,
         formValue:{
-          name:"1",
-          serviceLabel:"1",
-          developerSubmissionUser:"1",
-          serviceImplementationFileId: "1",
-          userManualFileId: "1",
-          demoFileId: "1",
-          minInstance: "1",
-          maxInstance: "1"
+          name:"",
+          serviceLabel:"",
+          developerSubmissionUser:"",
+          serviceImplementationFileId: "",
+          userManualFileId: "",
+          demoFileId: "",
+          minInstance: "",
+          maxInstance: ""
         }
       };
     },
