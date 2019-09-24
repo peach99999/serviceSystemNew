@@ -2,13 +2,13 @@
   <div id="components-layout-demo-basic">
     <a-row type="flex">
       <a-col :md="10" :sm="12" :offset="5">
-        <a-input-search placeholder="搜索你想要的服务" v-model="queryParam.name" @search="onSearch" enterButton="搜索"/>
+        <a-input-search placeholder="搜索你想要的服务" v-model="queryParam.name" @search="searchQuery" enterButton="搜索"/>
       </a-col>
-      <a-col :md="1" :sm="1">
+      <a-col :md="3" :sm="1">
         <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px;left: 10px">重置</a-button>
       </a-col>
-      <a-col :md="8" :sm="6">
-        <a-button type="primary" @click="handleAdd">
+      <a-col :md="6" :sm="6">
+        <a-button type="primary" @click="addService">
           <a-icon type="plus"/>
           新增
         </a-button>
@@ -28,7 +28,7 @@
       <a-layout>
         <a-layout-content>
           <a-table
-            :dataSource="models"
+            :dataSource="dataSource"
             :show-header="false"
             :fit="true"
             :pagination="ipagination"
@@ -42,7 +42,7 @@
               </template>
             </a-table-column>
             <a-table-column min-width="140px">
-              <template v-for="(service,index) in models" slot-scope="service">
+              <template v-for="(service,index) in dataSource" slot-scope="service">
                 <a-row type="flex" :key="index" justify="space-around" align="middle">
                   <a-col :span="6">
                     <span style="font-weight: bold;font-size: 16px">
@@ -56,11 +56,11 @@
                     <a-icon type="copy"/>
                     <span>文件</span>
                   </a-col>
-                  <a-col :span="2">
+                  <a-col :span="2" @click="handleEdit(service)">
                     <a-icon type="form"/>
                     <span>修改</span>
                   </a-col>
-                  <a-col :span="2">
+                  <a-col :span="2" @click="removeService(service.id)">
                     <a-icon type="laptop"/>
                     <span>删除</span>
                   </a-col>
@@ -98,8 +98,9 @@
   import ARow from "ant-design-vue/es/grid/Row";
   import ServiceRegisterModal from './modules/ServiceRegisterModal'
   import {JantdListMixin} from '@/mixins/JantdListMixin'
-  import {querySerciceCategery} from '@/api/api';
+  import {querySerciceCategery,deleteServiceInfo} from '@/api/api';
   import {deleteAction, postAction, getAction} from '@/api/manage';
+  
 
   export default {
     mixins: [JantdListMixin],
@@ -109,10 +110,10 @@
         treeData: [],
         rootSubmenuKeys: ['sub1', 'sub2', 'sub4'],
         openKeys: ['sub1'],
-        labelid: "",
         keys: "",
         pageSize: 10,
-        models: [],
+        dataSource: [],
+        columns: [],
         collapse: false,
         categoryId: "",
         labels: "",
@@ -139,28 +140,32 @@
           total: 0
         },
         url: {
-          queryServiceInfo: '/serviceInfo/list',
-        }
+          list: '/serviceInfo/list',
+        },
+        /* 排序参数 */
+        isorter:{
+          column: 'createTime',
+          order: 'desc',
+        },
       }
 
     },
     methods: {
-      // 搜索
-      onSearch() {
-        this.ipagination.current = 1
-        this.getModelList();
-      },
-      handleTableChange(pagination) {
-        this.ipagination = pagination;
-        this.getModelList();
-      },
-      // 重置
-      searchReset() {
-        var that = this;
-        that.queryParam = {} //清空查询区域参数
-        this.categoryId = ''
-        this.ipagination.current = 1
-        that.getModelList();
+      // 删除服务
+      removeService(serviceId){
+        var that = this
+          console.log(serviceId)
+          deleteServiceInfo({id: serviceId}).then((res) => {
+          if (res.success) {
+            if(res.success){
+                that.$message.success(res.message);
+                this.ipagination.current = 1
+                that.getModelList();
+              }else{
+                that.$message.warning(res.message);
+              }
+          }
+        })
       },
       // 获取服务分类
       listServiceCategory() {
@@ -177,6 +182,7 @@
         console.log(selectedKeys[0])
         this.categoryId = selectedKeys[0];
         this.ipagination.current = 1
+        this.queryParam.categoryId = this.categoryId;
         this.getModelList();
         console.log(this.categoryId);
       },
@@ -193,161 +199,39 @@
       },
       getModelList(pageNum) {
         //加载数据 若传入参数1则加载第一页的内容
-        var param = Object.assign({}, this.queryParam)
+        var param = Object.assign({}, this.queryParam,this.isorter)
         param.pageNo = this.ipagination.current
         param.pageSize = this.ipagination.pageSize
         param.categoryId = this.categoryId
         this.loading = true
         console.log(param)
-        getAction(this.url.queryServiceInfo, param).then((res) => {
+        getAction(this.url.list, param).then((res) => {
           if (res.success) {
             console.log(res)
-            this.models = res.result.records
+            this.dataSource = res.result.records
             this.ipagination.total = res.result.total
           }
           this.loading = false
         })
 
       },
-      createLabel() {
-        var vm = this;
-        this.$prompt("添加").then(({value}) => {
-          var label = {name: value};
-          vm.$axios.post("/all/addServiceLabel", label).then(data => {
-            vm.labels.push(data);
-          });
-        });
-
-      },
-      fetchLabels() {
-        var vm = this;
-        this.$axios.get("/all/getServiceLabels").then(data => {
-          vm.labels = data;
-        });
-      },
-      selectLabel(nodeobj, node, nodecomp) {
-        this.labelid = nodeobj.id;
-        this.fetchData(1, nodeobj, node, nodecomp);
-      },
-      fetchData(pageNum, nodeobj, node, nodecomp) {
-        var vm = this;
-        this.$axios
-          .post("/all/getLabelServiceUser?pageNum=" + pageNum + "&pageSize=" + this.pageSize,
-            {labelid: nodeobj.id, keys: this.searchKey})
-          .then(data => {
-            vm.models = [].concat(data.list);
-          });
-      },
-      addService() {
-        if (this.labelid != "") {
-          this.$router.push({path: '/detail', query: {labelid: this.labelid, method: "add"}});
-        } else {
-          this.$message('请先选择分类');
+      addService(){
+        if(this.categoryId == ""  ||  this.categoryId  == undefined){
+          this.$message.warning('请选择服务分类！');
+          return;
         }
-      },
-      search() {
-        var vm = this;
-        var searchKeys = vm.searchKeys;
-        this.$axios.post("all/searchServicekeys", {searchKeys: searchKeys})
-          .then(data => {
-            vm.models = [].concat(data.list);
-          })
-      },
-      update(rowService) {
-        var vm = this;
-        this.$router.push({path: '/detail', query: {rowService: rowService, method: "update"}});
-      },
-      deleteService(rowService) {
-        var vm = this;
-        vm.$axios
-          .post("/all/deleteService", rowService
-          )
-          .then(data => {
-            vm.models = [].concat(data.list);
-          })
-          .catch(e => {
-            // vm.$alert("login failure !!!", "tips");
-          });
-      },
-      getParams() {
-        //获取明细传过来数据
-        var vm = this;
-        if (this.$route.query.method == "onsubmit") {
-
-          vm.onSubmit(vm.$route.query.allServiceModel);
-        }
-      },
-      onSubmit(data) {
-        this.models = [].concat(data.list);
-      },
-      getPage() {
-
-      },
-
-      //树的添加方法
-      append(node, data) {
-        console.log(node, data)
-        console.log(node, data)
-      },
-      //删除树
-      remove(node, data) {
-        var vm = this;
-        this.$confirm('此操作将永久删除该标签, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          var label = {id: data.id};
-          vm.$axios.post("/all/removeTreeLabel", label).then(data => {
-            vm.fetchLabels();
-          });
-        }).catch(() => {
-          // this.$message({
-          //     type: 'info',
-          //     message: '已取消删除'
-          // });
-        });
-      },
-      //每页显示数量
-      handleSizeChange(pageSize) {
-        var vm = this;
-        vm.pageSize = pageSize;
-        vm.$axios
-          .post("/serve/changePage?start=" + vm.start + "&pageSize=" + vm.pageSize + "&keys=" + vm.keyword)
-          .then(data => {
-              vm.nodes = [].concat(data);
-            }
-          )
-          .catch(e => {
-
-          })
-      },
-      //页面改变是触发
-      currentChange(page) {
-        var vm = this;
-        vm.$axios
-          .post("/serve/changePage?start=" + start + "&pageSize=" + vm.pageSize + "&keys=" + vm.keyword)
-          .then(data => {
-              vm.nodes = [].concat(data);
-            }
-          )
-          .catch(e => {
-
-          })
+        this.$refs.modalForm.add(this.categoryId);
+        this.$refs.modalForm.title = "新增";
+        this.$refs.modalForm.serviceLabel = [];
       }
-
     },
     mounted() {
       this.listServiceCategory();
-      this.getModelList(1);
-      this.fetchLabels();
-      this.getPage();
     },
     watch: {
       '$route': 'getParams'
     },
     created: function () {
-      this.getParams();
     }
 
   }

@@ -1,9 +1,10 @@
 <template>
   <a-upload
     name="file"
-    :multiple="true"
+    :multiple="false"
     :action="uploadAction"
     :headers="headers"
+    :showUploadList="false"
     :data="{'isup':1,'bizPath':bizPath}"
     :fileList="fileList"
     :beforeUpload="beforeUpload"
@@ -46,7 +47,7 @@
       text:{
         type:String,
         required:false,
-        default:"点击上传"
+        default:"浏览"
       },
       fileType:{
         type:String,
@@ -108,9 +109,10 @@
         }
         let arr = [];
 
-        for(var a=0;a<uploadFiles.length;a++){
-          arr.push(uploadFiles[a].response.message)
-        }
+        // for(var a=0;a<uploadFiles.length;a++){
+        //   arr.push(uploadFiles[a].response.message)
+        // }
+        arr.push(uploadFiles[uploadFiles.length-1].response.message)
         if(arr.length>0){
           path = arr.join(",")
         }

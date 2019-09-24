@@ -91,6 +91,7 @@ const duplicateCheck = (params)=>getAction("/sys/duplicate/check",params);
 const querySerciceCategery = (params)=>getAction("/serviceCategory/list-all",params);
 const startService = (params)=>postAction("/communication/start-service",params);
 const stopService = (params)=>postAction("/communication/stop-service",params);
+const deleteServiceInfo = (params)=>deleteAction("/serviceInfo/delete",params);
 export {
   // imgView,
   // doMian,
@@ -139,6 +140,7 @@ export {
   querySerciceCategery,
   startService,
   stopService,
+  deleteServiceInfo,
 }
 
 
