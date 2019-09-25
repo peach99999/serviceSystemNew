@@ -212,8 +212,8 @@
           this.form.setFieldsValue(pick(this.model,'name','interfaceDescriptionFileName','designer','designerDepartment','contactInformation','description','developer'))
           if(record.serviceLabel){
             this.serviceLabel = record.serviceLabel.split(',');
+            this.categoryId = record.categoryId;
           }
-           this.categoryId = record.categoryId;
         });
       },
       close () {
