@@ -42,7 +42,7 @@
                        {{service.name}}
                     </span>
                     <span style="font-size: 10px;color: #cf1322">
-                      {{service.developerStatus_dictText}}
+                      {{service.designerStatus_dictText}}
                     </span>
                   </a-col>
                   <a-col :span="2" :offset="4">
@@ -67,7 +67,7 @@
                     <a-button type="primary" @click="developerService(service)" style="margin-left:5px">开发</a-button>
                   </a-col>
                   <a-col :span="2">
-                    <a-button type="primary" style="margin-left:5px">提交</a-button>
+                    <a-button @click="submitDeveloperService(service)" type="primary" style="margin-left:5px">提交</a-button>
                   </a-col>
                   <a-col :span="2">
                     <a-button type="primary" @click="removeService(service.id)" style="margin-left:5px">删除</a-button>
@@ -147,6 +147,14 @@
       }
     },
     methods: {
+      // 提交
+      submitDeveloperService(record){
+        console.log(record.minInstance)
+        if(record.minInstance == null){
+            this.$message.error("请先设置开发相关内容后再提交！")
+        }
+      },
+      // 服务开发
       developerService (record) {
         this.$refs.modalForm.edit(record);
         this.$refs.modalForm.title = "开发明细";
@@ -198,7 +206,7 @@
       },
       getModelList(pageNum) {
         //加载数据 若传入参数1则加载第一页的内容
-        var param = Object.assign({}, this.queryParam)
+        var param = Object.assign({}, this.queryParam,this.isorter)
         param.pageNo = this.ipagination.current
         param.pageSize = this.ipagination.pageSize
         param.categoryId = this.categoryId
