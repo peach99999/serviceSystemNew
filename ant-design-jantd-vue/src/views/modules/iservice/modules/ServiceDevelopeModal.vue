@@ -4,18 +4,18 @@
     :width="800"
     :visible="visible"
     :confirmLoading="confirmLoading"
-    @ok="handleOk"
-    @cancel="handleCancel"
-    cancelText="关闭">
-
+    @cancel="handleCancel">
+    <template slot="footer">
+      <a-button key="submit" :loading="loading" type="primary" @click="handleOk">保存</a-button>
+    </template>
     <a-spin :spinning="confirmLoading">
       <a-form :form="form">
         <a-form-item
           :label-col="labelCol"
           :wrapper-col="wrapperCol"
           label="服务名称"
-        >
-          <a-input placeholder="请输入名称" :value="formValue.name" v-decorator="['name', {}]"/>
+          hasFeedback>
+          <a-input placeholder="请输入名称" v-decorator="['name', {}]" disabled/>
         </a-form-item>
 
         <a-form-item
@@ -24,50 +24,28 @@
           label="标签"
         >
           <div style="float: left">
-            <template v-for="(tag, index) in formValue.serviceLabel">
-              <a-tooltip v-if="tag.length > 20" :key="tag" :title="tag">
+            <template v-for="(tag, index) in serviceLabel">
+              <a-tooltip v-if="tag.length > 20" :key="index" :title="tag">
                 <a-tag
                   :key="tag"
-                  :closable="index !== 0"
-                  :afterClose="() => handleTagClose(tag)"
                 >{{ `${tag.slice(0, 20)}...` }}
                 </a-tag>
               </a-tooltip>
               <a-tag
                 v-else
                 :key="tag"
-                :closable="index !== 0"
-                :afterClose="() => handleTagClose(tag)"
               >{{ tag }}
               </a-tag>
             </template>
-            <a-input
-              v-if="tagInputVisible"
-              ref="tagInput"
-              type="text"
-              size="small"
-              :style="{ width: '78px' }"
-              :value="tagInputValue"
-              @change="handleInputChange"
-              @blur="handleTagInputConfirm"
-              @keyup.enter="handleTagInputConfirm"
-            />
-            <a-tag v-else @click="showTagInput" style="background: #fff; borderStyle: dashed;">
-              <a-icon type="plus"/>
-              New Tag
-            </a-tag>
           </div>
         </a-form-item>
 
         <a-form-item
           :label-col="labelCol"
           :wrapper-col="wrapperCol"
-          label="服务开发人员"
-        >
-          <a-input :value="formValue.developerSubmissionUser" v-decorator="['developerSubmissionUser', {}]"/>
+          label="服务开发人员">
+          <a-input v-decorator="['developer', {}]" disabled/>
         </a-form-item>
-
-
         <a-row type="flex" style="margin-top: 20px;margin-bottom: 20px">
           <a-col :span="5" :offset="5">
             <a-button type="primary">服务调用代码框架</a-button>
@@ -80,28 +58,13 @@
         <a-form-item
           :label-col="labelCol"
           :wrapper-col="wrapperCol"
-          label="服务实现"
-        >
+          label="服务实现">
           <a-row type="flex">
             <a-col :span="21">
-              <a-input :value="formValue.serviceImplementationFileId" v-decorator="['serviceImplementationFileId', {}]"/>
+              <a-input placeholder="请上传服务实现文档" v-decorator="['serviceImplementationFileName', validatorRules.serviceImplementationFileName]"/>
             </a-col>
             <a-col :span="3">
-              <a-upload
-                v-decorator="['upload', {
-          valuePropName: 'fileList',
-          getValueFromEvent: normFile,
-        }]"
-                name="logo"
-                action="/upload.do"
-                list-type="picture"
-                showUploadList="false"
-              >
-                <a-button>
-                  <a-icon type="upload"/>
-                  浏览
-                </a-button>
-              </a-upload>
+              <JUpload @input="handleUploadServiceImplementationFileSuccess"></JUpload>
             </a-col>
           </a-row>
         </a-form-item>
@@ -109,87 +72,43 @@
         <a-form-item
           :label-col="labelCol"
           :wrapper-col="wrapperCol"
-          label="用户文档"
-        >
+          label="用户文档">
           <a-row type="flex">
             <a-col :span="21">
-              <a-input :value="formValue.userManualFileId" v-decorator="['userManualFileId', {}]"/>
+              <a-input placeholder="请上传用户文档" v-decorator="['userManualFileName', validatorRules.userManualFileName]"/>
             </a-col>
             <a-col :span="3">
-              <a-upload
-                v-decorator="['upload', {
-          valuePropName: 'fileList',
-          getValueFromEvent: normFile,
-        }]"
-                name="logo"
-                action="/upload.do"
-                list-type="picture"
-                showUploadList="false"
-              >
-                <a-button>
-                  <a-icon type="upload"/>
-                  浏览
-                </a-button>
-              </a-upload>
+              <JUpload @input="handleUploadUserManualFileSuccess"></JUpload>
             </a-col>
           </a-row>
         </a-form-item>
-
-
         <a-form-item
           :label-col="labelCol"
           :wrapper-col="wrapperCol"
-          label="使用案例"
-        >
+          label="使用案例">
           <a-row type="flex">
             <a-col :span="21">
-              <a-input :value="formValue.demoFileId" v-decorator="['demoFileId', {}]"/>
+              <a-input placeholder="请上传使用案例" v-decorator="['demoFileName', validatorRules.demoFileName]"/>
             </a-col>
             <a-col :span="3">
-              <a-upload
-                v-decorator="['upload', {
-          valuePropName: 'fileList',
-          getValueFromEvent: normFile,
-        }]"
-                name="logo"
-                action="/upload.do"
-                list-type="picture"
-                showUploadList="false"
-              >
-                <a-button>
-                  <a-icon type="upload"/>
-                  浏览
-                </a-button>
-              </a-upload>
+              <JUpload @input="handleUploadDemoFileSuccess"></JUpload>             
             </a-col>
           </a-row>
         </a-form-item>
-
-
         <a-form-item
           :label-col="labelCol"
           :wrapper-col="wrapperCol"
           label="最小实例数"
-        >
-          <a-input :value="formValue.minInstance" v-decorator="['minInstance', {}]"/>
+          hasFeedback>
+          <a-input type="number" min='0' oninput="javascript:this.value=this.value.replace(/[^\d]/g,'')" placeholder="请输入最小实例数" v-decorator="['minInstance', validatorRules.minInstance]"/>
         </a-form-item>
         <a-form-item
           :label-col="labelCol"
           :wrapper-col="wrapperCol"
           label="最大实例数"
-        >
-          <a-input :value="formValue.maxInstance" v-decorator="['maxInstance', {}]"/>
+          hasFeedback>
+          <a-input type="number" min='0' oninput="javascript:this.value=this.value.replace(/[^\d]/g,'')" placeholder="请输入最大实例数" v-decorator="['maxInstance', validatorRules.maxInstance]"/>
         </a-form-item>
-        <!--<a-form-item>-->
-        <!--<a-row type="flex" >-->
-        <!--<a-col :span="2" :offset="8">-->
-        <!--<a-button type="primary" @click="onSubmit">提交</a-button>-->
-        <!--</a-col>-->
-        <!--<a-col :span="2">-->
-        <!--<a-button @click="onSave">保存</a-button>-->
-        <!--</a-col>-->
-        <!--</a-row>-->
-        <!--</a-form-item>-->
       </a-form>
     </a-spin>
   </a-modal>
@@ -197,9 +116,12 @@
 <script>
   import ARow from "ant-design-vue/es/grid/Row";
   import './ServiceRegisterModal.less'
+  import pick from 'lodash.pick'
+  import JUpload from '@/components/jantd/JUpload'
+  import { httpAction } from '@/api/manage'
 
   export default {
-    components: {ARow},
+    components: {ARow,JUpload},
     data() {
       return {
         labelCol: {
@@ -210,25 +132,73 @@
           xs: {span: 24},
           sm: {span: 12},
         },
-        tagInputVisible: false,
-        tags: [],
-        tagInputValue: '',
         visible: false,
         form: this.$form.createForm(this),
         confirmLoading: false,
-        formValue:{
-          name:"",
-          serviceLabel:"",
-          developerSubmissionUser:"",
-          serviceImplementationFileId: "",
-          userManualFileId: "",
-          demoFileId: "",
-          minInstance: "",
-          maxInstance: ""
-        }
+        serviceLabel:[],
+        validatorRules:{
+          serviceImplementationFileName:{
+            rules: [
+              { required: true, message: '请上传服务实现文档!' },
+            ]},
+          userManualFileName:{
+            rules: [
+              { required: true, message: '请上传用户文档!' },
+            ]},
+          demoFileName:{
+            rules: [
+              { required: true, message: '请上传用户案例文档!' },
+            ]},
+          minInstance:{
+            rules: [
+              { required: true, message: '请输入最小实例数!' },
+            ]},
+          maxInstance:{
+            rules: [
+              { required: true, message: '请输入最大实例数!' },
+            ]},
+        },
+        serviceImplementationFilePath:'',
+        userManualFilePath:'',
+        demoFilePath:'',
+        loading:false,
+        url: {
+          add: '/serviceInfo/add',
+          edit: "/serviceInfo/edit",
+        },
       };
     },
     methods: {
+      // 服务实现附件上传回调
+      handleUploadServiceImplementationFileSuccess(value){
+        this.serviceImplementationFilePath = value
+        this.form.setFieldsValue({serviceImplementationFileName:this.handleFileName(value)})
+      },
+      // 用户文档附件上传回调
+      handleUploadUserManualFileSuccess(value){
+        this.userManualFilePath = value;
+        this.form.setFieldsValue({userManualFileName:this.handleFileName(value)})
+      },
+      // 使用案例附件上传回调
+      handleUploadDemoFileSuccess(value){
+        this.demoFilePath = value
+        this.form.setFieldsValue({demoFileName:this.handleFileName(value)})
+      },
+      handleFileName(value){
+        console.log(value)
+        let fileName = '';
+        this.interfaceDescriptionFilePath = ''
+        let num = value.lastIndexOf('/')+1
+        let name = value.substring(num)
+        if(name.split('_').length > 2){
+          let count = name.lastIndexOf('_')
+          fileName = name.substring(0,count)
+        }else{
+          fileName = name.split('_')[0]
+        }
+        let fileType = name.split('.')[1]
+        return fileName+'.'+fileType
+      },
       add() {
         this.edit({});
       },
@@ -236,34 +206,19 @@
         this.form.resetFields();
         this.model = Object.assign({}, record);
         this.visible = true;
-      },
-      showTagInput() {
-        this.tagInputVisible = true
         this.$nextTick(() => {
-          this.$refs.tagInput.focus()
-        })
-      },
-      handleInputChange(e) {
-        this.tagInputValue = e.target.value
-      },
-      handleTagInputConfirm() {
-        const inputValue = this.tagInputValue
-        let tags = this.tags
-        if (inputValue && !tags.includes(inputValue)) {
-          tags = [...tags, inputValue]
-        }
-
-        Object.assign(this, {
-          tags,
-          tagInputVisible: false,
-          tagInputValue: ''
-        })
+          this.form.setFieldsValue(pick(this.model,'name','developer','serviceImplementationFileName','userManualFileName','demoFileName','minInstance','maxInstance'))
+          if(record.serviceLabel){
+            this.serviceLabel = record.serviceLabel.split(',');
+          }
+        });
       },
       handleOk () {
         const that = this;
         // 触发表单验证
         this.form.validateFields((err, values) => {
           if (!err) {
+            that.loading = true;
             that.confirmLoading = true;
             let httpurl = '';
             let method = '';
@@ -275,10 +230,10 @@
               method = 'put';
             }
             let formData = Object.assign(this.model, values);
-            //时间格式化
-            formData.punchTime = formData.punchTime?formData.punchTime.format('YYYY-MM-DD HH:mm:ss'):null;
-            formData.birthday = formData.birthday?formData.birthday.format():null;
-
+            formData.serviceImplementationFilePath = this.serviceImplementationFilePath;
+            formData.userManualFilePath = this.userManualFilePath;
+            formData.demoFilePath = this.demoFilePath;
+            formData.developerStatus = "0";
             console.log(formData)
             httpAction(httpurl,formData,method).then((res)=>{
               if(res.success){
@@ -289,6 +244,7 @@
               }
             }).finally(() => {
               that.confirmLoading = false;
+              that.loading = false;
               that.close();
             })
 

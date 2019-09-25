@@ -8,7 +8,7 @@
     @cancel="handleClose"
     >
     <template slot="footer">
-      <a-button key="back" @click="handleSave">保存</a-button>
+      <a-button key="back" :loading="loading" @click="handleSave">保存</a-button>
       <a-button key="submit" type="primary" :loading="loading" @click="handleSubmit(1)">
         提交
       </a-button>
@@ -99,7 +99,7 @@
               <a-input placeholder="请上传接口描述文件" v-decorator="['interfaceDescriptionFileName', validatorRules.interfaceDescriptionFileId]"/>
             </a-col>
             <a-col :span="3">
-            <JUpload @input="handleUploadSuccess"></JUpload>
+              <JUpload @input="handleUploadSuccess"></JUpload>
             </a-col>
           </a-row>
         </a-form-item>
@@ -152,16 +152,6 @@
         url: {
           add: '/serviceInfo/add',
           edit: "/serviceInfo/edit",
-        },
-        formValue:{
-          name: "",
-          // serviceLabel:"",
-          designer:"",
-          designerDepartment:"",
-          contactInformation:"",
-          description:"",
-          interfaceDescriptionFileId:"",
-          developer:""
         },
         validatorRules:{
           name:{
@@ -220,8 +210,10 @@
         this.visible = true;
         this.$nextTick(() => {
           this.form.setFieldsValue(pick(this.model,'name','interfaceDescriptionFileName','designer','designerDepartment','contactInformation','description','developer'))
-          this.serviceLabel = record.serviceLabel.split(',');
-          this.categoryId = record.categoryId;
+          if(record.serviceLabel){
+            this.serviceLabel = record.serviceLabel.split(',');
+          }
+           this.categoryId = record.categoryId;
         });
       },
       close () {
@@ -237,7 +229,7 @@
         // 触发表单验证
         this.form.validateFields((err, values) => {
           if (!err) {
-            this.loading = true;
+            that.loading = true;
             that.confirmLoading = true;
             let httpurl = '';
             let method = '';
@@ -263,8 +255,8 @@
               }
             }).finally(() => {
               that.confirmLoading = false;
-              that.close();
               that.loading = false;
+              that.close();
             })
 
           }

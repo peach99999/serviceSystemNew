@@ -19,7 +19,7 @@ import java.util.Date;
 /**
  * @Description: 服务基本信息
  * @Author: xiagf
- * @Date: 2019-09-19
+ * @Date: 2019-09-25
  */
 @Data
 @TableName("service_info")
@@ -93,18 +93,18 @@ public class ServiceInfo implements Serializable {
     private String description;
 
     /**
-     * 接口描述文件路径
-     */
-    @Excel(name = "接口描述文件路径", width = 15)
-    @ApiModelProperty(value = "接口描述文件路径")
-    private String interfaceDescriptionFilePath;
-
-    /**
      * 接口描述文件名称
      */
     @Excel(name = "接口描述文件名称", width = 15)
     @ApiModelProperty(value = "接口描述文件名称")
     private String interfaceDescriptionFileName;
+
+    /**
+     * 接口描述文件路径
+     */
+    @Excel(name = "接口描述文件路径", width = 15)
+    @ApiModelProperty(value = "接口描述文件路径")
+    private String interfaceDescriptionFilePath;
 
     /**
      * 开发人员
@@ -160,25 +160,46 @@ public class ServiceInfo implements Serializable {
     private String designSubmissionUserId;
 
     /**
-     * 服务实现ID
+     * 服务实现文件名称
      */
-    @Excel(name = "服务实现ID", width = 15)
-    @ApiModelProperty(value = "服务实现ID")
-    private String serviceImplementationFileId;
+    @Excel(name = "服务实现文件名称", width = 15)
+    @ApiModelProperty(value = "服务实现文件名称")
+    private String serviceImplementationFileName;
 
     /**
-     * 用户文档ID
+     * 服务实现文件路径
      */
-    @Excel(name = "用户文档ID", width = 15)
-    @ApiModelProperty(value = "用户文档ID")
-    private String userManualFileId;
+    @Excel(name = "服务实现文件路径", width = 15)
+    @ApiModelProperty(value = "服务实现文件路径")
+    private String serviceImplementationFilePath;
 
     /**
-     * 使用案例文档ID
+     * 用户文档文件名称
      */
-    @Excel(name = "使用案例文档ID", width = 15)
-    @ApiModelProperty(value = "使用案例文档ID")
-    private String demoFileId;
+    @Excel(name = "用户文档文件名称", width = 15)
+    @ApiModelProperty(value = "用户文档文件名称")
+    private String userManualFileName;
+
+    /**
+     * 用户文档文件路径
+     */
+    @Excel(name = "用户文档文件路径", width = 15)
+    @ApiModelProperty(value = "用户文档文件路径")
+    private String userManualFilePath;
+
+    /**
+     * 使用案例文档文件名称
+     */
+    @Excel(name = "使用案例文档文件名称", width = 15)
+    @ApiModelProperty(value = "使用案例文档文件名称")
+    private String demoFileName;
+
+    /**
+     * 使用案例文档文件路径
+     */
+    @Excel(name = "使用案例文档文件路径", width = 15)
+    @ApiModelProperty(value = "使用案例文档文件路径")
+    private String demoFilePath;
 
     /**
      * 最小实例数
@@ -223,7 +244,7 @@ public class ServiceInfo implements Serializable {
     @Excel(name = "开发状态 0:草稿;1:提交", width = 15, dicCode = "developer_status")
     @ApiModelProperty(value = "开发状态 0:草稿;1:提交")
     @Dict(dicCode = "developer_status")
-    private Boolean developerStatus;
+    private String developerStatus;
 
     /**
      * 部署提交时间
@@ -254,7 +275,14 @@ public class ServiceInfo implements Serializable {
     @Excel(name = "部署状态 0:草稿;1:提交", width = 15, dicCode = "deploy_status")
     @ApiModelProperty(value = "部署状态 0:草稿;1:提交")
     @Dict(dicCode = "deploy_status")
-    private Boolean deployStatus;
+    private String deployStatus;
+
+    /**
+     * 删除状态（0，正常，1已删除）
+     */
+    @Excel(name = "删除状态（0，正常，1已删除）", width = 15)
+    @ApiModelProperty(value = "删除状态（0，正常，1已删除）")
+    private String delFlag;
 
     /**
      * 服务id

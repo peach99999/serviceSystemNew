@@ -4,6 +4,6 @@
 <!-- 通用查询结果列 -->
 <sql id="Base_Column_List">
         id,
-    category_id, name, service_label, designer, designer_id, designer_department, contact_information, description, interface_description_file_name, interface_description_file_path, developer, developer_id, designer_status, create_time, design_submission_time, design_submission_user, design_submission_user_id, service_implementation_file_id, user_manual_file_id, demo_file_id, min_instance, max_instance, developer_submission_time, developer_submission_user, developer_submission_user_id, developer_status, deploy_submission_time, deploy_submission_user, deploy_submission_user_id, deploy_status, service_id
+    category_id, name, service_label, designer, designer_id, designer_department, contact_information, description, interface_description_file_name, interface_description_file_path, developer, developer_id, designer_status, create_time, design_submission_time, design_submission_user, design_submission_user_id, service_implementation_file_name, service_implementation_file_path, user_manual_file_name, user_manual_file_path, demo_file_name, demo_file_path, min_instance, max_instance, developer_submission_time, developer_submission_user, developer_submission_user_id, developer_status, deploy_submission_time, deploy_submission_user, deploy_submission_user_id, deploy_status, del_flag, service_id
 </sql>
 </mapper>
