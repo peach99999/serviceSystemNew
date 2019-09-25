@@ -163,8 +163,7 @@
         demoFilePath:'',
         loading:false,
         url: {
-          add: '/serviceInfo/add',
-          edit: "/serviceInfo/edit",
+          edit: "/serviceInfo/edit-developer",
         },
       };
     },

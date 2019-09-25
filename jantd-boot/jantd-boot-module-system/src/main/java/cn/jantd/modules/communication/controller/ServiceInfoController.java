@@ -94,15 +94,15 @@ public class ServiceInfoController {
     }
 
     /**
-     * 编辑
+     * 编辑服务相关信息
      *
      * @param serviceInfo
      * @return
      */
-    @AutoLog(value = "服务基本信息-编辑")
-    @ApiOperation(value = "服务基本信息-编辑")
-    @PutMapping(value = "/edit")
-    public Result<ServiceInfo> edit(@RequestBody ServiceInfo serviceInfo) {
+    @AutoLog(value = "服务基本信息-编辑服务相关信息")
+    @ApiOperation(value = "服务基本信息-编辑服务相关信息")
+    @PutMapping(value = "/edit-register")
+    public Result<ServiceInfo> editRegister(@RequestBody ServiceInfo serviceInfo) {
         Result<ServiceInfo> result = new Result<>();
         ServiceInfo serviceInfoEntity = serviceInfoService.getById(serviceInfo.getId());
         if (serviceInfoEntity == null) {
@@ -119,17 +119,89 @@ public class ServiceInfoController {
     }
 
     /**
+     * 编辑开发相关信息
+     *
+     * @param serviceInfo
+     * @return
+     */
+    @AutoLog(value = "服务基本信息-编辑开发相关信息")
+    @ApiOperation(value = "服务基本信息-编辑开发相关信息")
+    @PutMapping(value = "/edit-developer")
+    public Result<ServiceInfo> editDeveloper(@RequestBody ServiceInfo serviceInfo) {
+        Result<ServiceInfo> result = new Result<>();
+        ServiceInfo serviceInfoEntity = serviceInfoService.getById(serviceInfo.getId());
+        if (serviceInfoEntity == null) {
+            result.error500("未找到对应实体");
+        } else {
+            setDeveloperUser(serviceInfo);
+            boolean ok = serviceInfoService.updateById(serviceInfo);
+            if (ok) {
+                result.success("修改成功!");
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 编辑部署相关信息
+     *
+     * @param serviceInfo
+     * @return
+     */
+    @AutoLog(value = "服务基本信息-编辑部署相关信息")
+    @ApiOperation(value = "服务基本信息-编辑部署相关信息")
+    @PutMapping(value = "/edit-deploy")
+    public Result<ServiceInfo> editDeploy(@RequestBody ServiceInfo serviceInfo) {
+        Result<ServiceInfo> result = new Result<>();
+        ServiceInfo serviceInfoEntity = serviceInfoService.getById(serviceInfo.getId());
+        if (serviceInfoEntity == null) {
+            result.error500("未找到对应实体");
+        } else {
+            setDeployUser(serviceInfo);
+            boolean ok = serviceInfoService.updateById(serviceInfo);
+            if (ok) {
+                result.success("修改成功!");
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 设置部署相关信息
+     *
+     * @param serviceInfo
+     */
+    private void setDeployUser(ServiceInfo serviceInfo) {
+        LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        serviceInfo.setDeploySubmissionTime(new Date());
+        serviceInfo.setDeploySubmissionUser(user.getRealname());
+        serviceInfo.setDeploySubmissionUserId(user.getId());
+    }
+
+    /**
+     * 设置开发人员相关信息
+     *
+     * @param serviceInfo
+     */
+    private void setDeveloperUser(ServiceInfo serviceInfo) {
+        LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        serviceInfo.setDeveloperSubmissionTime(new Date());
+        serviceInfo.setDeveloperSubmissionUser(user.getRealname());
+        serviceInfo.setDeveloperSubmissionUserId(user.getId());
+    }
+
+    /**
      * 设置设计提交人员相关信息
      *
      * @param serviceInfo
      */
     private void setDesignUser(@RequestBody ServiceInfo serviceInfo) {
-        if ("1".equals(serviceInfo.getDesignerStatus())) {
-            LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-            serviceInfo.setDesignSubmissionTime(new Date());
-            serviceInfo.setDesignSubmissionUser(user.getRealname());
-            serviceInfo.setDesignSubmissionUserId(user.getId());
-        }
+        LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        serviceInfo.setDesignSubmissionTime(new Date());
+        serviceInfo.setDesignSubmissionUser(user.getRealname());
+        serviceInfo.setDesignSubmissionUserId(user.getId());
     }
 
     /**

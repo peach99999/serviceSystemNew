@@ -2,6 +2,7 @@ package cn.jantd.modules.communication.dto.communication;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * QueryAllNodesDTO 查询所有节点
@@ -11,6 +12,7 @@ import lombok.Data;
  */
 @Data
 @ApiModel("查询所有节点")
+@EqualsAndHashCode(callSuper = false)
 public class QueryAllNodesDTO extends BaseDTO {
 
 

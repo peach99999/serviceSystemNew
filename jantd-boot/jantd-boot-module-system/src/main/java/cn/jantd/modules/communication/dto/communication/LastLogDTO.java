@@ -2,6 +2,7 @@ package cn.jantd.modules.communication.dto.communication;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * LastLogDTO 获取最近的日志
@@ -11,6 +12,7 @@ import lombok.Data;
  */
 @Data
 @ApiModel("获取最近的日志")
+@EqualsAndHashCode(callSuper = false)
 public class LastLogDTO extends BaseDTO {
 
     /**

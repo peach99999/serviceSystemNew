@@ -2,6 +2,7 @@ package cn.jantd.modules.communication.dto.communication;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * ServiceDetailDTO 查询单个服务
@@ -11,6 +12,7 @@ import lombok.Data;
  */
 @Data
 @ApiModel("查询单个服务")
+@EqualsAndHashCode(callSuper = false)
 public class ServiceDetailDTO extends BaseDTO {
 
     /**

@@ -42,7 +42,7 @@
                        {{service.name}}
                     </span>
                     <span style="font-size: 10px;color: #cf1322">
-                      {{service.designerStatus_dictText}}
+                      {{service.developerStatus_dictText}}
                     </span>
                   </a-col>
                   <a-col :span="2" :offset="4">

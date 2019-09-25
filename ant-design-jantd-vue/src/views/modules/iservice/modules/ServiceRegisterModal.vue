@@ -151,7 +151,7 @@
         },
         url: {
           add: '/serviceInfo/add',
-          edit: "/serviceInfo/edit",
+          edit: "/serviceInfo/edit-register",
         },
         validatorRules:{
           name:{
