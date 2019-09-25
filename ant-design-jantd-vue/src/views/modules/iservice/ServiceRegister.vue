@@ -45,9 +45,9 @@
               <template v-for="(service,index) in dataSource" slot-scope="service">
                 <a-row type="flex" :key="index" justify="space-around" align="middle">
                   <a-col :span="6">
-                    <span style="font-weight: bold;font-size: 16px">
+                    <a href="#" @click="showServiceDetail(service)" style="font-weight: bold;font-size: 16px; color:rgba(0, 0, 0, 0.65)" >
                        {{service.name}}
-                    </span>
+                    </a>
                     <span style="font-size: 10px;color: #cf1322">
                       {{service.designerStatus_dictText}}
                     </span>
@@ -67,7 +67,7 @@
                 </a-row>
                 <div class="divLine" :key="index"/>
                 <p class="text" :key="index">
-                  <a href="#">{{service.description}}</a>
+                  <a href="#" @click="showServiceDetail(service)">{{service.description}}</a>
                 </p>
                 <div class="can_div" :key="index">
                   <div class="can_left">标签：
@@ -91,6 +91,8 @@
     </a-layout>
     <!-- 表单区域 -->
     <serviceRegister-modal ref="modalForm" @ok="modalFormOk"></serviceRegister-modal>
+    <servicePreview-modal ref="servicePreviewDetailForm"></servicePreview-modal>
+    
   </div>
 </template>
 <script>
@@ -100,11 +102,11 @@
   import {JantdListMixin} from '@/mixins/JantdListMixin'
   import {querySerciceCategery,deleteServiceInfo} from '@/api/api';
   import {deleteAction, postAction, getAction} from '@/api/manage';
-  
+  import ServicePreviewModal from './modules/ServicePreviewModal'
 
   export default {
     mixins: [JantdListMixin],
-    components: {ARow, ATableColumn, ServiceRegisterModal},
+    components: {ARow, ATableColumn, ServiceRegisterModal,ServicePreviewModal},
     data() {
       return {
         treeData: [],
@@ -142,6 +144,15 @@
 
     },
     methods: {
+      // 服务详情
+      showServiceDetail(record){
+        if(record.serviceId == null){
+          this.$message.warning('请先注册服务!');
+        }else{
+          this.$refs.servicePreviewDetailForm.detail(record);
+          this.$refs.servicePreviewDetailForm.title = "服务详情";
+        }
+      },
       // 删除服务
       removeService(serviceId){
         var that = this

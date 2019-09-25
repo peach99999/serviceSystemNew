@@ -92,6 +92,7 @@ const querySerciceCategery = (params)=>getAction("/serviceCategory/list-all",par
 const startService = (params)=>postAction("/communication/start-service",params);
 const stopService = (params)=>postAction("/communication/stop-service",params);
 const deleteServiceInfo = (params)=>deleteAction("/serviceInfo/delete",params);
+const getIndividualServiceStatistics = (params)=>getAction("/communication/query-individual-service-statistics",params);
 export {
   // imgView,
   // doMian,
@@ -141,6 +142,7 @@ export {
   startService,
   stopService,
   deleteServiceInfo,
+  getIndividualServiceStatistics,
 }
 
 

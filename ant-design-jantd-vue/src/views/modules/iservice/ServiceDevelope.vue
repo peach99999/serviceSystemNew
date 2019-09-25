@@ -38,9 +38,9 @@
               <template v-for="(service,index) in dataSource" slot-scope="service">
                 <a-row type="flex" :key="index" justify="space-around" align="middle">
                   <a-col :span="6">
-                    <span style="font-weight: bold;font-size: 16px" >
+                    <a href="#" @click="showServiceDetail(service)" style="font-weight: bold;font-size: 16px; color:rgba(0, 0, 0, 0.65)" >
                        {{service.name}}
-                    </span>
+                    </a>
                     <span style="font-size: 10px;color: #cf1322">
                       {{service.designerStatus_dictText}}
                     </span>
@@ -61,8 +61,6 @@
                     <a-icon type="laptop"/>
                     <span>代码</span>
                   </a-col>
-
-
                   <a-col :span="2" >
                     <a-button type="primary" @click="developerService(service)" style="margin-left:5px">开发</a-button>
                   </a-col>
@@ -76,7 +74,7 @@
                 </a-row>
                 <div class="divLine" :key="index"/>
                 <p class="text" :key="index">
-                  <a href="#">{{service.description}}</a>
+                  <a href="#" @click="showServiceDetail(service)">{{service.description}}</a>
                 </p>
                 <div class="can_div" :key="index">
                   <div class="can_left">标签：
@@ -100,6 +98,7 @@
     </a-layout>
     <!-- 表单区域 -->
     <ServiceDevelope-modal ref="modalForm" @ok="modalFormOk"></ServiceDevelope-modal>
+    <servicePreview-modal ref="servicePreviewDetailForm"></servicePreview-modal>
   </div>
 </template>
 <script>
@@ -107,10 +106,12 @@
   import ARow from "ant-design-vue/es/grid/Row";
   import {querySerciceCategery,deleteServiceInfo} from '@/api/api';
   import { deleteAction, postAction, getAction } from '@/api/manage';
-  import {JantdListMixin} from '@/mixins/JantdListMixin'
-  import ServiceDevelopeModal from './modules/ServiceDevelopeModal'
+  import {JantdListMixin} from '@/mixins/JantdListMixin';
+  import ServiceDevelopeModal from './modules/ServiceDevelopeModal';
+  import ServicePreviewModal from './modules/ServicePreviewModal';
+
   export default {
-    components: {ARow, ATableColumn,ServiceDevelopeModal},
+    components: {ARow, ATableColumn,ServiceDevelopeModal,ServicePreviewModal},
     mixins: [JantdListMixin],
     data() {
       return {
@@ -147,6 +148,15 @@
       }
     },
     methods: {
+      // 服务详情
+      showServiceDetail(record){
+        if(record.serviceId == null){
+          this.$message.warning('请先注册服务!');
+        }else{
+          this.$refs.servicePreviewDetailForm.detail(record);
+          this.$refs.servicePreviewDetailForm.title = "服务详情";
+        }
+      },
       // 提交
       submitDeveloperService(record){
         console.log(record.minInstance)

@@ -38,9 +38,9 @@
               <template v-for="(service,index) in dataSource" slot-scope="service">
                 <a-row type="flex" :key="index" justify="space-around" align="middle">
                   <a-col :span="6">
-                    <span style="font-weight: bold;font-size: 16px" >
+                    <a href="#" @click="showServiceDetail(service)" style="font-weight: bold;font-size: 16px; color:rgba(0, 0, 0, 0.65)" >
                        {{service.name}}
-                    </span>
+                    </a>
                   </a-col>
                   <a-col :span="2" :offset="12">
                     <a-button type="primary" style="margin-left:5px" @click="deploy">部署</a-button>
@@ -55,7 +55,7 @@
                 </a-row>
                 <div class="divLine" :key="index"/>
                 <p class="text" :key="index">
-                  <a href="#">{{service.description}}</a>
+                  <a href="#" @click="showServiceDetail(service)">{{service.description}}</a>
                 </p>
                 <div class="can_div" :key="index">
                   <div class="can_left">标签：
@@ -77,6 +77,7 @@
         <a-layout-footer>{{'12'}}</a-layout-footer>
       </a-layout>
     </a-layout>
+    <servicePreview-modal ref="servicePreviewDetailForm"></servicePreview-modal>
   </div>
 </template>
 <script>
@@ -84,9 +85,11 @@
   import ARow from "ant-design-vue/es/grid/Row";
   import { querySerciceCategery, stopService, startService } from '@/api/api';
   import { deleteAction, postAction, getAction } from '@/api/manage';
-  import {JantdListMixin} from '@/mixins/JantdListMixin'
+  import {JantdListMixin} from '@/mixins/JantdListMixin';
+  import ServicePreviewModal from './modules/ServicePreviewModal';
+
   export default {
-    components: {ARow, ATableColumn},
+    components: {ARow, ATableColumn, ServicePreviewModal},
     mixins: [JantdListMixin],
     data() {
       return {
@@ -124,6 +127,15 @@
       }
     },
     methods: {
+      // 服务详情
+      showServiceDetail(record){
+        if(record.serviceId == null){
+          this.$message.warning('请先注册服务!');
+        }else{
+          this.$refs.servicePreviewDetailForm.detail(record);
+          this.$refs.servicePreviewDetailForm.title = "服务详情";
+        }
+      },
       // 启动服务
       startService(serviceId){
         let that = this
