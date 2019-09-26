@@ -1,5 +1,6 @@
 package cn.jantd.modules.communication.dto.communication;
 
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,7 +49,7 @@ public class IndividualNodeStatisticsDTO extends BaseDTO {
     /**
      * 磁盘可用大小信息
      */
-    private DiskInfoDTO disk_available;
+    private JSONObject disk_available;
 
     /**
      * 运行中服务数量

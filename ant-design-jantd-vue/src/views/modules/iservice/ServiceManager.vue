@@ -14,7 +14,6 @@
           showLine
           :treeData="treeData"
           @select="this.onSelect"
-          @check="this.onCheck"
         >
         </a-tree>
       </a-layout-sider>
@@ -43,7 +42,7 @@
                     </a>
                   </a-col>
                   <a-col :span="2" :offset="12">
-                    <a-button type="primary" style="margin-left:5px" @click="deploy">部署</a-button>
+                    <a-button type="primary" style="margin-left:5px" @click="deploy(service)">部署</a-button>
                   </a-col>
                   <a-col :span="2">
                     <a-button type="primary" style="margin-left:5px" @click="startService(service.serviceId)">启动</a-button>
@@ -67,8 +66,8 @@
                   </div>
                 </div>
                 <div class="subit" :key="index">
-                  上传者：{{service.designer}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  发布时间： {{service.createTime.substring(0,10)}}
+                  开发人员：{{service.developer}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  部署时间： {{service.deploySubmissionTime == null?'':service.deploySubmissionTime.substring(0,10)}}
                 </div>
               </template>
             </a-table-column>
@@ -78,6 +77,7 @@
       </a-layout>
     </a-layout>
     <servicePreview-modal ref="servicePreviewDetailForm"></servicePreview-modal>
+    <serviceManager-modal ref="serviceManagerForm"></serviceManager-modal>
   </div>
 </template>
 <script>
@@ -87,15 +87,14 @@
   import { deleteAction, postAction, getAction } from '@/api/manage';
   import {JantdListMixin} from '@/mixins/JantdListMixin';
   import ServicePreviewModal from './modules/ServicePreviewModal';
+  import ServiceManagerModal from './modules/ServiceManagerModal';
 
   export default {
-    components: {ARow, ATableColumn, ServicePreviewModal},
+    components: {ARow, ATableColumn, ServicePreviewModal,ServiceManagerModal},
     mixins: [JantdListMixin],
     data() {
       return {
         treeData: [],
-        rootSubmenuKeys: ['sub1', 'sub2', 'sub4'],
-        openKeys: ['sub1'],
         dataSource: [],
         columns: [],
         collapse: false,
@@ -189,9 +188,7 @@
         this.getModelList();
         console.log(this.categoryId);
       },
-      onCheck (checkedKeys, info) {
-        console.log('onCheck', checkedKeys)
-      },
+
       getModelList(pageNum) {
         //加载数据 若传入参数1则加载第一页的内容
         var param = Object.assign({}, this.queryParam)
@@ -213,15 +210,17 @@
       listServiceCategory() {
         querySerciceCategery().then((res) => {
           if (res.success) {
-            console.log(res.results)
+            console.log(res.result)
             res.result.forEach(data => {
               this.treeData.push({"title":data.name,"key":data.id})
             })
           }
         })
       },
-      deploy(){
-        this.$router.push({ path:'/iservice/modules/ServiceManagerModal'})
+      deploy(record){
+        // this.$router.push({ path:'/iservice/modules/ServiceManagerModal'})
+          this.$refs.serviceManagerForm.show(record);
+          this.$refs.serviceManagerForm.title = "部署详情";
       }
 
     },

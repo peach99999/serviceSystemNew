@@ -20,7 +20,7 @@
       <a-row type="flex" justify="start" :gutter="30" style="margin-left: 1px">
         <a-col :span="15">
           <template v-bind="serviceInfo">
-            <a-card style="height: 240px">
+            <a-card style="height: 250px">
               <a-row type="flex" justify="start" style="margin-top: 15px">
                 <a-col :span="4">
                   <span class="span-left">{{"名称:"}}</span>
@@ -60,7 +60,7 @@
                   <span class="span-left">{{"描述:"}}</span>
                 </a-col>
                 <a-col :span="8">
-                  <a-tooltip v-if="serviceInfo.description.length > 20">
+                  <a-tooltip v-if="serviceInfo.description !== undefined && serviceInfo.description.length > 20">
                     <span class="span-margin">{{serviceInfo.description.substring(0,20) + '....'}}</span>
                   </a-tooltip>
                   <span v-else class="span-margin">{{serviceInfo.description}}</span>
@@ -104,36 +104,40 @@
           <span class="point">
           </span>
           <span style="font-weight: bold">
-            {{"服务列表"}}
+            {{"节点列表"}}
           </span>
         </a-col>
       </a-row>
       <a-row type="flex" justify="start" style="margin-top: 5px">
         <a-col :span="28">
-          <a-table :dataSource="data" :fit="true" :pagination="false">
+          <a-table 
+            :dataSource="nodeDataSource" 
+            :fit="true" 
+            :pagination="false"
+            :loading="loading">
             <a-table-column min-width="140px" title="节点编码">
               <template slot-scope="scope">
-                {{scope.name}}
+                {{scope.nodeId}}
               </template>
             </a-table-column>
             <a-table-column min-width="140px" title="主机名">
               <template slot-scope="scope">
-                {{scope.name}}
+                {{scope.hostName}}
               </template>
             </a-table-column>
             <a-table-column min-width="140px" title="IP">
               <template slot-scope="scope">
-                {{scope.name}}
+                {{scope.ip}}
               </template>
             </a-table-column>
             <a-table-column min-width="140px" title="本服务部署数">
               <template slot-scope="scope">
-                {{scope.name}}
+                {{scope.deployedServices}}
               </template>
             </a-table-column>
             <a-table-column min-width="140px" title="本服务运行数">
               <template slot-scope="scope">
-                {{scope.name}}
+                {{scope.runningServices}}
               </template>
             </a-table-column>
             <a-table-column min-width="140px" title="CPU占用率">
@@ -149,16 +153,6 @@
             <a-table-column min-width="140px" title="磁盘使用率">
               <template slot-scope="scope">
                 <a-progress :percent="50" :showInfo="false" />
-              </template>
-            </a-table-column>
-            <a-table-column min-width="140px" title="调用次数">
-              <template slot-scope="scope">
-                {{scope.name}}
-              </template>
-            </a-table-column>
-            <a-table-column min-width="140px" title="平均耗时">
-              <template slot-scope="scope">
-                {{scope.name}}
               </template>
             </a-table-column>
           </a-table>
@@ -211,7 +205,7 @@
                 </a-col>
                 <a-col :span="4">
                   <span >
-                    <a-progress :percent=serviceStatistics.total_cpu_used status="active"/>
+                    <a-progress :percent=parseInt(serviceStatistics.total_cpu_used) status="active"/>
                   </span>
                 </a-col>
                 <a-col :span="4" :offset="4">
@@ -227,7 +221,7 @@
                 </a-col>
                 <a-col :span="4">
                   <span>
-                    <a-progress :percent=serviceStatistics.total_memory_used status="active"/>
+                    <a-progress :percent=parseInt(serviceStatistics.total_memory_used) status="active"/>
                   </span>
                 </a-col>
                 <a-col :span="4" :offset="4">
@@ -245,37 +239,22 @@
   </a-drawer>
 </template>
 <script>
-  const data = [{
-    key: '1',
-    name: 'John Brown',
-    num: '21',
-    address: 'New York No. 1 Lake Park',
-  }, {
-    key: '2',
-    name: 'Jim Green',
-    num: '44',
-    address: 'London No. 1 Lake Park',
-  }, {
-    key: '3',
-    name: 'Joe Black',
-    num: '66',
-    address: 'Sidney No. 1 Lake Park',
-  }];
   
-  import {getIndividualServiceStatistics} from '@/api/api'
+  import {getIndividualServiceStatistics,getServiceDetail,queryNodeDetail} from '@/api/api'
   export default {
     name: "ServicePreviewModal",
     data() {
       return {
-        data,
+        nodeDataSource:[],
         title:"",
         visible: false,
+        loading: false,
         serviceInfo:'',
         url: {
           downloadUrl: window._CONFIG['domianURL']+"/sys/common/download",
         },
         serviceStatistics:{},
-        cpuUsed:'80'
+        serviceDetatl:{},
       }
     },
        
@@ -316,20 +295,72 @@
         let that = this;
         that.refresh();
         that.visible = true;
+        that.loading = true;
         that.serviceInfo = record;
         // 获取服务概览
         that.getServiceStatistics(that.serviceInfo.serviceId);
+        // 查询单个单个服务信息获取部署节点获取节点列表
+        that.getServiceDetail(record.serviceId);
+      },
+      // 查询单个单个服务信息获取部署节点获取节点列表
+      getServiceDetail(serviceId){
+        getServiceDetail({serviceId:serviceId}).then((res)=>{
+          if(res.success){
+            console.log(res.result.deployed_on_nodes)
+            this.serviceDetatl = res.result;
+            // 查询节点明细信息
+            this.getNodeDetail(this.serviceDetatl);
+          }else {
+            this.$message.error(res.message);
+            this.loading = false
+          }
+        })
+      },
+      // 查询节点明细信息
+      getNodeDetail(serviceDetatl){
+        if(serviceDetatl.deployed_on_nodes.length > 0){
+          for (let index = 0; index < serviceDetatl.deployed_on_nodes.length; index++) {
+            const element = serviceDetatl.deployed_on_nodes[index];
+            console.log(element)
+            this.fetchNodeDetail(element);
+          }
+          this.loading = false
+        }else{
+          this.loading = false
+        }
+        
+      },
+      fetchNodeDetail(nodeId){
+        queryNodeDetail({nodeId:nodeId}).then((res)=>{
+          if(res.success){
+            console.log(res.result)
+            let temp = {}
+            temp.nodeId = res.result.node_id
+            temp.hostName = res.result.host_name
+            temp.ip = res.result.ip
+            temp.deployedServices = res.result.deployed_services.length
+            temp.runningservices = res.result.running_services.length
+            temp.cpuCount = res.result.cpu_count
+            temp.memorySize = res.result.memory_size
+            temp.diskSize = res.result.disk_size
+            this.nodeDataSource.push(temp)
+          }else {
+            this.$message.error(res.message);
+          }
+        })
       },
       refresh () {
         this.serviceInfo = {}
         this.serviceStatistics = {}
+        this.serviceDetatl = {}
+        this.nodeDataSource = []
       },
       // 获取服务概览
       getServiceStatistics(serviceId){
         getIndividualServiceStatistics({serviceId:serviceId}).then((res)=>{
           if(res.success){
             console.log(res.result)
-            this.serviceStatistics = res.result;
+            this.serviceStatistics = res.result
           }else {
             this.$message.error(res.message);
           }

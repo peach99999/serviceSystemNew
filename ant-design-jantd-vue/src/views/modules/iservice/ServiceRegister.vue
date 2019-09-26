@@ -21,8 +21,7 @@
           showLine
           :treeData="treeData"
           @select="this.onSelect"
-          @check="this.onCheck"
-        >
+          >
         </a-tree>
       </a-layout-sider>
       <a-layout>
@@ -54,15 +53,17 @@
                   </a-col>
                   <a-col :span="2" :offset="12">
                     <a-icon type="copy"/>
-                    <span>文件</span>
+                    <a @click="uploadFile(service.interfaceDescriptionFilePath)" style="color:rgba(0, 0, 0, 0.65)">文件</a>
                   </a-col>
                   <a-col :span="2" @click="handleEdit(service)">
                     <a-icon type="form"/>
                     <span>修改</span>
                   </a-col>
-                  <a-col :span="2" @click="removeService(service.id)">
+                  <a-col :span="2">
                     <a-icon type="laptop"/>
-                    <span>删除</span>
+                      <a-popconfirm title="确定删除吗?" @confirm="() => removeService(service.id)">
+                        <span>删除</span>
+                      </a-popconfirm>
                   </a-col>
                 </a-row>
                 <div class="divLine" :key="index"/>
@@ -79,8 +80,8 @@
                   </div>
                 </div>
                 <div class="subit" :key="index">
-                  上传者：{{service.designer}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  发布时间： {{service.createTime.substring(0,10)}}
+                  设计人员：{{service.designer}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  注册时间： {{service.createTime == null?'':service.createTime.substring(0,10)}}
                 </div>
               </template>
             </a-table-column>
@@ -110,8 +111,6 @@
     data() {
       return {
         treeData: [],
-        rootSubmenuKeys: ['sub1', 'sub2', 'sub4'],
-        openKeys: ['sub1'],
         dataSource: [],
         columns: [],
         collapse: false,
@@ -173,7 +172,7 @@
       listServiceCategory() {
         querySerciceCategery().then((res) => {
           if (res.success) {
-            console.log(res.results)
+            console.log(res.result)
             res.result.forEach(data => {
               this.treeData.push({"title": data.name, "key": data.id})
             })
@@ -188,17 +187,7 @@
         this.getModelList();
         console.log(this.categoryId);
       },
-      onCheck(checkedKeys, info) {
-        console.log('onCheck', checkedKeys)
-      },
-      onOpenChange(openKeys) {
-        const latestOpenKey = openKeys.find(key => this.openKeys.indexOf(key) === -1)
-        if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-          this.openKeys = openKeys
-        } else {
-          this.openKeys = latestOpenKey ? [latestOpenKey] : []
-        }
-      },
+     
       getModelList(pageNum) {
         //加载数据 若传入参数1则加载第一页的内容
         var param = Object.assign({}, this.queryParam,this.isorter)

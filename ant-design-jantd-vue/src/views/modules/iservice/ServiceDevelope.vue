@@ -14,7 +14,6 @@
         showLine
         :treeData="treeData"
         @select="this.onSelect"
-        @check="this.onCheck"
       >
         </a-tree>
       </a-layout-sider>
@@ -42,24 +41,24 @@
                        {{service.name}}
                     </a>
                     <span style="font-size: 10px;color: #cf1322">
-                      {{service.designerStatus_dictText}}
+                      {{service.developerStatus_dictText}}
                     </span>
                   </a-col>
                   <a-col :span="2" :offset="4">
                     <a-icon type="folder"/>
-                    <span>文件</span>
+                    <a @click="uploadFile(service.interfaceDescriptionFilePath)" style="color:rgba(0, 0, 0, 0.65)">文件</a>
                   </a-col>
                   <a-col :span="2">
                     <a-icon type="copy"/>
-                    <span>文档</span>
+                    <a @click="uploadFile(service.userManualFilePath)" style="color:rgba(0, 0, 0, 0.65)">文档</a>
                   </a-col>
                   <a-col :span="2">
                     <a-icon type="form"/>
-                    <span>案例</span>
+                    <a @click="uploadFile(service.demoFilePath)" style="color:rgba(0, 0, 0, 0.65)">案例</a>
                   </a-col>
                   <a-col :span="2">
                     <a-icon type="laptop"/>
-                    <span>代码</span>
+                    <a @click="uploadFile(service.serviceImplementationFilePath)" style="color:rgba(0, 0, 0, 0.65)">代码</a>
                   </a-col>
                   <a-col :span="2" >
                     <a-button type="primary" @click="developerService(service)" style="margin-left:5px">开发</a-button>
@@ -68,8 +67,11 @@
                     <a-button @click="submitDeveloperService(service)" type="primary" style="margin-left:5px">提交</a-button>
                   </a-col>
                   <a-col :span="2">
-                    <a-button type="primary" @click="removeService(service.id)" style="margin-left:5px">删除</a-button>
+                    <a-popconfirm title="确定删除吗?" @confirm="() => removeService(service.id)">
+                      <a-button type="primary" style="margin-left:5px">删除</a-button>
+                    </a-popconfirm>
                   </a-col>
+                  
 
                 </a-row>
                 <div class="divLine" :key="index"/>
@@ -86,8 +88,8 @@
                   </div>
                 </div>
                 <div class="subit" :key="index">
-                  上传者：{{service.designer}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  发布时间： {{service.createTime.substring(0,10)}}
+                  开发人员：{{service.developer}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  开发时间： {{service.developerSubmissionTime == null?'':service.developerSubmissionTime.substring(0,10)}}
                 </div>
               </template>
             </a-table-column>
@@ -116,8 +118,6 @@
     data() {
       return {
         treeData:[],
-        rootSubmenuKeys: ['sub1', 'sub2', 'sub4'],
-        openKeys: ['sub1'],
         dataSource: [],
         columns: [],
         categoryId: "",
@@ -189,7 +189,7 @@
       listServiceCategory() {
         querySerciceCategery().then((res) => {
           if (res.success) {
-            console.log(res.results)
+            console.log(res.result)
             res.result.forEach(data => {
               this.treeData.push({"title": data.name, "key": data.id})
             })
@@ -203,17 +203,7 @@
         this.getModelList();
         console.log(this.categoryId);
       },
-      onCheck (checkedKeys, info) {
-        console.log('onCheck', checkedKeys)
-      },
-      onOpenChange(openKeys) {
-        const latestOpenKey = openKeys.find(key => this.openKeys.indexOf(key) === -1)
-        if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-          this.openKeys = openKeys
-        } else {
-          this.openKeys = latestOpenKey ? [latestOpenKey] : []
-        }
-      },
+      
       getModelList(pageNum) {
         //加载数据 若传入参数1则加载第一页的内容
         var param = Object.assign({}, this.queryParam,this.isorter)

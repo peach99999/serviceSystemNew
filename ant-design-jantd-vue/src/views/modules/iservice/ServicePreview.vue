@@ -14,7 +14,6 @@
           showLine
           :treeData="treeData"
           @select="this.onSelect"
-          @check="this.onCheck"
         >
         </a-tree>
       </a-layout-sider>
@@ -29,9 +28,9 @@
             @change="handleTableChange">
             <a-table-column min-width="140px">
               <template slot-scope="scope">
-                <a href="#">
-                  <img src="../../../../src/assets/img/img.jpg" width="80px" height="80px">
-                </a>
+                <!-- <a href="#"> -->
+                  <img :src="scope.url" width="100px" height="130px">
+                <!-- </a> -->
               </template>
             </a-table-column>
             <a-table-column min-width="140px">
@@ -49,15 +48,15 @@
                   <!--</a-col>-->
                   <a-col :span="2" :offset="12">
                     <a-icon type="copy"/>
-                    <span>文档</span>
+                    <a @click="uploadFile(service.userManualFilePath)" style="color:rgba(0, 0, 0, 0.65)">文档</a>
                   </a-col>
                   <a-col :span="2">
                     <a-icon type="form"/>
-                    <span>案例</span>
+                    <a @click="uploadFile(service.demoFilePath)" style="color:rgba(0, 0, 0, 0.65)">案例</a>
                   </a-col>
                   <a-col :span="2">
                     <a-icon type="laptop"/>
-                    <span>代码</span>
+                    <a @click="uploadFile(service.serviceImplementationFilePath)" style="color:rgba(0, 0, 0, 0.65)">代码</a>
                   </a-col>
                 </a-row>
                 <div class="divLine" :key="index"/>
@@ -74,8 +73,8 @@
                   </div>
                 </div>
                 <div class="subit" :key="index">
-                  上传者：{{service.designer}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  发布时间： {{service.createTime.substring(0,10)}}
+                  开发人员：{{service.developer}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  部署时间： {{service.deploySubmissionTime == null?'':service.deploySubmissionTime.substring(0,10)}}
                 </div>
               </template>
             </a-table-column>
@@ -90,10 +89,11 @@
 <script>
   import ATableColumn from "ant-design-vue/es/table/Column";
   import ARow from "ant-design-vue/es/grid/Row";
-  import {querySerciceCategery} from '@/api/api'
+  import {querySerciceCategery,querySerciceCategeryById} from '@/api/api'
   import { deleteAction, postAction, getAction } from '@/api/manage';
   import {JantdListMixin} from '@/mixins/JantdListMixin';
   import ServicePreviewModal from './modules/ServicePreviewModal'
+
 
   export default {
     mixins: [JantdListMixin],
@@ -122,6 +122,7 @@
         },
         url: {
           list: '/serviceInfo/list',
+          imgerver: window._CONFIG['domianURL']+"/sys/common/view",
         },
         /* 排序参数 */
         isorter:{
@@ -130,7 +131,35 @@
         },
       }
     },
+    computed: {
+    },
+    mounted(){
+    },
+    
     methods: {
+      getAvatarView(service){
+        // return this.url.imgerver +"/"+ "files/6932694_201909269/测试服务_1569468123694.png"
+        // this.$nextTick(() => {
+          return querySerciceCategeryById({id:service.categoryId}).then((res) => {
+            if (res.success) {
+             
+              console.log('res.result', this.url.imgerver +"/"+ "files/6932694_201909269/测试服务_1569468123694.png")
+              return this.url.imgerver +"/"+ res.result.servicePhoto;
+                // return this.url.imgerver +"/"+ "files/6932694_201909269/测试服务_1569468123694.png"
+
+            }
+          })
+          //  });
+      },
+      getPhotoUrl(item){
+        querySerciceCategeryById({id:item.categoryId}).then((res) => {
+          if (res.success) {
+            console.log(res.result)
+            // return this.url.imgerver +"/"+ res.result.servicePhoto;
+             item.url  = this.url.imgerver +"/"+ res.result.servicePhoto
+          }
+        })
+      },
       // 服务详情
       showServiceDetail(record){
         if(record.serviceId == null){
@@ -148,17 +177,6 @@
         this.ipagination.current = 1
         this.getModelList();
         console.log(this.categoryId);
-      },
-      onCheck (checkedKeys, info) {
-        console.log('onCheck', checkedKeys, info)
-      },
-      onOpenChange(openKeys) {
-        const latestOpenKey = openKeys.find(key => this.openKeys.indexOf(key) === -1)
-        if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-          this.openKeys = openKeys
-        } else {
-          this.openKeys = latestOpenKey ? [latestOpenKey] : []
-        }
       },
       getModelList(pageNum) {
        //加载数据 若传入参数1则加载第一页的内容
@@ -181,7 +199,7 @@
       listServiceCategory() {
         querySerciceCategery().then((res) => {
           if (res.success) {
-            console.log(res.results)
+            console.log(res.result)
             res.result.forEach(data => {
               this.treeData.push({"title":data.name,"key":data.id})
             })

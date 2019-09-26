@@ -4,6 +4,6 @@
 <!-- 通用查询结果列 -->
 <sql id="Base_Column_List">
         id,
-    name, create_time, create_by, create_userid, update_time, update_by, update_userid
+    name, create_time, service_photo, create_by, create_userid, update_time, update_by, update_userid
 </sql>
 </mapper>

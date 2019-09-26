@@ -64,7 +64,7 @@
               <a-input placeholder="请上传服务实现文档" v-decorator="['serviceImplementationFileName', validatorRules.serviceImplementationFileName]"/>
             </a-col>
             <a-col :span="3">
-              <JUpload @input="handleUploadServiceImplementationFileSuccess"></JUpload>
+              <JZIPUpload @input="handleUploadServiceImplementationFileSuccess"></JZIPUpload>
             </a-col>
           </a-row>
         </a-form-item>
@@ -118,12 +118,14 @@
   import './ServiceRegisterModal.less'
   import pick from 'lodash.pick'
   import JUpload from '@/components/jantd/JUpload'
+  import JZIPUpload from '@/components/jantd/JZIPUpload'
   import { httpAction } from '@/api/manage'
 
   export default {
-    components: {ARow,JUpload},
+    components: {ARow,JUpload,JZIPUpload},
     data() {
       return {
+        title:'',
         labelCol: {
           xs: {span: 24},
           sm: {span: 5},

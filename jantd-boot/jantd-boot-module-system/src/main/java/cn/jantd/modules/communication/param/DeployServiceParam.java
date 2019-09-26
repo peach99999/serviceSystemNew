@@ -1,6 +1,6 @@
 package cn.jantd.modules.communication.param;
 
-import cn.jantd.modules.communication.dto.communication.RunningOnNodesDTO;
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -25,6 +25,6 @@ public class DeployServiceParam implements Serializable {
 
     @NotNull(message = "节点信息不能为空")
     @ApiModelProperty("节点信息")
-    private RunningOnNodesDTO nodes;
+    private JSONObject nodes;
 
 }

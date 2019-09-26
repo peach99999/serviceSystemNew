@@ -56,6 +56,12 @@
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
 
+        <template slot="avatarslot" slot-scope="text, record">
+          <div class="anty-img-wrap">
+            <a-avatar shape="square" :src="getAvatarView(record.servicePhoto)" icon="user"/>
+          </div>
+        </template>
+
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
 
@@ -111,6 +117,13 @@
             align:"center",
             dataIndex: 'name'
            },
+        {
+            title: '分类图片',
+            align:"center",
+            width: 120,
+            dataIndex: 'servicePhoto',
+            scopedSlots: {customRender: "avatarslot"}
+           },
 		   {
             title: '创建人',
             align:"center",
@@ -134,6 +147,7 @@
           deleteBatch: "/serviceCategory/deleteBatch",
           exportXlsUrl: "serviceCategory/exportXls",
           importExcelUrl: "serviceCategory/importExcel",
+          imgerver: window._CONFIG['domianURL'] + "/sys/common/view",
        },
     }
   },
@@ -143,7 +157,9 @@
     }
   },
     methods: {
-     
+     getAvatarView: function (avatar) {
+        return this.url.imgerver + "/" + avatar;
+      },
     }
   }
 </script>

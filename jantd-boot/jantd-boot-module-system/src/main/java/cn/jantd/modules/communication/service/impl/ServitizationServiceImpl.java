@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.Map;
+
 /**
  * @Description 服务化前端通信接口实现类
  * @Author xiagf
@@ -314,8 +316,9 @@ public class ServitizationServiceImpl implements IServitizationService {
         // 服务id
         json.put("service_id", startStopServiceParam.getServiceId());
         JSONObject nodes = new JSONObject();
-        nodes.put("NODE_ID_1", startStopServiceParam.getNodes().getNODE_ID_1());
-        nodes.put("NODE_ID_2", startStopServiceParam.getNodes().getNODE_ID_2());
+        for (Map.Entry<String, Object> entry: startStopServiceParam.getNodes().entrySet()) {
+            nodes.put(entry.getKey(),entry.getValue());
+        }
         json.put("nodes", nodes);
         HttpEntity<String> entity = servitizationManager.getStringHttpEntity(json);
         ResponseEntity<String> deployServiceResult = restTemplate.postForEntity(url, entity, String.class, startStopServiceParam.getServiceId());

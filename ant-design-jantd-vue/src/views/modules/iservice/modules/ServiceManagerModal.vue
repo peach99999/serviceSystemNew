@@ -1,8 +1,18 @@
 <template>
+  <a-drawer
+    :title="title"
+    :maskClosable="true"
+    :width="800"
+    placement="right"
+    :closable="true"
+    @close="handleCancel"
+    :pagination="ipagination"
+    :loading="loading"
+    :visible="visible">
   <div id="components-layout-demo-basic">
     <a-row type="flex" justify="center">
       <a-col :span="8">
-        <a-input-search placeholder="搜索你想要的节点" @search="onSearch" enterButton="搜索" size="smill"/>
+        <a-input-search placeholder="搜索你想要的节点" @search="onSearch" enterButton="搜索"/>
       </a-col>
     </a-row>
     <a-row type="flex" style="margin-top: 20px">
@@ -48,6 +58,7 @@
       </a-row>
     </a-layout>
   </div>
+  </a-drawer>
 </template>
 <script>
   import ATableColumn from "ant-design-vue/es/table/Column";
@@ -72,15 +83,52 @@
 
 
   export default {
+    components: {ARow, ATableColumn},
     data() {
       return {
         data,
         one:true,
         two:true,
-        three:true
+        three:true,
+        title:"",
+        visible: false,
+        serviceInfo:{},
+        loading: false,
+        ipagination: {
+          current: 1,
+          pageSize: 10,
+          pageSizeOptions: ['10', '20', '30'],
+          showTotal: (total, range) => {
+            return range[0] + '-' + range[1] + ' 共' + total + '条'
+          },
+          showQuickJumper: true,
+          showSizeChanger: true,
+          total: 0
+        },
       }
     },
-    components: {ARow, ATableColumn}
+    created () {
+    },
+    computed:{
+    },
+    methods: {
+      show(record){
+        let that = this;
+        that.refresh();
+        that.visible = true;
+        that.serviceInfo = record;
+      },
+      refresh () {
+        this.serviceInfo = {}
+      },
+      handleCancel () {
+        this.close()
+      },
+      close () {
+        this.$emit('close');
+        this.visible = false;
+      },
+    }
   }
 </script>
 <style>

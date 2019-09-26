@@ -29,7 +29,7 @@
         label="标签">
         <div style="float: left">
             <template v-for="(tag, index) in serviceLabel">
-              <a-tooltip v-if="tag.length > 20" :key="tag" :title="tag">
+              <a-tooltip v-if="tag.length() > 20" :key="tag" :title="tag">
                 <a-tag
                   :key="tag"
                   :closable="index !== 0"

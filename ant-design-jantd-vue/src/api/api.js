@@ -89,10 +89,14 @@ const queryUserRoleMap = (params)=>getAction("/sys/user/queryUserRoleMap",params
 const duplicateCheck = (params)=>getAction("/sys/duplicate/check",params);
 // 获取服务分类
 const querySerciceCategery = (params)=>getAction("/serviceCategory/list-all",params);
+const querySerciceCategeryById = (params)=>getAction("/serviceCategory/queryById",params);
 const startService = (params)=>postAction("/communication/start-service",params);
 const stopService = (params)=>postAction("/communication/stop-service",params);
 const deleteServiceInfo = (params)=>deleteAction("/serviceInfo/delete",params);
 const getIndividualServiceStatistics = (params)=>getAction("/communication/query-individual-service-statistics",params);
+const getServiceDetail = (params)=>getAction("/communication/get-service-detail",params);
+const queryNodeDetail = (params)=>getAction("/communication/query-node-detail",params);
+
 export {
   // imgView,
   // doMian,
@@ -143,6 +147,9 @@ export {
   stopService,
   deleteServiceInfo,
   getIndividualServiceStatistics,
+  querySerciceCategeryById,
+  getServiceDetail,
+  queryNodeDetail,
 }
 
 

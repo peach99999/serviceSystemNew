@@ -1,5 +1,6 @@
 package cn.jantd.modules.communication.dto.communication;
 
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -53,6 +54,6 @@ public class ServiceDetailDTO extends BaseDTO {
     /**
      * 运行节点信息
      */
-    private RunningOnNodesDTO running_on_nodes;
+    private JSONObject running_on_nodes;
 
 }

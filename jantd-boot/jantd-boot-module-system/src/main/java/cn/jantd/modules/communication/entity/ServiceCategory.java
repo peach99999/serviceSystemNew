@@ -44,6 +44,13 @@ public class ServiceCategory implements Serializable {
 	private String name;
 
     /**
+     * 服务图片
+     */
+    @Excel(name = "服务图片", width = 15)
+    @ApiModelProperty(value = "服务图片")
+    private String servicePhoto;
+
+    /**
      * 创建时间
      */
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
