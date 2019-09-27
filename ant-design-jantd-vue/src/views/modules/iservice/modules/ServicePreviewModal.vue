@@ -2,7 +2,7 @@
   <a-drawer
     :title="title"
     :maskClosable="true"
-    :width="1150"
+    :width="1050"
     placement="right"
     :closable="true"
     @close="handleCancel"
@@ -112,6 +112,7 @@
         <a-col :span="28">
           <a-table 
             :dataSource="nodeDataSource" 
+            bordered
             :fit="true" 
             :pagination="false"
             :loading="loading">
@@ -130,29 +131,29 @@
                 {{scope.ip}}
               </template>
             </a-table-column>
-            <a-table-column min-width="140px" title="本服务部署数">
+            <a-table-column min-width="140px" align = "center" title="本服务部署数">
               <template slot-scope="scope">
                 {{scope.deployedServices}}
               </template>
             </a-table-column>
-            <a-table-column min-width="140px" title="本服务运行数">
+            <a-table-column min-width="140px" align = "center" title="本服务运行数">
               <template slot-scope="scope">
                 {{scope.runningServices}}
               </template>
             </a-table-column>
             <a-table-column min-width="140px" title="CPU占用率">
               <template slot-scope="scope">
-                <a-progress :percent="50" :showInfo="false" />
+                <a-progress :percent=scope.cpuCount :showInfo="false" />
               </template>
             </a-table-column>
             <a-table-column min-width="140px" title="内存使用率">
               <template slot-scope="scope">
-                <a-progress :percent="50" :showInfo="false" />
+                <a-progress :percent=scope.memorySize :showInfo="false" />
               </template>
             </a-table-column>
             <a-table-column min-width="140px" title="磁盘使用率">
               <template slot-scope="scope">
-                <a-progress :percent="50" :showInfo="false" />
+                <a-progress :percent=scope.diskSize :showInfo="false" />
               </template>
             </a-table-column>
           </a-table>
@@ -335,15 +336,27 @@
           if(res.success){
             console.log(res.result)
             let temp = {}
+            let runserviceNumber = 0
+            let diskSize = 0
+            let diskCount = 0
             temp.nodeId = res.result.node_id
             temp.hostName = res.result.host_name
             temp.ip = res.result.ip
             temp.deployedServices = res.result.deployed_services.length
-            temp.runningservices = res.result.running_services.length
-            temp.cpuCount = res.result.cpu_count
-            temp.memorySize = res.result.memory_size
-            temp.diskSize = res.result.disk_size
+            for (var val in res.result.running_services) {
+              runserviceNumber++
+            }
+            temp.runningServices = runserviceNumber
+            temp.cpuCount = parseInt(res.result.cpu_count)
+            temp.memorySize = parseInt(res.result.memory_size)
+         
+            for (var val in res.result.disk_size) {
+              diskCount++
+              diskSize = diskSize + parseInt(res.result.disk_size[val])
+            }
+            temp.diskSize = Math.round(diskSize/diskCount)
             this.nodeDataSource.push(temp)
+            console.log(temp)
           }else {
             this.$message.error(res.message);
           }
