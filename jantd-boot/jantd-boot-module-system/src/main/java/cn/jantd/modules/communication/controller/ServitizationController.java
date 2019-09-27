@@ -2,13 +2,16 @@ package cn.jantd.modules.communication.controller;
 
 import cn.jantd.core.api.vo.Result;
 import cn.jantd.modules.communication.dto.communication.*;
+import cn.jantd.modules.communication.entity.ServiceInfo;
 import cn.jantd.modules.communication.param.*;
+import cn.jantd.modules.communication.service.IServiceInfoService;
 import cn.jantd.modules.communication.service.IServitizationService;
 import cn.jantd.modules.communication.util.ServiceMockDataUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +27,10 @@ import org.springframework.web.bind.annotation.*;
 public class ServitizationController {
     @Autowired
     private IServitizationService servitizationService;
+
+    @Autowired
+    private IServiceInfoService serviceInfoService;
+
 
 
     @GetMapping(value = "/query-all-services")
@@ -159,5 +166,27 @@ public class ServitizationController {
     public Result<Object> downloadLogFile() {
 //        return servitizationService.downloadLogFile();
         return ServiceMockDataUtil.downloadLogFile();
+    }
+    /**
+     * 提交服务
+     * @param submitRegisterParam
+     * @return
+     */
+    @PostMapping(value = "/submit-service")
+    @ApiOperation("提交服务")
+    public Result<Object> submitService(@RequestBody @Validated SubmitRegisterParam submitRegisterParam){
+
+//        return servitizationService.submitService(submitRegisterParam);
+
+        // 测试代码
+        Result result = ServiceMockDataUtil.submitService(submitRegisterParam);
+        if (!ObjectUtils.isEmpty(result.getResult())) {
+            ServiceInfo serviceInfo = new ServiceInfo();
+            serviceInfo.setId(submitRegisterParam.getId());
+            serviceInfo.setDeveloperStatus("1");
+            serviceInfo.setServiceId(String.valueOf(result.getResult()));
+            serviceInfoService.updateById(serviceInfo);
+        }
+        return Result.ok();
     }
 }

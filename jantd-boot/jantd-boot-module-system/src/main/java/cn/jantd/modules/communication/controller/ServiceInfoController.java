@@ -10,6 +10,7 @@ import cn.jantd.core.poi.view.JantdEntityExcelViewBase;
 import cn.jantd.core.system.query.QueryGenerator;
 import cn.jantd.core.system.vo.LoginUser;
 import cn.jantd.modules.communication.entity.ServiceInfo;
+import cn.jantd.modules.communication.param.SubmitRegisterParam;
 import cn.jantd.modules.communication.service.IServiceInfoService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -19,6 +20,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -203,6 +205,7 @@ public class ServiceInfoController {
         serviceInfo.setDesignSubmissionUser(user.getRealname());
         serviceInfo.setDesignSubmissionUserId(user.getId());
     }
+
 
     /**
      * 通过id删除

@@ -96,6 +96,9 @@ const deleteServiceInfo = (params)=>deleteAction("/serviceInfo/delete",params);
 const getIndividualServiceStatistics = (params)=>getAction("/communication/query-individual-service-statistics",params);
 const getServiceDetail = (params)=>getAction("/communication/get-service-detail",params);
 const queryNodeDetail = (params)=>getAction("/communication/query-node-detail",params);
+const uploadServiceFile = (params)=>postAction("/communication/upload-service-file",params);
+const submitService = (params)=>postAction("/communication/submit-service",params);
+const queryAllNodes = (params)=>getAction("/communication/query-all-node",params);
 
 export {
   // imgView,
@@ -150,6 +153,9 @@ export {
   querySerciceCategeryById,
   getServiceDetail,
   queryNodeDetail,
+  uploadServiceFile,
+  submitService,
+  queryAllNodes
 }
 
 

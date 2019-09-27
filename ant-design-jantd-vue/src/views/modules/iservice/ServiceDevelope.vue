@@ -104,7 +104,7 @@
 <script>
   import ATableColumn from "ant-design-vue/es/table/Column";
   import ARow from "ant-design-vue/es/grid/Row";
-  import {querySerciceCategery,deleteServiceInfo} from '@/api/api';
+  import {querySerciceCategery,deleteServiceInfo,uploadServiceFile,submitService} from '@/api/api';
   import { deleteAction, postAction, getAction } from '@/api/manage';
   import {JantdListMixin} from '@/mixins/JantdListMixin';
   import ServiceDevelopeModal from './modules/ServiceDevelopeModal';
@@ -137,6 +137,7 @@
         },
         url: {
           list: '/serviceInfo/list',
+          edit: "/serviceInfo/edit-register",
           imgerver: window._CONFIG['domianURL']+"/sys/common/view",
         },
          /* 排序参数 */
@@ -165,6 +166,33 @@
         if(record.minInstance == null){
             this.$message.error("请先设置开发相关内容后再提交！")
         }
+        // 1.上传服务实现文件获取文件id
+        // 2.修改开发状态为已提交
+        // 3.注册服务
+        let param = {}
+        param.fileUrl = record.serviceImplementationFilePath
+        uploadServiceFile(param).then((res) => {
+          if(res.success){
+              // 服务注册
+              let params = {
+                id:record.id,
+                minInstanceCount:record.minInstance,
+                maxInstanceCount:record.maxInstance,
+                fileId:res.result
+              }
+              submitService(params).then((res) => {
+                if(res.success){
+                  this.$message.success("服务提交成功！")
+                  this.ipagination.current = 1
+                  this.getModelList();
+                }else{
+                  this.$message.warning(res.message);
+                }
+              })
+            }else{
+              this.$message.warning(res.message);
+          }
+        })
       },
       // 服务开发
       developerService (record) {
@@ -176,15 +204,13 @@
         var that = this
           console.log(serviceId)
           deleteServiceInfo({id: serviceId}).then((res) => {
-          if (res.success) {
-            if(res.success){
-                that.$message.success(res.message);
-                this.ipagination.current = 1
-                that.getModelList();
-              }else{
-                that.$message.warning(res.message);
-              }
-          }
+          if(res.success){
+              that.$message.success(res.message);
+              that.ipagination.current = 1
+              that.getModelList();
+            }else{
+              that.$message.warning(res.message);
+            }
         })
       },
       // 获取服务分类

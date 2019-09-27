@@ -116,7 +116,7 @@
             :fit="true" 
             :pagination="false"
             :loading="loading">
-            <a-table-column min-width="140px" title="节点编码">
+            <a-table-column min-width="140px" title="节点编号">
               <template slot-scope="scope">
                 {{scope.nodeId}}
               </template>

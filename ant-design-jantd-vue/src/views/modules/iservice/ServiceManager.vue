@@ -23,6 +23,7 @@
             :dataSource="dataSource" 
             :show-header="false" 
             :fit="true" 
+            rowKey="id"
             :pagination="ipagination" 
             :loading="loading"
             @change="handleTableChange">

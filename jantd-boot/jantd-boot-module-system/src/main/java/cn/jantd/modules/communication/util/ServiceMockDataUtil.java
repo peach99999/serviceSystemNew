@@ -2,6 +2,7 @@ package cn.jantd.modules.communication.util;
 
 import cn.jantd.core.api.vo.Result;
 import cn.jantd.modules.communication.dto.communication.*;
+import cn.jantd.modules.communication.param.SubmitRegisterParam;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -19,6 +20,7 @@ import java.io.InputStream;
  */
 @Slf4j
 public class ServiceMockDataUtil {
+
 
     private ServiceMockDataUtil() {
     }
@@ -72,31 +74,53 @@ public class ServiceMockDataUtil {
     }
 
     public static Result<Object> deleteService() {
-        return Result.ok();
+        Result result = new Result();
+        result.setMessage("操作成功!");
+        result.setSuccess(true);
+        return result;
     }
 
     public static Result<Object> updateService() {
-        return Result.ok();
+        Result result = new Result();
+        result.setMessage("操作成功!");
+        result.setSuccess(true);
+        return result;
     }
 
     public static Result<Object> startService() {
-        return Result.ok();
+        Result result = new Result();
+        result.setMessage("操作成功!");
+        result.setSuccess(true);
+        return result;
     }
 
     public static Result<Object> sstopService() {
-        return Result.ok();
+        Result result = new Result();
+        result.setMessage("操作成功!");
+        result.setSuccess(true);
+        return result;
     }
 
     public static Result<Object> deployService() {
-        return Result.ok();
+        Result result = new Result();
+        result.setMessage("操作成功!");
+        result.setSuccess(true);
+        return result;
     }
 
     public static Result<Object> removeDeployService() {
-        return Result.ok();
+        Result result = new Result();
+        result.setMessage("操作成功!");
+        result.setSuccess(true);
+        return result;
     }
 
     public static Result<Object> uploadServiceFile() {
-        return Result.ok("123ajdskooojoad");
+        Result result = new Result();
+        result.setResult("adfadsf");
+        result.setMessage("操作成功!");
+        result.setSuccess(true);
+        return result;
     }
 
     public static Result<Object> queryAllNodes() {
@@ -150,6 +174,15 @@ public class ServiceMockDataUtil {
     }
 
     public static Result<Object> downloadLogFile() {
-        return Result.ok();
+        Result result = new Result();
+        result.setMessage("操作成功!");
+        result.setSuccess(true);
+        return result;
+    }
+
+    public static Result<Object> submitService(SubmitRegisterParam submitRegisterParam) {
+        Result result = new Result<>();
+        result = registerService();
+        return result;
     }
 }

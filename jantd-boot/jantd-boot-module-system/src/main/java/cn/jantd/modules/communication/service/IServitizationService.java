@@ -158,4 +158,12 @@ public interface IServitizationService {
      * @return
      */
     Result<Object> downloadLogFile();
+
+    /**
+     * 提交服务
+     *
+     * @return
+     * @param submitRegisterParam
+     */
+    Result<Object> submitService(SubmitRegisterParam submitRegisterParam);
 }

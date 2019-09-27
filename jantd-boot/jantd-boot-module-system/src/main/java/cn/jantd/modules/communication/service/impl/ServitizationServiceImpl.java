@@ -4,20 +4,26 @@ import cn.jantd.core.api.vo.Result;
 import cn.jantd.core.properties.CommunicationProperties;
 import cn.jantd.modules.communication.constant.CommunicationMsgCode;
 import cn.jantd.modules.communication.dto.communication.*;
+import cn.jantd.modules.communication.entity.ServiceInfo;
 import cn.jantd.modules.communication.manage.ServitizationManager;
+import cn.jantd.modules.communication.mapper.ServiceInfoMapper;
 import cn.jantd.modules.communication.param.*;
 import cn.jantd.modules.communication.service.IServitizationService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Map;
 
 /**
@@ -48,6 +54,12 @@ public class ServitizationServiceImpl implements IServitizationService {
 
     @Autowired
     private ServitizationManager servitizationManager;
+
+    @Value(value = "${jantd.path.upload}")
+    private String uploadpath;
+
+    @Autowired
+    private ServiceInfoMapper serviceInfoMapper;
 
     /**
      * 查询所有服务
@@ -316,8 +328,8 @@ public class ServitizationServiceImpl implements IServitizationService {
         // 服务id
         json.put("service_id", startStopServiceParam.getServiceId());
         JSONObject nodes = new JSONObject();
-        for (Map.Entry<String, Object> entry: startStopServiceParam.getNodes().entrySet()) {
-            nodes.put(entry.getKey(),entry.getValue());
+        for (Map.Entry<String, Object> entry : startStopServiceParam.getNodes().entrySet()) {
+            nodes.put(entry.getKey(), entry.getValue());
         }
         json.put("nodes", nodes);
         HttpEntity<String> entity = servitizationManager.getStringHttpEntity(json);
@@ -375,32 +387,97 @@ public class ServitizationServiceImpl implements IServitizationService {
     public Result<Object> uploadServiceFile(UploadServiceFileParam uploadServiceFileParam) {
         Result result = new Result<>();
         // 查询所有服接口url
-        String url = communicationProperties.getUploadServiceFile();
-        log.info("服务文件上传，接口名[{}]:", url);
+        String uploadServiceFileUrl = communicationProperties.getUploadServiceFile();
+        log.info("服务文件上传，接口名[{}]:", uploadServiceFileUrl);
         // 参数处理
-        JSONObject json = new JSONObject();
-        // 服务id
-        json.put("file_url", uploadServiceFileParam.getFileUrl());
-        String requestJson = json.toJSONString();
+//        JSONObject json = new JSONObject();
+//        // 服务id
+//        json.put("file_url", uploadServiceFileParam.getFileUrl());
+//        String requestJson = json.toJSONString();
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+//        headers.setAccept(Lists.newArrayList(MediaType.MULTIPART_FORM_DATA));
+//        HttpEntity<String> entity = new HttpEntity<String>(requestJson, headers);
+//
+//        ResponseEntity<String> uploadServiceFileResult = restTemplate.postForEntity(url, entity, String.class);
+//        // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
+//        if (!HttpStatus.OK.equals(uploadServiceFileResult.getStatusCode())) {
+//            return Result.error(CommunicationMsgCode.UPLOAD_SERVICE_FFILE_FAILED.getMsg());
+//        }
+//        UploadServiceFileDTO uploadServiceFileDTO = JSON.parseObject(uploadServiceFileResult.getBody(), UploadServiceFileDTO.class);
+//        BaseDTO baseDTO = new BaseDTO();
+//        BeanUtils.copyProperties(uploadServiceFileDTO, baseDTO);
+//        // 返回结果判断
+//        if (servitizationManager.requestjudgment(result, baseDTO)) {
+//            return result;
+//        }
+//        return Result.ok(uploadServiceFileDTO.getService_id());
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-        headers.setAccept(Lists.newArrayList(MediaType.MULTIPART_FORM_DATA));
-        HttpEntity<String> entity = new HttpEntity<String>(requestJson, headers);
 
-        ResponseEntity<String> uploadServiceFileResult = restTemplate.postForEntity(url, entity, String.class);
-        // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
-        if (!HttpStatus.OK.equals(uploadServiceFileResult.getStatusCode())) {
-            return Result.error(CommunicationMsgCode.UPLOAD_SERVICE_FFILE_FAILED.getMsg());
+        String filePath = uploadpath + File.separator + uploadServiceFileParam.getFileUrl();
+
+        HttpURLConnection conn = null;
+        // boundary就是request头和上传文件内容的分隔符
+        String BOUNDARY = "---------------------------123821742118716";
+        try {
+            URL url = new URL(uploadServiceFileUrl);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(30000);
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setUseCaches(false);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY);
+            OutputStream out = new DataOutputStream(conn.getOutputStream());
+
+            File file = new File(filePath);
+            String filename = file.getName();
+
+            StringBuffer strBuf = new StringBuffer();
+            strBuf.append("\r\n").append("--").append(BOUNDARY).append("\r\n");
+            strBuf.append("Content-Disposition: form-data; name=\"" + "upfile" + "\"; filename=\"" + filename + "\"\r\n");
+            strBuf.append("Content-Type:" + MediaType.MULTIPART_FORM_DATA + "\r\n\r\n");
+            out.write(strBuf.toString().getBytes());
+            DataInputStream in = new DataInputStream(new FileInputStream(file));
+            int bytes = 0;
+            byte[] bufferOut = new byte[1024];
+            while ((bytes = in.read(bufferOut)) != -1) {
+                out.write(bufferOut, 0, bytes);
+            }
+            in.close();
+
+            byte[] endData = ("\r\n--" + BOUNDARY + "--\r\n").getBytes();
+            out.write(endData);
+            out.flush();
+            out.close();
+            // 读取返回数据
+            StringBuffer returnBuf = new StringBuffer();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                returnBuf.append(line).append("\n");
+            }
+            reader.close();
+            UploadServiceFileDTO uploadServiceFileDTO = JSON.parseObject(returnBuf.toString(), UploadServiceFileDTO.class);
+            BaseDTO baseDTO = new BaseDTO();
+            BeanUtils.copyProperties(uploadServiceFileDTO, baseDTO);
+            // 返回结果判断
+            if (servitizationManager.requestjudgment(result, baseDTO)) {
+                return result;
+            }
+            Result.ok(uploadServiceFileDTO.getService_id());
+        } catch (Exception e) {
+            System.out.println("发送POST请求出错。" + uploadServiceFileUrl);
+            e.printStackTrace();
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
         }
-        UploadServiceFileDTO uploadServiceFileDTO = JSON.parseObject(uploadServiceFileResult.getBody(), UploadServiceFileDTO.class);
-        BaseDTO baseDTO = new BaseDTO();
-        BeanUtils.copyProperties(uploadServiceFileDTO, baseDTO);
-        // 返回结果判断
-        if (servitizationManager.requestjudgment(result, baseDTO)) {
-            return result;
-        }
-        return Result.ok(uploadServiceFileDTO.getService_id());
+        return result;
     }
 
     /**
@@ -637,6 +714,22 @@ public class ServitizationServiceImpl implements IServitizationService {
         // 返回结果判断
         if (servitizationManager.requestjudgment(result, baseDTO)) {
             return result;
+        }
+        return Result.ok();
+    }
+
+    @Override
+    public Result<Object> submitService(SubmitRegisterParam submitRegisterParam) {
+        Result result = new Result<>();
+        RegisterParam registerParam = new RegisterParam();
+        BeanUtils.copyProperties(submitRegisterParam, registerParam);
+        result = registerService(registerParam);
+        if (!ObjectUtils.isEmpty(result.getResult())) {
+            ServiceInfo serviceInfo = new ServiceInfo();
+            serviceInfo.setId(submitRegisterParam.getId());
+            serviceInfo.setDeveloperStatus("1");
+            serviceInfo.setServiceId(String.valueOf(result.getResult()));
+            serviceInfoMapper.updateById(serviceInfo);
         }
         return Result.ok();
     }
