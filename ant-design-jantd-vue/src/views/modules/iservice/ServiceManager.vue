@@ -28,14 +28,12 @@
             @change="handleTableChange">
             <a-table-column min-width="140px">
               <template slot-scope="scope">
-                <a href="#">
-                  <img src="../../../../src/assets/img/img.jpg" width="80px" height="80px">
-                </a>
+                <img :src="getAvatarView(scope.servicePhoto)" width="100px" height="130px">
               </template>
             </a-table-column>
             <a-table-column min-width="140px">
-              <template v-for="(service,index) in dataSource" slot-scope="service">
-                <a-row type="flex" :key="index" justify="space-around" align="middle">
+              <template slot-scope="service">
+                <a-row type="flex" justify="space-around" align="middle">
                   <a-col :span="6">
                     <a href="#" @click="showServiceDetail(service)" style="font-weight: bold;font-size: 16px; color:rgba(0, 0, 0, 0.65)" >
                        {{service.name}}
@@ -52,11 +50,11 @@
                   </a-col>
 
                 </a-row>
-                <div class="divLine" :key="index"/>
-                <p class="text" :key="index">
+                <div class="divLine"/>
+                <p class="text">
                   <a href="#" @click="showServiceDetail(service)">{{service.description}}</a>
                 </p>
-                <div class="can_div" :key="index">
+                <div class="can_div">
                   <div class="can_left">标签：
                     <span v-if="service.serviceLabel">
                        <h4 v-for="tag in service.serviceLabel.split(',')" class="biaoshi" :key="tag">
@@ -65,7 +63,7 @@
                      </span>
                   </div>
                 </div>
-                <div class="subit" :key="index">
+                <div class="subit">
                   开发人员：{{service.developer}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   部署时间： {{service.deploySubmissionTime == null?'':service.deploySubmissionTime.substring(0,10)}}
                 </div>
@@ -117,6 +115,7 @@
         },
         url: {
           list: '/serviceInfo/list',
+          imgerver: window._CONFIG['domianURL']+"/sys/common/view",
         },
         /* 排序参数 */
         isorter:{
@@ -126,6 +125,9 @@
       }
     },
     methods: {
+      getAvatarView(url){
+        return this.url.imgerver +"/"+ url
+      },
       // 服务详情
       showServiceDetail(record){
         if(record.serviceId == null){

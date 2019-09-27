@@ -44,6 +44,14 @@ public class ServiceInfo implements Serializable {
     private String categoryId;
 
     /**
+     * 服务分类图片
+     */
+    @Excel(name = "服务分类图片", width = 15)
+    @ApiModelProperty(value = "服务分类图片")
+    private String servicePhoto;
+    
+
+    /**
      * 服务名称
      */
     @Excel(name = "服务名称", width = 15)

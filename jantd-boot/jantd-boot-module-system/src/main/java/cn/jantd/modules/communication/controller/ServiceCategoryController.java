@@ -116,6 +116,8 @@ public class ServiceCategoryController {
             result.error500("未找到对应实体");
         } else {
             boolean ok = serviceCategoryService.updateById(serviceCategory);
+            // 更新服务图片url
+            serviceCategoryService.updateServiceInPhoto(serviceCategory);
             if (ok) {
                 result.success("修改成功!");
             }

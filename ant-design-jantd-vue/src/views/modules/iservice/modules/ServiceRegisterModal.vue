@@ -29,7 +29,7 @@
         label="标签">
         <div style="float: left">
             <template v-for="(tag, index) in serviceLabel">
-              <a-tooltip v-if="tag.length() > 20" :key="tag" :title="tag">
+              <a-tooltip v-if="tag.length > 20" :key="tag" :title="tag">
                 <a-tag
                   :key="tag"
                   :closable="index !== 0"
@@ -121,6 +121,7 @@
   import pick from 'lodash.pick'
   import moment from "moment"
   import JUpload from '@/components/jantd/JUpload'
+  import {querySerciceCategeryById} from '@/api/api'
 
   export default {
     name: "ServiceRegisterModal",
@@ -181,7 +182,8 @@
         tagInputValue:'',
         categoryId:'',
         uploadFilePath:'',
-        loading:false
+        loading:false,
+        servicePhoto:''
       }
     },
     created(){
@@ -191,7 +193,16 @@
     methods: {
       add (categoryId) {
         this.categoryId = categoryId
+        this.getPhotoUrl(categoryId)
         this.edit({});
+      },
+      getPhotoUrl(categoryId){
+        querySerciceCategeryById({id:categoryId}).then((res) => {
+          if (res.success) {
+            console.log(res.result)
+             this.servicePhoto =  res.result.servicePhoto
+          }
+        })
       },
       // 附件上传回调
       handleUploadSuccess(value){
@@ -233,18 +244,19 @@
             that.confirmLoading = true;
             let httpurl = '';
             let method = '';
+            let formData = Object.assign(this.model, values);
             if(!this.model.id){
               httpurl+=this.url.add;
               method = 'post';
+              formData.servicePhoto = this.servicePhoto
+              formData.interfaceDescriptionFilePath= this.interfaceDescriptionFilePath;
             }else{
               httpurl+=this.url.edit;
-               method = 'put';
+              method = 'put';
             }
-            let formData = Object.assign(this.model, values);
             formData.categoryId = this.categoryId;
             formData.serviceLabel = this.serviceLabel.join(",");
             formData.designerStatus = designerStatus;
-            formData.interfaceDescriptionFilePath= this.interfaceDescriptionFilePath;
             console.log(formData)
             httpAction(httpurl,formData,method).then((res)=>{
               if(res.success){

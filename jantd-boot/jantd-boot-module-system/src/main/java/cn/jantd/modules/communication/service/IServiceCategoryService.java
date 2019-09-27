@@ -12,5 +12,17 @@ import java.util.List;
  */
 public interface IServiceCategoryService extends IService<ServiceCategory> {
 
+    /**
+     * 查询所有的服务分类
+     *
+     * @return
+     */
     List<ServiceCategory> queryListAll();
+
+    /**
+     * 更新服务基本信息服务分类图片
+     *
+     * @param serviceCategory
+     */
+    void updateServiceInPhoto(ServiceCategory serviceCategory);
 }

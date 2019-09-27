@@ -307,7 +307,6 @@
       getServiceDetail(serviceId){
         getServiceDetail({serviceId:serviceId}).then((res)=>{
           if(res.success){
-            console.log(res.result.deployed_on_nodes)
             this.serviceDetatl = res.result;
             // 查询节点明细信息
             this.getNodeDetail(this.serviceDetatl);
@@ -322,7 +321,6 @@
         if(serviceDetatl.deployed_on_nodes.length > 0){
           for (let index = 0; index < serviceDetatl.deployed_on_nodes.length; index++) {
             const element = serviceDetatl.deployed_on_nodes[index];
-            console.log(element)
             this.fetchNodeDetail(element);
           }
           this.loading = false
@@ -334,7 +332,6 @@
       fetchNodeDetail(nodeId){
         queryNodeDetail({nodeId:nodeId}).then((res)=>{
           if(res.success){
-            console.log(res.result)
             let temp = {}
             let runserviceNumber = 0
             let diskSize = 0
@@ -356,7 +353,6 @@
             }
             temp.diskSize = Math.round(diskSize/diskCount)
             this.nodeDataSource.push(temp)
-            console.log(temp)
           }else {
             this.$message.error(res.message);
           }
