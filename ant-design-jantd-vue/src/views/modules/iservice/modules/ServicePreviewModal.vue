@@ -301,10 +301,10 @@
         // 获取服务概览
         that.getServiceStatistics(that.serviceInfo.serviceId);
         // 查询单个单个服务信息获取部署节点获取节点列表
-        that.getServiceDetail(record.serviceId);
+        that.queryServiceDetail(record.serviceId);
       },
       // 查询单个单个服务信息获取部署节点获取节点列表
-      getServiceDetail(serviceId){
+      queryServiceDetail(serviceId){
         getServiceDetail({serviceId:serviceId}).then((res)=>{
           if(res.success){
             this.serviceDetatl = res.result;

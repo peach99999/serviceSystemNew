@@ -89,16 +89,28 @@ const queryUserRoleMap = (params)=>getAction("/sys/user/queryUserRoleMap",params
 const duplicateCheck = (params)=>getAction("/sys/duplicate/check",params);
 // 获取服务分类
 const querySerciceCategery = (params)=>getAction("/serviceCategory/list-all",params);
+// 通过id获取服务分类
 const querySerciceCategeryById = (params)=>getAction("/serviceCategory/queryById",params);
+// 启动一个服务
 const startService = (params)=>postAction("/communication/start-service",params);
+// 停止一个服务
 const stopService = (params)=>postAction("/communication/stop-service",params);
+// 删除一个服务
 const deleteServiceInfo = (params)=>deleteAction("/serviceInfo/delete",params);
+// 单个服务统计
 const getIndividualServiceStatistics = (params)=>getAction("/communication/query-individual-service-statistics",params);
+// 查询服务明细
 const getServiceDetail = (params)=>getAction("/communication/get-service-detail",params);
+// 查询节点明细
 const queryNodeDetail = (params)=>getAction("/communication/query-node-detail",params);
+// 上传服务文件
 const uploadServiceFile = (params)=>postAction("/communication/upload-service-file",params);
+// 提交服务
 const submitService = (params)=>postAction("/communication/submit-service",params);
+// 查询所有节点
 const queryAllNodes = (params)=>getAction("/communication/query-all-node",params);
+// 部署一个服务
+const deployService = (params)=>postAction("/communication/deploy-service",params);
 
 export {
   // imgView,
@@ -155,7 +167,8 @@ export {
   queryNodeDetail,
   uploadServiceFile,
   submitService,
-  queryAllNodes
+  queryAllNodes,
+  deployService
 }
 
 

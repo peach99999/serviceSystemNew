@@ -17,20 +17,20 @@
       </a-col>
     </a-row>
     <a-row type="flex" style="margin-top: 20px">
-      <a-col :span="16">
+      <a-col :span="12">
         部署状态:
-        <span v-if="one" style="color: #1890ff">
+        <span v-if="notDeployed" style="color: #1890ff">
           {{"未部署"}}
         </span>
-        <span v-if="two" style="color: #1890ff">
-          >{{"部署中"}}
+        <span v-if="deploying" style="color: #1890ff">
+          {{"部署中"}}
         </span>
-        <span v-if="three" style="color: #1890ff">
-          >{{"已部署"}}
+        <span v-if="deployed" style="color: #1890ff">
+          {{"已部署"}}
         </span>
       </a-col>
-      <a-col :span="8">
-        <a-button type="primary">
+      <a-col :span="12">
+        <a-button type="primary" @click="deployedService" style="margin-left:200px">
           部署
         </a-button>
       </a-col>
@@ -82,7 +82,7 @@
 </template>
 <script>
   import ATableColumn from "ant-design-vue/es/table/Column";
-  import {queryAllNodes,queryNodeDetail} from '@/api/api';
+  import {queryAllNodes,queryNodeDetail,deployService,getServiceDetail} from '@/api/api';
   import ARow from "ant-design-vue/es/grid/Row";
   import './ServiceManagerModal.less'
 
@@ -121,13 +121,14 @@
           {
             title: '操作',
             dataIndex: 'operation',
+            align:"center",
             scopedSlots: { customRender: 'operation' },
           }
         ],
         dataSource:[],
-        one:true,
-        two:true,
-        three:true,
+        notDeployed:false,
+        deploying:false,
+        deployed:false,
         title:"",
         visible: false,
         serviceInfo:{},
@@ -139,7 +140,8 @@
         selectionRows: [],
       }
     },
-    created () {
+    created() {
+      
     },
     mounted(){
     
@@ -147,6 +149,34 @@
     computed:{
     },
     methods: {
+      // 查询单个单个服务信息
+      queryServiceDetail(serviceId){
+        getServiceDetail({serviceId:serviceId}).then((res)=>{
+          if(res.success){
+            console.log(res.result)
+            let status = res.result.status
+            if(status == 'running'){
+              this.deployed = true
+            }else if(status == 'not_deployed'){
+              this.deploying = true
+            }else if(status == 'deploying'){
+              this.deploying = true
+            }else if(status == 'not_running'){
+              this.deployed = true
+            }else if(status == 'starting'){
+              this.deployed = true
+            }else {
+              this.deploying = true
+            }
+          }else {
+            this.$message.error(res.message);
+          }
+        })
+      },
+      searchReset(){
+        this.queryParam = {}
+        this.getAllNodes()
+      },
       getAllNodes(){
         this.loading = true;
 
@@ -190,18 +220,52 @@
         this.selectionRows = selectionRows;
         console.log(this.selectedRowKeys,this.selectionRows)
       },
+      // 部署服务
+      deployedService(){
+        var param = {}
+        var nodes = {}
+        param.serviceId = this.serviceInfo.serviceId
+        if(this.selectionRows.length == 0){
+          this.$message.warning("请选择节点!")
+          return
+        }
+        try{
+          this.selectionRows.forEach((item,index)=>{
+            if(item.instanceCount == "" || item.instanceCount == null || item.instanceCount == undefined){
+              console.log(item)
+                this.$message.warning("请编辑" + item.hostName + "的实例数!")
+                throw 'Jump out now!'
+            }else{
+              let nodeId = item.nodeId
+              
+              nodes[nodeId] = item.instanceCount
+            }
+          })
+        }catch (e) {
+          console.log(e)
+          return
+        }
+        param.nodes = nodes
+        console.log(param)
+        deployService(param).then((res)=>{
+          if(res.success){
+            this.$message.success("部署成功!")
+            this.$emit('close');
+            this.visible = false;
+          }else {
+            this.$message.error(res.message);
+          }
+        })
+      },
       onSearch(){
         let name = this.queryParam.name;
         let temp = [];
         this.dataSource.forEach(item=>{
-          if(item.name.indexOf(name) >= 0){
+          if(item.hostName.indexOf(name) >= 0){
             temp.push(item);
           }
         })
         this.dataSource = temp
-
-      },
-      searchReset(){
 
       },
       show(record){
@@ -211,11 +275,16 @@
         that.serviceInfo = record;
         // 获取所有节点
         this.getAllNodes();
+        this.queryServiceDetail(record.serviceId);
       },
       refresh () {
         this.serviceInfo = {}
         this.queryParam = {}
         this.dataSource = []
+         /* table选中keys*/
+        this.selectedRowKeys = []
+        /* table选中records*/
+        this.selectionRows = []
       },
       handleCancel () {
         this.close()
@@ -225,34 +294,31 @@
         this.visible = false;
       },
       handleChange (value, key, column) {
-        console.log(value, key, column)
         const newData = [...this.dataSource]
         const target = newData.filter(item => key === item.nodeId)[0]
-        console.log(target)
         if (target) {
           target[column] = value
           this.dataSource = newData
         }
+        setTimeout(()=>{
+          this.save(key)
+        },1500)
       },
       edit (key) {
-        console.log(key)
         const newData = [...this.dataSource]
         const target = newData.filter(item => key === item.nodeId)[0]
         if (target) {
           target.editable = true
           this.dataSource = newData
         }
-        console.log(this.dataSource)
       },
       save (key) {
-        console.log(key)
         const newData = [...this.dataSource]
         const target = newData.filter(item => key === item.nodeId)[0]
         if (target) {
           delete target.editable
           this.dataSource = newData
         }
-        console.log(this.dataSource)
       },
       
     }

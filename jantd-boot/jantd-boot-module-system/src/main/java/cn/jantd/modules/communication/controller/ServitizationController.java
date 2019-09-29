@@ -122,7 +122,7 @@ public class ServitizationController {
     @ApiOperation("查询节点信息【缓存信息】")
     public Result<QueryNodeDetailDTO> queryNodeDetail(@RequestParam(name = "nodeId") String nodeId) {
 //        return servitizationService.queryNodeDetail(nodeId);
-        return ServiceMockDataUtil.queryNodeDetail();
+        return ServiceMockDataUtil.queryNodeDetail(nodeId);
     }
 
     @GetMapping(value = "/aggregate-statistics")

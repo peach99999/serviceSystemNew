@@ -25,6 +25,7 @@ public class ServiceMockDataUtil {
     private ServiceMockDataUtil() {
     }
 
+
     /**
      * 读取json格式文件
      *
@@ -131,9 +132,9 @@ public class ServiceMockDataUtil {
     }
 
 
-    public static Result<QueryNodeDetailDTO> queryNodeDetail() {
+    public static Result<QueryNodeDetailDTO> queryNodeDetail(String nodeId) {
         Result result = new Result();
-        QueryNodeDetailDTO queryNodeDetailDTO = JSON.parseObject(readJson("classpath:cn/jantd/modules/demo/mock/json/queryNodeDetail.json"), QueryNodeDetailDTO.class);
+        QueryNodeDetailDTO queryNodeDetailDTO = JSON.parseObject(readJson("classpath:cn/jantd/modules/demo/mock/json/" + "queryNodeDetail_" + nodeId + ".json"), QueryNodeDetailDTO.class);
         result.setResult(queryNodeDetailDTO);
         return result;
     }
