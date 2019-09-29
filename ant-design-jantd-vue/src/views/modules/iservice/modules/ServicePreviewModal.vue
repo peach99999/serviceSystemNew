@@ -143,17 +143,17 @@
             </a-table-column>
             <a-table-column min-width="140px" title="CPU占用率">
               <template slot-scope="scope">
-                <a-progress :percent=scope.cpuCount :showInfo="false" />
+                <a-progress status="active" :percent=scope.cpuAvailable :showInfo="false" />
               </template>
             </a-table-column>
             <a-table-column min-width="140px" title="内存使用率">
               <template slot-scope="scope">
-                <a-progress :percent=scope.memorySize :showInfo="false" />
+                <a-progress status="active" :percent=scope.memoryAvalable :showInfo="false" />
               </template>
             </a-table-column>
             <a-table-column min-width="140px" title="磁盘使用率">
               <template slot-scope="scope">
-                <a-progress :percent=scope.diskSize :showInfo="false" />
+                <a-progress status="active" :percent=scope.diskAvailable :showInfo="false" />
               </template>
             </a-table-column>
           </a-table>
@@ -241,7 +241,7 @@
 </template>
 <script>
   
-  import {getIndividualServiceStatistics,getServiceDetail,queryNodeDetail} from '@/api/api'
+  import {getIndividualServiceStatistics,getServiceDetail,queryNodeDetail,individualNodeStatistics} from '@/api/api'
   export default {
     name: "ServicePreviewModal",
     data() {
@@ -256,6 +256,7 @@
         },
         serviceStatistics:{},
         serviceDetatl:{},
+        temp:{}
       }
     },
        
@@ -332,27 +333,45 @@
       fetchNodeDetail(nodeId){
         queryNodeDetail({nodeId:nodeId}).then((res)=>{
           if(res.success){
-            let temp = {}
+            this.temp = {}
             let runserviceNumber = 0
             let diskSize = 0
             let diskCount = 0
-            temp.nodeId = res.result.node_id
-            temp.hostName = res.result.host_name
-            temp.ip = res.result.ip
-            temp.deployedServices = res.result.deployed_services.length
+            this.temp.nodeId = res.result.node_id
+            this.temp.hostName = res.result.host_name
+            this.temp.ip = res.result.ip
+            this.temp.deployedServices = res.result.deployed_services.length
+            
             for (var val in res.result.running_services) {
               runserviceNumber++
             }
-            temp.runningServices = runserviceNumber
-            temp.cpuCount = parseInt(res.result.cpu_count)
-            temp.memorySize = parseInt(res.result.memory_size)
+            this.temp.runningServices = runserviceNumber
+            // this.temp.cpuCount = parseInt(res.result.cpu_count)
+            // this.temp.memorySize = parseInt(res.result.memory_size)
          
-            for (var val in res.result.disk_size) {
-              diskCount++
-              diskSize = diskSize + parseInt(res.result.disk_size[val])
-            }
-            temp.diskSize = Math.round(diskSize/diskCount)
-            this.nodeDataSource.push(temp)
+            // for (var val in res.result.disk_size) {
+            //   diskCount++
+            //   diskSize = diskSize + parseInt(res.result.disk_size[val])
+            // }
+            // this.temp.diskSize = Math.round(diskSize/diskCount)
+            // 查询节点统计信息
+            individualNodeStatistics({nodeId:nodeId}).then((res)=>{
+              if(res.success){
+                let diskSize = 0
+                let diskCount = 0
+                this.temp.cpuAvailable = parseInt(res.result.cpu_available)
+                this.temp.memoryAvalable = parseInt(res.result.memory_avalable)
+                for (var val in res.result.disk_available) {
+                  diskCount++
+                  diskSize = diskSize + parseInt(res.result.disk_available[val])
+                }
+                this.temp.diskAvailable = Math.round(diskSize/diskCount)
+                this.nodeDataSource.push(this.temp)
+              }else {
+                this.$message.error(res.message);
+              }
+              console.log(this.temp)
+            })
           }else {
             this.$message.error(res.message);
           }
@@ -363,6 +382,7 @@
         this.serviceStatistics = {}
         this.serviceDetatl = {}
         this.nodeDataSource = []
+        this.temp = {}
       },
       // 获取服务概览
       getServiceStatistics(serviceId){

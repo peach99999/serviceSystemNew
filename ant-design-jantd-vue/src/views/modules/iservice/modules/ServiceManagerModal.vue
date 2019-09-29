@@ -103,7 +103,7 @@
             }
           },
           {
-            title: '节点名称',
+            title: '主机名称',
             align:"center",
             dataIndex: 'hostName'
           },

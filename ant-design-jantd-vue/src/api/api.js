@@ -111,6 +111,11 @@ const submitService = (params)=>postAction("/communication/submit-service",param
 const queryAllNodes = (params)=>getAction("/communication/query-all-node",params);
 // 部署一个服务
 const deployService = (params)=>postAction("/communication/deploy-service",params);
+// 单个节点统计信息
+const individualNodeStatistics = (params)=>getAction("/communication/query-individual-node-Statistics",params);
+// 查询单个节点的单个服务的统计信息
+const individualNodeServiceStatistics = (params)=>getAction("/communication/query-individual-node-service-statistics",params);
+
 
 export {
   // imgView,
@@ -168,7 +173,9 @@ export {
   uploadServiceFile,
   submitService,
   queryAllNodes,
-  deployService
+  deployService,
+  individualNodeStatistics,
+  individualNodeServiceStatistics
 }
 
 

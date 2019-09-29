@@ -1,216 +1,310 @@
 <template>
-  <div id="components-layout-demo-basic">
-    <a-row type="flex" justify="start">
-      <a-col :span="2">
-        <span class="point">
-        </span>
-        <span style="font-weight: bold">
-          {{"静态信息"}}
-        </span>
-      </a-col>
-      <a-col :span="2" :offset="6">
-        <span class="point">
-        </span>
-        <span style="font-weight: bold">
-          {{"动态信息"}}
-        </span>
-      </a-col>
-    </a-row>
-    <a-row type="flex" justify="start" :gutter="30" style="margin-left: 1px">
-      <a-col :span="8">
-        <template>
-          <a-card style="height: 280px">
-            <a-row type="flex" justify="start" style="margin-top: 10px">
-              <a-col :span="6">
-                <span class="span-left">{{"主机名:"}}</span>
-              </a-col>
-              <a-col :span="11">
-                <span class="span-margin">{{"名称"}}</span>
-              </a-col>
-            </a-row>
-            <a-row type="flex" justify="start" style="margin-top: 10px">
-              <a-col :span="6">
-                <span class="span-left">{{"IP:"}}</span>
-              </a-col>
-              <a-col :span="11">
-                <span class="span-margin">{{"127.0.0.1"}}</span>
-              </a-col>
-            </a-row>
-            <a-row type="flex" justify="start" style="margin-top: 10px">
-              <a-col :span="6">
-                <span class="span-left">{{"CPU数:"}}</span>
-              </a-col>
-              <a-col :span="11">
-                <span class="span-margin">{{"12"}}</span>
-              </a-col>
-            </a-row>
-            <a-row type="flex" justify="start" style="margin-top: 10px">
-              <a-col :span="6">
-                <span class="span-left">{{"线程数:"}}</span>
-              </a-col>
-              <a-col :span="11">
-                <span class="span-margin">{{"12"}}</span>
-              </a-col>
-            </a-row>
-            <a-row type="flex" justify="start" style="margin-top: 10px">
-              <a-col :span="6">
-                <span class="span-left">{{"CPU主频:"}}</span>
-              </a-col>
-              <a-col :span="11">
-                <span class="span-margin">{{"12"}}</span>
-              </a-col>
-            </a-row>
-            <a-row type="flex" justify="start" style="margin-top: 10px">
-              <a-col :span="6">
-                <span class="span-left">{{"内存:"}}</span>
-              </a-col>
-              <a-col :span="11">
-                <span class="span-margin">{{"200G"}}</span>
-              </a-col>
-            </a-row>
-            <a-row type="flex" justify="start" style="margin-top: 10px">
-              <a-col :span="6">
-                <span class="span-left">{{"磁盘:"}}</span>
-              </a-col>
-              <a-col :span="11">
-                <span class="span-margin">{{"4MB"}}</span>
-              </a-col>
-            </a-row>
-          </a-card>
-        </template>
-      </a-col>
+  <a-drawer
+    :title="title"
+    :maskClosable="true"
+    :width="900"
+    placement="right"
+    :closable="true"
+    @close="handleCancel"
+    :visible="visible">
+    <div id="components-layout-demo-basic">
+      <a-row type="flex" justify="start">
+        <a-col :span="2">
+          <span class="point">
+          </span>
+          <span style="font-weight: bold">
+            {{"静态信息"}}
+          </span>
+        </a-col>
+        <a-col :span="2" :offset="8">
+          <span class="point">
+          </span>
+          <span style="font-weight: bold">
+            {{"动态信息"}}
+          </span>
+        </a-col>
+      </a-row>
+      <a-row type="flex" justify="start" :gutter="30" style="margin-left: 1px">
+        <a-col :span="9">
+          <template v-bind="nodeInfo">
+            <a-card style="height: 280px">
+              <a-row type="flex" justify="start" style="margin-top: 10px">
+                <a-col :span="7">
+                  <span class="span-left">{{"主机名"}}</span>
+                </a-col>
+                <a-col :span="11">
+                  <span class="span-margin">{{nodeInfo.hostName}}</span>
+                </a-col>
+              </a-row>
+              <a-row type="flex" justify="start" style="margin-top: 10px">
+                <a-col :span="7">
+                  <span class="span-left">{{"IP:"}}</span>
+                </a-col>
+                <a-col :span="11">
+                  <span class="span-margin">{{nodeInfo.ip}}</span>
+                </a-col>
+              </a-row>
+              <a-row type="flex" justify="start" style="margin-top: 10px">
+                <a-col :span="7">
+                  <span class="span-left">{{"CPU数:"}}</span>
+                </a-col>
+                <a-col :span="11">
+                  <span class="span-margin">{{nodeInfo.cpuCount}}</span>
+                </a-col>
+              </a-row>
+              <a-row type="flex" justify="start" style="margin-top: 10px">
+                <a-col :span="7">
+                  <span class="span-left">{{"线程数:"}}</span>
+                </a-col>
+                <a-col :span="11">
+                  <span class="span-margin">{{nodeInfo.threadCount}}</span>
+                </a-col>
+              </a-row>
+              <a-row type="flex" justify="start" style="margin-top: 10px">
+                <a-col :span="7">
+                  <span class="span-left">{{"CPU主频:"}}</span>
+                </a-col>
+                <a-col :span="11">
+                  <span class="span-margin">{{nodeInfo.cpuFrequency}}</span>
+                </a-col>
+              </a-row>
+              <a-row type="flex" justify="start" style="margin-top: 10px">
+                <a-col :span="7">
+                  <span class="span-left">{{"内存:"}}</span>
+                </a-col>
+                <a-col :span="11">
+                  <span class="span-margin">{{nodeInfo.memorySize}}</span>
+                </a-col>
+              </a-row>
+              <a-row type="flex" justify="start" style="margin-top: 10px">
+                <a-col :span="7">
+                  <span class="span-left">{{"磁盘:"}}</span>
+                </a-col>
+                <a-col :span="11">
+                  <span class="span-margin">{{nodeInfo.diskSize}}G</span>
+                </a-col>
+              </a-row>
+            </a-card>
+          </template>
+        </a-col>
 
-      <a-col :span="8">
-        <template>
-          <a-card style="height: 280px">
-            <a-row type="flex" justify="start" style="margin-top: 10px">
-              <a-col :span="6">
-                <span class="span-left">{{"CPU占用率:"}}</span>
-              </a-col>
-              <a-col :span="11" :offset="2">
-                <span>
-                   <a-progress :percent="50"/>
-                </span>
-              </a-col>
-            </a-row>
-            <a-row type="flex" justify="start" style="margin-top: 10px">
-              <a-col :span="6">
-                <span class="span-left">{{"已用内存"}}</span>
-              </a-col>
-              <a-col :span="11" :offset="2">
-                <span>
-                   <a-progress :percent="50"/>
-                </span>
-              </a-col>
-            </a-row>
-            <a-row type="flex" justify="start" style="margin-top: 10px">
-              <a-col :span="6">
-                <span class="span-left">{{"磁盘使用"}}</span>
-              </a-col>
-              <a-col :span="11" :offset="2">
-                <span>
-                   <a-progress :percent="50"/>
-                </span>
-              </a-col>
-            </a-row>
-            <a-row type="flex" justify="start" style="margin-top: 10px">
-              <a-col :span="6">
-                <span class="span-left">{{"调用次数:"}}</span>
-              </a-col>
-              <a-col :span="11">
-                <span class="span-margin">{{"12次"}}</span>
-              </a-col>
-            </a-row>
-            <a-row type="flex" justify="start" style="margin-top: 10px">
-              <a-col :span="6">
-                <span class="span-left">{{"平均耗时:"}}</span>
-              </a-col>
-              <a-col :span="11">
-                <span class="span-margin">{{"12ms"}}</span>
-              </a-col>
-            </a-row>
-          </a-card>
-        </template>
-      </a-col>
-    </a-row>
+        <a-col :span="10">
+          <template v-bind="individualNodeStatisticsInfo">
+            <a-card style="height: 280px">
+              <a-row type="flex" justify="start" style="margin-top: 10px">
+                <a-col :span="7">
+                  <span class="span-left">{{"统计时间"}}</span>
+                </a-col>
+                <a-col :span="14" :offset="2">
+                  <span>
+                    <span style="float: left;">{{individualNodeStatisticsInfo.statsTime}}</span>
+                  </span>
+                </a-col>
+              </a-row>
+              <a-row type="flex" justify="start" style="margin-top: 10px">
+                <a-col :span="7">
+                  <span class="span-left">{{"CPU占用率:"}}</span>
+                </a-col>
+                <a-col :span="14" :offset="2">
+                  <span>
+                    <a-progress :percent= individualNodeStatisticsInfo.cpuAvailable status="active" />
+                  </span>
+                </a-col>
+              </a-row>
+              <a-row type="flex" justify="start" style="margin-top: 10px">
+                <a-col :span="7">
+                  <span class="span-left">{{"已用内存"}}</span>
+                </a-col>
+                <a-col :span="14" :offset="2">
+                  <span>
+                    <a-progress :percent=individualNodeStatisticsInfo.memoryAvalable status="active"/>
+                  </span>
+                </a-col>
+              </a-row>
+              <a-row type="flex" justify="start" style="margin-top: 10px">
+                <a-col :span="7">
+                  <span class="span-left">{{"磁盘使用"}}</span>
+                </a-col>
+                <a-col :span="14" :offset="2">
+                  <span>
+                    <a-progress :percent=individualNodeStatisticsInfo.diskAvailable status="active" />
+                  </span>
+                </a-col>
+              </a-row>
+              <a-row type="flex" justify="start" style="margin-top: 10px">
+                <a-col :span="7">
+                  <span class="span-left">{{"运行服务数:"}}</span>
+                </a-col>
+                <a-col :span="14">
+                  <span class="span-margin">{{individualNodeStatisticsInfo.runningServicesCount}}</span>
+                </a-col>
+              </a-row>
+            </a-card>
+          </template>
+        </a-col>
+      </a-row>
 
-    <a-row type="flex" justify="start" style="margin-top: 20px">
-      <a-col :span="2">
-        <span class="point">
-        </span>
-        <span style="font-weight: bold">
-          {{"服务列表"}}
-        </span>
-      </a-col>
-    </a-row>
-    <a-row type="flex" justify="start" style="margin-top: 5px">
-      <a-col :span="20">
-        <a-table :dataSource="data" :fit="true">
-          <a-table-column min-width="140px" title="服务IP">
-            <template slot-scope="scope">
-              {{scope.name}}
-            </template>
-          </a-table-column>
-          <a-table-column min-width="140px" title="上线时间">
-            <template slot-scope="scope">
-              {{scope.name}}
-            </template>
-          </a-table-column>
-          <a-table-column min-width="140px" title="CPU占用率">
-            <template slot-scope="scope">
-              <a-progress :percent="50" :showInfo="false" />
-            </template>
-          </a-table-column>
-          <a-table-column min-width="140px" title="内存使用率">
-            <template slot-scope="scope">
-              <a-progress :percent="50" :showInfo="false" />
-            </template>
-          </a-table-column>
-          <a-table-column min-width="140px" title="磁盘使用率">
-            <template slot-scope="scope">
-              <a-progress :percent="50" :showInfo="false" />
-            </template>
-          </a-table-column>
-          <a-table-column min-width="140px" title="调用次数">
-            <template slot-scope="scope">
-              {{scope.name}}
-            </template>
-          </a-table-column>
-          <a-table-column min-width="140px" title="平均耗时(ms)">
-            <template slot-scope="scope">
-              {{scope.name}}
-            </template>
-          </a-table-column>
-        </a-table>
-      </a-col>
-    </a-row>
-
-  </div>
+      <a-row type="flex" justify="start" style="margin-top: 20px">
+        <a-col :span="2">
+          <span class="point">
+          </span>
+          <span style="font-weight: bold">
+            {{"服务列表"}}
+          </span>
+        </a-col>
+      </a-row>
+      <a-row type="flex" justify="start" style="margin-top: 5px">
+        <a-col :span="30">
+          <a-table 
+            :dataSource="data" 
+            :fit="true"
+            bordered
+            :loading="loading">
+            <a-table-column min-width="140px" align = "center" title="服务编号">
+              <template slot-scope="scope">
+                {{scope.serviceId}}
+              </template>
+            </a-table-column>
+            <a-table-column min-width="140px" align = "center" title="上线时间">
+              <template slot-scope="scope">
+                {{scope.deploySubmissionTime}}
+              </template>
+            </a-table-column>
+            <a-table-column min-width="140px" title="CPU占用率" align = "center">
+              <template slot-scope="scope">
+                <a-progress status="active" :percent=scope.cpuUsed :showInfo="false" />
+              </template>
+            </a-table-column>
+            <a-table-column min-width="140px" title="内存使用率" align = "center">
+              <template slot-scope="scope">
+                <a-progress status="active" :percent=scope.memoryUsed :showInfo="false" />
+              </template>
+            </a-table-column>
+            <a-table-column min-width="140px" title="磁盘使用率" align = "center">
+              <template slot-scope="scope">
+                <a-progress status="active" :percent=scope.diskUsed :showInfo="false" />
+              </template>
+            </a-table-column>
+            <a-table-column min-width="140px" title="调用次数" align = "center">
+              <template slot-scope="scope">
+                {{scope.callCount}}
+              </template>
+            </a-table-column>
+            <a-table-column min-width="140px" title="平均耗时(ms)" align = "center">
+              <template slot-scope="scope">
+                {{scope.averageTimeCost}}
+              </template>
+            </a-table-column>
+          </a-table>
+        </a-col>
+      </a-row>
+    </div>
+  </a-drawer>
 </template>
 <script>
-  const data = [{
-    key: '1',
-    name: 'John Brown',
-    num: '21',
-    address: 'New York No. 1 Lake Park',
-  }, {
-    key: '2',
-    name: 'Jim Green',
-    num: '44',
-    address: 'London No. 1 Lake Park',
-  }, {
-    key: '3',
-    name: 'Joe Black',
-    num: '66',
-    address: 'Sidney No. 1 Lake Park',
-  }];
-
+  
+import {individualNodeStatistics,individualNodeServiceStatistics} from '@/api/api'
   export default {
+    name: "NodeManagerModal",
     data() {
       return {
-        data
+        data:[],
+        title:"",
+        visible: false,
+        loading: false,
+        nodeInfo:{},
+        individualNodeStatisticsInfo:{},
+        ipagination: {
+          current: 1,
+          pageSize: 1,
+          pageSizeOptions: ['10', '20', '30'],
+          showTotal: (total, range) => {
+            return range[0] + '-' + range[1] + ' 共' + total + '条'
+          },
+          showQuickJumper: true,
+          showSizeChanger: true,
+          total: 0
+        },
+        temp:{}
       }
-    }
+      
+    },
+    created() {
+      
+    },
+    mounted(){
+    },
+    computed:{
+    },
+    methods: {
+      detail(record){
+        let that = this;
+        that.refresh();
+        that.visible = true;
+        that.loading = true;
+        that.nodeInfo = record;
+        // 获取节点统计信息
+        that.queryIndividualNodeStatisticsInfo(record.nodeId);
+        // 获取服务列表详情
+        that.queryIndividualNodeServiceStatistics(record)
+      },
+      queryIndividualNodeServiceStatistics(record){
+        console.log(record)
+        for (let index = 0; index < record.deployedServices.length; index++) {
+          const serviceId = record.deployedServices[index];
+          individualNodeServiceStatistics({nodeId:record.nodeId,serviceId:serviceId}).then((res)=>{
+            if(res.success){
+              this.temp = {}
+              this.temp.serviceId = res.result.service_id
+              this.temp.cpuUsed = parseInt(res.result.cpu_used)
+              this.temp.memoryUsed = parseInt(res.result.memory_used)
+              this.temp.diskUsed = parseInt(res.result.disk_used)
+              this.temp.callCount = parseInt(res.result.call_count)
+              this.temp.averageTimeCost =parseInt(res.result.average_time_cost)
+              this.data.push(this.temp)
+              console.log(this.data)
+            }else {
+              this.$message.error(res.message);
+            }
+          })
+        }
+        this.loading = false
+      },
+      queryIndividualNodeStatisticsInfo(nodeId){
+        individualNodeStatistics({nodeId:nodeId}).then((res)=>{
+          if(res.success){
+            let temp = {}
+            let diskSize = 0
+            let diskCount = 0
+            temp.statsTime = res.result.stats_time
+            temp.hostUpTime = parseInt(res.result.host_up_time)
+            temp.cpuAvailable = parseInt(res.result.cpu_available)
+            temp.memoryAvalable = parseInt(res.result.memory_avalable)
+            for (var val in res.result.disk_available) {
+              diskCount++
+              diskSize = diskSize + parseInt(res.result.disk_available[val])
+            }
+            temp.diskAvailable = Math.round(diskSize/diskCount)
+            temp.runningServicesCount = parseInt(res.result.running_services_count)
+            this.individualNodeStatisticsInfo = temp
+          }else {
+            this.$message.error(res.message);
+          }
+        })
+      },
+      refresh () {
+        this.data = []
+        this.nodeInfo = {}
+        this.individualNodeStatisticsInfo = {}
+      },
+      handleCancel () {
+        this.close()
+      },
+      close () {
+        this.$emit('close');
+        this.visible = false;
+      },
+    },
   }
 </script>
 <style>

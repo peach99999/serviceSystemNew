@@ -189,8 +189,6 @@
     mounted() {
       this.listServiceCategory()
     },
-    watch: {
-    },
     created: function () {
     }
 
