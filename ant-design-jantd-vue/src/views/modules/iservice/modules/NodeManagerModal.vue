@@ -204,6 +204,7 @@
 <script>
   
 import {individualNodeStatistics,individualNodeServiceStatistics} from '@/api/api'
+import { deleteAction, postAction, getAction } from '@/api/manage';
   export default {
     name: "NodeManagerModal",
     data() {
@@ -225,7 +226,10 @@ import {individualNodeStatistics,individualNodeServiceStatistics} from '@/api/ap
           showSizeChanger: true,
           total: 0
         },
-        temp:{}
+        temp:{},
+        url: {
+          serviceDetail: '/serviceInfo/query-by-service-id',
+        },
       }
       
     },
@@ -261,7 +265,13 @@ import {individualNodeStatistics,individualNodeServiceStatistics} from '@/api/ap
               this.temp.diskUsed = parseInt(res.result.disk_used)
               this.temp.callCount = parseInt(res.result.call_count)
               this.temp.averageTimeCost =parseInt(res.result.average_time_cost)
-              this.data.push(this.temp)
+              // 查询部署时间
+              getAction(this.url.serviceDetail, {serviceId:res.result.service_id}).then((res) => {
+                if (res.success) {
+                  this.temp.deploySubmissionTime = res.result.deploySubmissionTime
+                  this.data.push(this.temp)
+                }
+              })
               console.log(this.data)
             }else {
               this.$message.error(res.message);

@@ -12,6 +12,7 @@ import cn.jantd.core.system.vo.LoginUser;
 import cn.jantd.modules.communication.entity.ServiceInfo;
 import cn.jantd.modules.communication.param.SubmitRegisterParam;
 import cn.jantd.modules.communication.service.IServiceInfoService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -263,6 +264,30 @@ public class ServiceInfoController {
     public Result<ServiceInfo> queryById(@RequestParam(name = "id", required = true) String id) {
         Result<ServiceInfo> result = new Result<>();
         ServiceInfo serviceInfo = serviceInfoService.getById(id);
+        if (serviceInfo == null) {
+            result.error500("未找到对应实体");
+        } else {
+            result.setResult(serviceInfo);
+            result.setSuccess(true);
+        }
+        return result;
+    }
+
+    /**
+     * 通过serviceid查询
+     *
+     * @param serviceId
+     * @return
+     */
+    @AutoLog(value = "服务基本信息-通过serviceid查询")
+    @ApiOperation(value = "服务基本信息-通过serviceid查询")
+    @GetMapping(value = "/query-by-service-id")
+    public Result<ServiceInfo> queryByServiceId(@RequestParam(name = "serviceId", required = true) String serviceId) {
+        Result<ServiceInfo> result = new Result<>();
+        LambdaQueryWrapper<ServiceInfo> query = new LambdaQueryWrapper<ServiceInfo>();
+        query.eq(ServiceInfo::getServiceId, serviceId);
+        query.orderByDesc(ServiceInfo::getDeploySubmissionTime);
+        ServiceInfo serviceInfo = serviceInfoService.getOne(query);
         if (serviceInfo == null) {
             result.error500("未找到对应实体");
         } else {
