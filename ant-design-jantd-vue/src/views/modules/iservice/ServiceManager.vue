@@ -76,7 +76,7 @@
       </a-layout>
     </a-layout>
     <servicePreview-modal ref="servicePreviewDetailForm"></servicePreview-modal>
-    <serviceManager-modal ref="serviceManagerForm"></serviceManager-modal>
+    <serviceManager-modal ref="serviceManagerForm"  @ok="modalFormOk"></serviceManager-modal>
   </div>
 </template>
 <script>

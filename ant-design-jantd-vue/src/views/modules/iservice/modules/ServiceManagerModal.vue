@@ -84,7 +84,8 @@
   import ATableColumn from "ant-design-vue/es/table/Column";
   import {queryAllNodes,queryNodeDetail,deployService,getServiceDetail} from '@/api/api';
   import ARow from "ant-design-vue/es/grid/Row";
-  import './ServiceManagerModal.less'
+  import './ServiceManagerModal.less';
+  import { httpAction } from '@/api/manage'
 
   export default {
     components: {ARow, ATableColumn},
@@ -138,6 +139,9 @@
         selectedRowKeys: [],
         /* table选中records*/
         selectionRows: [],
+        url: {
+          edit: "/serviceInfo/edit-deploy",
+        },
       }
     },
     created() {
@@ -250,8 +254,25 @@
         deployService(param).then((res)=>{
           if(res.success){
             this.$message.success("部署成功!")
-            this.$emit('close');
-            this.visible = false;
+            // 更新部署人和部署时间
+            
+            let httpurl=this.url.edit;
+            let method = 'put';
+            let formData = {};
+            formData.id = this.serviceInfo.id;
+            
+            console.log(formData)
+            httpAction(httpurl,formData,method).then((res)=>{
+              if(res.success){
+                console.log(res.message);
+              }else{
+                console.log(res.message);
+              }
+            }).finally(() => {
+              this.$emit('ok');
+              this.visible = false;
+            })
+            
           }else {
             this.$message.error(res.message);
           }
