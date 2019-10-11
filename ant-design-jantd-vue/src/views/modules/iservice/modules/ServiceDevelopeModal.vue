@@ -6,6 +6,7 @@
     :confirmLoading="confirmLoading"
     @cancel="handleCancel">
     <template slot="footer">
+      <a-button key="remove" :loading="loading"  @click="remove">移除</a-button>
       <a-button key="submit" :loading="loading" type="primary" @click="handleOk">保存</a-button>
     </template>
     <a-spin :spinning="confirmLoading">
@@ -44,54 +45,63 @@
           :label-col="labelCol"
           :wrapper-col="wrapperCol"
           label="服务开发人员">
-          <a-input v-decorator="['developer', {}]" disabled/>
+          <a-input v-model="realName" disabled/>
         </a-form-item>
         <a-row type="flex" style="margin-top: 20px;margin-bottom: 20px">
           <a-col :span="5" :offset="5">
-            <a-button type="primary">服务调用代码框架</a-button>
+            <a-button type="primary" @click="downLoadServiceCallFrame">服务调用代码框架</a-button>
           </a-col>
           <a-col :span="5">
-            <a-button type="primary">服务实现代码框架</a-button>
+            <a-button type="primary" @click="downLoadServiceImplementFrame">服务实现代码框架</a-button>
           </a-col>
         </a-row>
 
         <a-form-item
           :label-col="labelCol"
-          :wrapper-col="wrapperCol"
+          :wrapper-col="downWrapperCol"
           label="服务实现">
           <a-row type="flex">
-            <a-col :span="21">
+            <a-col :span="16">
               <a-input placeholder="请上传服务实现文档" v-decorator="['serviceImplementationFileName', validatorRules.serviceImplementationFileName]"/>
             </a-col>
+            <a-col :span="5">
+              <JZIPUpload style="margin-left:10px" @input="handleUploadServiceImplementationFileSuccess"></JZIPUpload>
+            </a-col>
             <a-col :span="3">
-              <JZIPUpload @input="handleUploadServiceImplementationFileSuccess"></JZIPUpload>
+              <a-button icon="download" @click="downLoadImplementationFile">下载</a-button>
             </a-col>
           </a-row>
         </a-form-item>
 
         <a-form-item
           :label-col="labelCol"
-          :wrapper-col="wrapperCol"
+          :wrapper-col="downWrapperCol"
           label="用户文档">
           <a-row type="flex">
-            <a-col :span="21">
-              <a-input placeholder="请上传用户文档" v-decorator="['userManualFileName', validatorRules.userManualFileName]"/>
+            <a-col :span="16">
+              <a-input placeholder="请上传用户文档" v-decorator="['userManualFileName', {}]"/>
+            </a-col>
+            <a-col :span="5">
+              <JUpload style="margin-left:10px" @input="handleUploadUserManualFileSuccess"></JUpload>
             </a-col>
             <a-col :span="3">
-              <JUpload @input="handleUploadUserManualFileSuccess"></JUpload>
+              <a-button icon="download" @click="dowmLoadUserManualFile">下载</a-button>
             </a-col>
           </a-row>
         </a-form-item>
         <a-form-item
           :label-col="labelCol"
-          :wrapper-col="wrapperCol"
+          :wrapper-col="downWrapperCol"
           label="使用案例">
           <a-row type="flex">
-            <a-col :span="21">
-              <a-input placeholder="请上传使用案例" v-decorator="['demoFileName', validatorRules.demoFileName]"/>
+            <a-col :span="16">
+              <a-input placeholder="请上传使用案例" v-decorator="['demoFileName', {}]"/>
+            </a-col>
+            <a-col :span="5">
+              <JUpload style="margin-left:10px" @input="handleUploadDemoFileSuccess"></JUpload>             
             </a-col>
             <a-col :span="3">
-              <JUpload @input="handleUploadDemoFileSuccess"></JUpload>             
+              <a-button icon="download" @click="downLoadDemoFile">下载</a-button>
             </a-col>
           </a-row>
         </a-form-item>
@@ -117,9 +127,11 @@
   import ARow from "ant-design-vue/es/grid/Row";
   import './ServiceRegisterModal.less'
   import pick from 'lodash.pick'
+  import omit from 'lodash.omit'
   import JUpload from '@/components/jantd/JUpload'
   import JZIPUpload from '@/components/jantd/JZIPUpload'
   import { httpAction } from '@/api/manage'
+  import { mapActions, mapGetters } from 'vuex'
 
   export default {
     components: {ARow,JUpload,JZIPUpload},
@@ -133,6 +145,10 @@
         wrapperCol: {
           xs: {span: 24},
           sm: {span: 12},
+        },
+        downWrapperCol: {
+          xs: {span: 24},
+          sm: {span: 15},
         },
         visible: false,
         form: this.$form.createForm(this),
@@ -167,23 +183,55 @@
         url: {
           edit: "/serviceInfo/edit-developer",
         },
+        realName:'',
+        serviceCallFramePath:'',
+        serviceImplementFramePath:''
       };
     },
     methods: {
+      ...mapGetters(["nickname"]),
+      downLoadServiceCallFrame(){
+        this.handleDownload(this.serviceCallFramePath)
+      },
+      downLoadServiceImplementFrame(){
+        this.handleDownload(this.serviceImplementFramePath)
+      },
       // 服务实现附件上传回调
       handleUploadServiceImplementationFileSuccess(value){
         this.serviceImplementationFilePath = value
         this.form.setFieldsValue({serviceImplementationFileName:this.handleFileName(value)})
+      },
+      // 服务实现附件下载
+      downLoadImplementationFile(){
+        this.handleDownload(this.serviceImplementationFilePath)
+      },
+      // 下載
+      handleDownload(path){
+        console.log(path)
+        if(!path){
+        this.$message.warning("请上传后再下载!")
+          return;
+        }
+        if(path.indexOf(",")>0){
+          path = path.substring(0,path.indexOf(","))
+        }
+        window.open(window._CONFIG['domianURL'] + "/sys/common/download/"+path);
       },
       // 用户文档附件上传回调
       handleUploadUserManualFileSuccess(value){
         this.userManualFilePath = value;
         this.form.setFieldsValue({userManualFileName:this.handleFileName(value)})
       },
+      dowmLoadUserManualFile(){
+        this.handleDownload(this.userManualFilePath)
+      },
       // 使用案例附件上传回调
       handleUploadDemoFileSuccess(value){
         this.demoFilePath = value
         this.form.setFieldsValue({demoFileName:this.handleFileName(value)})
+      },
+      downLoadDemoFile(){
+        this.handleDownload(this.demoFilePath)
       },
       handleFileName(value){
         console.log(value)
@@ -201,18 +249,52 @@
         return fileName+'.'+fileType
       },
       add() {
+        
         this.edit({});
+
       },
       edit(record) {
         this.form.resetFields();
+        this.realName = this.nickname();
         this.model = Object.assign({}, record);
         this.visible = true;
+        this.serviceImplementationFilePath = record.serviceImplementationFilePath
+        this.userManualFilePath = record.userManualFilePath
+        this.demoFilePath = record.demoFilePath
+        this.serviceCallFramePath = record.serviceCallFramePath
+        this.serviceImplementFramePath = record.serviceCallFramePath
         this.$nextTick(() => {
           this.form.setFieldsValue(pick(this.model,'name','developer','serviceImplementationFileName','userManualFileName','demoFileName','minInstance','maxInstance'))
           if(record.serviceLabel){
             this.serviceLabel = record.serviceLabel.split(',');
           }
         });
+      },
+      remove(){
+        if(!this.model.minInstance){
+          this.$message.warning("保存后方可移除!")
+          return;
+        }
+        const that = this;
+        that.loading = true;
+        that.confirmLoading = true;
+        let formData = omit(this.model,'developer','serviceImplementationFileName','serviceImplementationFilePath','userManualFileName','userManualFilePath','demoFileName','demoFilePath','minInstance','maxInstance','developerStatus','developerSubmissionTime','developerSubmissionUser','developerSubmissionUserId')
+        console.log(formData)
+        let httpurl = this.url.edit;
+        let method = 'put';
+        
+        httpAction(httpurl,formData,method).then((res)=>{
+          if(res.success){
+            that.$message.success("移除成功!");
+            that.$emit('ok');
+          }else{
+            that.$message.warning(res.message);
+          }
+        }).finally(() => {
+          that.confirmLoading = false;
+          that.loading = false;
+          that.close();
+        })
       },
       handleOk () {
         const that = this;
@@ -231,14 +313,21 @@
               method = 'put';
             }
             let formData = Object.assign(this.model, values);
-            formData.serviceImplementationFilePath = this.serviceImplementationFilePath;
-            formData.userManualFilePath = this.userManualFilePath;
-            formData.demoFilePath = this.demoFilePath;
+            formData.developer = this.realName
+            if(this.serviceImplementationFilePath != ''){
+                formData.serviceImplementationFilePath = this.serviceImplementationFilePath;
+            }
+            if(this.userManualFilePath != ''){
+              formData.userManualFilePath = this.userManualFilePath;
+            }
+            if(this.demoFilePath != ''){
+              formData.demoFilePath = this.demoFilePath;
+            }
             formData.developerStatus = "0";
             console.log(formData)
             httpAction(httpurl,formData,method).then((res)=>{
               if(res.success){
-                that.$message.success(res.message);
+                that.$message.success("保存成功!");
                 that.$emit('ok');
               }else{
                 that.$message.warning(res.message);

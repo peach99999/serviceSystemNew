@@ -2,9 +2,7 @@ package cn.jantd.modules.communication.entity;
 
 import cn.jantd.core.annotation.Dict;
 import cn.jantd.core.poi.excel.annotation.Excel;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -119,6 +117,7 @@ public class ServiceInfo implements Serializable {
      */
     @Excel(name = "开发人员", width = 15)
     @ApiModelProperty(value = "开发人员")
+    @TableField(strategy = FieldStrategy.IGNORED)
     private String developer;
 
     /**
@@ -126,6 +125,7 @@ public class ServiceInfo implements Serializable {
      */
     @Excel(name = "开发人员ID", width = 15)
     @ApiModelProperty(value = "开发人员ID")
+    @TableField(strategy = FieldStrategy.IGNORED)
     private String developerId;
 
     /**
@@ -172,6 +172,7 @@ public class ServiceInfo implements Serializable {
      */
     @Excel(name = "服务实现文件名称", width = 15)
     @ApiModelProperty(value = "服务实现文件名称")
+    @TableField(strategy = FieldStrategy.IGNORED)
     private String serviceImplementationFileName;
 
     /**
@@ -179,6 +180,7 @@ public class ServiceInfo implements Serializable {
      */
     @Excel(name = "服务实现文件路径", width = 15)
     @ApiModelProperty(value = "服务实现文件路径")
+    @TableField(strategy = FieldStrategy.IGNORED)
     private String serviceImplementationFilePath;
 
     /**
@@ -186,6 +188,7 @@ public class ServiceInfo implements Serializable {
      */
     @Excel(name = "用户文档文件名称", width = 15)
     @ApiModelProperty(value = "用户文档文件名称")
+    @TableField(strategy = FieldStrategy.IGNORED)
     private String userManualFileName;
 
     /**
@@ -193,6 +196,7 @@ public class ServiceInfo implements Serializable {
      */
     @Excel(name = "用户文档文件路径", width = 15)
     @ApiModelProperty(value = "用户文档文件路径")
+    @TableField(strategy = FieldStrategy.IGNORED)
     private String userManualFilePath;
 
     /**
@@ -200,6 +204,7 @@ public class ServiceInfo implements Serializable {
      */
     @Excel(name = "使用案例文档文件名称", width = 15)
     @ApiModelProperty(value = "使用案例文档文件名称")
+    @TableField(strategy = FieldStrategy.IGNORED)
     private String demoFileName;
 
     /**
@@ -207,6 +212,7 @@ public class ServiceInfo implements Serializable {
      */
     @Excel(name = "使用案例文档文件路径", width = 15)
     @ApiModelProperty(value = "使用案例文档文件路径")
+    @TableField(strategy = FieldStrategy.IGNORED)
     private String demoFilePath;
 
     /**
@@ -214,6 +220,7 @@ public class ServiceInfo implements Serializable {
      */
     @Excel(name = "最小实例数", width = 15)
     @ApiModelProperty(value = "最小实例数")
+    @TableField(strategy = FieldStrategy.IGNORED)
     private Integer minInstance;
 
     /**
@@ -221,6 +228,7 @@ public class ServiceInfo implements Serializable {
      */
     @Excel(name = "最大实例数", width = 15)
     @ApiModelProperty(value = "最大实例数")
+    @TableField(strategy = FieldStrategy.IGNORED)
     private Integer maxInstance;
 
     /**
@@ -237,6 +245,7 @@ public class ServiceInfo implements Serializable {
      */
     @Excel(name = "开发提交人", width = 15)
     @ApiModelProperty(value = "开发提交人")
+    @TableField(strategy = FieldStrategy.IGNORED)
     private String developerSubmissionUser;
 
     /**
@@ -244,6 +253,7 @@ public class ServiceInfo implements Serializable {
      */
     @Excel(name = "开发提交人ID", width = 15)
     @ApiModelProperty(value = "开发提交人ID")
+    @TableField(strategy = FieldStrategy.IGNORED)
     private String developerSubmissionUserId;
 
     /**
@@ -252,6 +262,7 @@ public class ServiceInfo implements Serializable {
     @Excel(name = "开发状态 0:草稿;1:提交", width = 15, dicCode = "developer_status")
     @ApiModelProperty(value = "开发状态 0:草稿;1:提交")
     @Dict(dicCode = "developer_status")
+    @TableField(strategy = FieldStrategy.IGNORED)
     private String developerStatus;
 
     /**
@@ -298,5 +309,20 @@ public class ServiceInfo implements Serializable {
     @Excel(name = "服务id", width = 15)
     @ApiModelProperty(value = "服务id")
     private String serviceId;
+
+    /**
+     * 服务调用代码框架路径
+     */
+    @ApiModelProperty(value = "服务调用代码框架路径")
+    private String serviceCallFramePath;
+
+
+    /**
+     * 服务实现代码框架路径
+     */
+    @ApiModelProperty(value = "服务实现代码框架路径")
+    private String serviceImplementFramePath;
+
+
 
 }

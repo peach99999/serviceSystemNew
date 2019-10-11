@@ -136,7 +136,7 @@
           total: 0
         },
         url: {
-          list: '/serviceInfo/list',
+          list: '/serviceInfo/list-myself',
           edit: "/serviceInfo/edit-register",
           imgerver: window._CONFIG['domianURL']+"/sys/common/view",
         },
@@ -165,6 +165,7 @@
         console.log(record.minInstance)
         if(record.minInstance == null){
             this.$message.error("请先设置开发相关内容后再提交！")
+            return;
         }
         // 1.上传服务实现文件获取文件id
         // 2.修改开发状态为已提交

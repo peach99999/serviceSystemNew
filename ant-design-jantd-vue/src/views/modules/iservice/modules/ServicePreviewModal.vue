@@ -20,7 +20,7 @@
       <a-row type="flex" justify="start" :gutter="30" style="margin-left: 1px">
         <a-col :span="15">
           <template v-bind="serviceInfo">
-            <a-card style="height: 250px">
+            <a-card style="height: 320px">
               <a-row type="flex" justify="start" style="margin-top: 15px">
                 <a-col :span="4">
                   <span class="span-left">{{"名称:"}}</span>
@@ -92,6 +92,29 @@
                 </a-col>
                 <a-col :span="8">
                   <a @click="handleDownload(serviceInfo.demoFilePath)" class="span-margin" style="color: #2f54eb">{{"下载文件"}}</a>
+                </a-col>
+              </a-row>
+
+              <a-row type="flex" justify="start" style="margin-top: 15px">
+                <a-col :span="4">
+                  <span class="span-left">{{"用户文档:"}}</span>
+                </a-col>
+                <a-col :span="8">
+                  <a  @click="handleDownload(serviceInfo.userManualFilePath)" class="span-margin" style="color: #2f54eb">{{"下载文件"}}</a>
+                </a-col>
+                <a-col :span="4">
+                  <span class="span-left">{{"服务调用框架:"}}</span>
+                </a-col>
+                <a-col :span="8">
+                  <a @click="handleDownload(serviceInfo.serviceCallFramePath)" class="span-margin" style="color: #2f54eb">{{"下载文件"}}</a>
+                </a-col>
+              </a-row>
+              <a-row type="flex" justify="start" style="margin-top: 15px">
+                <a-col :span="4">
+                  <span class="span-left">{{"服务实现框架:"}}</span>
+                </a-col>
+                <a-col :span="8">
+                  <a  @click="handleDownload(serviceInfo.serviceImplementFramePath)" class="span-margin" style="color: #2f54eb">{{"下载文件"}}</a>
                 </a-col>
               </a-row>
             </a-card>
@@ -285,7 +308,7 @@
       handleDownload(path){
         console.log(path)
         if(!path){
-        this.$message.warning("未知的文件")
+        this.$message.warning("文件路径不存在，请确认是否上传后重试!")
           return;
         }
         if(path.indexOf(",")>0){

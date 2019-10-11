@@ -74,6 +74,33 @@ public class ServiceInfoController {
     }
 
     /**
+     * 分页列表查询
+     *
+     * @param serviceInfo
+     * @param pageNo
+     * @param pageSize
+     * @param req
+     * @return
+     */
+    @AutoLog(value = "服务基本信息-分页列表查询")
+    @ApiOperation(value = "服务基本信息-分页列表查询")
+    @GetMapping(value = "/list-myself")
+    public Result<IPage<ServiceInfo>> queryPageMyselfList(ServiceInfo serviceInfo,
+                                                          @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                                                          @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                                          HttpServletRequest req) {
+        Result<IPage<ServiceInfo>> result = new Result<>();
+        QueryWrapper<ServiceInfo> queryWrapper = QueryGenerator.initQueryWrapper(serviceInfo, req.getParameterMap());
+        LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        queryWrapper.eq("developer", user.getRealname()).or().isNull("developer");
+        Page<ServiceInfo> page = new Page<ServiceInfo>(pageNo, pageSize);
+        IPage<ServiceInfo> pageList = serviceInfoService.page(page, queryWrapper);
+        result.setSuccess(true);
+        result.setResult(pageList);
+        return result;
+    }
+
+    /**
      * 添加
      *
      * @param serviceInfo
@@ -136,7 +163,10 @@ public class ServiceInfoController {
         if (serviceInfoEntity == null) {
             result.error500("未找到对应实体");
         } else {
-            setDeveloperUser(serviceInfo);
+            if(serviceInfo.getMinInstance() != null){
+                setDeveloperUser(serviceInfo);
+                // 判断是否被他人提交
+            }
             boolean ok = serviceInfoService.updateById(serviceInfo);
             if (ok) {
                 result.success("修改成功!");
@@ -145,6 +175,8 @@ public class ServiceInfoController {
 
         return result;
     }
+
+
 
     /**
      * 编辑部署相关信息
@@ -178,7 +210,9 @@ public class ServiceInfoController {
      */
     private void setDeployUser(ServiceInfo serviceInfo) {
         LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        serviceInfo.setDeploySubmissionTime(new Date());
+        if(serviceInfo.getDeploySubmissionTime() == null){
+            serviceInfo.setDeploySubmissionTime(new Date());
+        }
         serviceInfo.setDeploySubmissionUser(user.getRealname());
         serviceInfo.setDeploySubmissionUserId(user.getId());
     }
@@ -190,7 +224,9 @@ public class ServiceInfoController {
      */
     private void setDeveloperUser(ServiceInfo serviceInfo) {
         LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        serviceInfo.setDeveloperSubmissionTime(new Date());
+        if(serviceInfo.getDeveloperSubmissionTime() == null){
+            serviceInfo.setDeveloperSubmissionTime(new Date());
+        }
         serviceInfo.setDeveloperSubmissionUser(user.getRealname());
         serviceInfo.setDeveloperSubmissionUserId(user.getId());
     }
@@ -202,7 +238,9 @@ public class ServiceInfoController {
      */
     private void setDesignUser(@RequestBody ServiceInfo serviceInfo) {
         LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        serviceInfo.setDesignSubmissionTime(new Date());
+        if(serviceInfo.getDesignSubmissionTime() == null){
+            serviceInfo.setDesignSubmissionTime(new Date());
+        }
         serviceInfo.setDesignSubmissionUser(user.getRealname());
         serviceInfo.setDesignSubmissionUserId(user.getId());
     }

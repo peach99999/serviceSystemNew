@@ -67,21 +67,21 @@
           :wrapperCol="wrapperCol"
           label="设计人员"
           hasFeedback >
-          <a-input placeholder="请输入设计人员"  v-model="realName"/>
+          <a-input placeholder="请输入设计人员"  v-model="realName" disabled/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="单位"
           hasFeedback>
-          <a-input placeholder="请输入单位" v-model="checkedDepartNameString" />
+          <a-input placeholder="请输入单位" v-model="checkedDepartNameString" disabled/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="联系方式"
           hasFeedback >
-          <a-input placeholder="请输入联系方式" v-model="contactInformation" />
+          <a-input placeholder="请输入联系方式" v-model="contactInformation" disabled/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -202,17 +202,27 @@
     methods: {
       ...mapGetters(["userInfo"]),
       add (categoryId) {
-        this.realName = this.userInfo().realname
-        this.contactInformation = this.userInfo().phone
-        this.userId = this.userInfo().id
-        this.checkedDepartNameString = "";
-        console.log(this.userInfo().realname)
-        console.log(this.userInfo().orgCode)
-        console.log(this.userInfo().phone)
         this.categoryId = categoryId
         this.getPhotoUrl(categoryId)
-        this.loadCheckedDeparts();
+       
         this.edit({});
+      },
+      edit (record) {
+        this.form.resetFields();
+        this.model = Object.assign({}, record);
+        this.realName = this.userInfo().realname
+        this.userId = this.userInfo().id
+        this.contactInformation = this.userInfo().phone
+        this.checkedDepartNameString = "";
+        this.loadCheckedDeparts();
+        this.visible = true;
+        this.$nextTick(() => {
+          this.form.setFieldsValue(pick(this.model,'name','interfaceDescriptionFileName','designer','designerDepartment','contactInformation','description'))
+          if(record.serviceLabel){
+            this.serviceLabel = record.serviceLabel.split(',');
+            this.categoryId = record.categoryId;
+          }
+        });
       },
       loadCheckedDeparts(){
         let that = this;
@@ -248,18 +258,7 @@
         this.interfaceDescriptionFilePath = value;
         this.form.setFieldsValue({interfaceDescriptionFileName:fileName+'.'+fileType})
       },
-      edit (record) {
-        this.form.resetFields();
-        this.model = Object.assign({}, record);
-        this.visible = true;
-        this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'name','interfaceDescriptionFileName','designer','designerDepartment','contactInformation','description'))
-          if(record.serviceLabel){
-            this.serviceLabel = record.serviceLabel.split(',');
-            this.categoryId = record.categoryId;
-          }
-        });
-      },
+      
       close () {
         this.$emit('close');
         this.visible = false;
@@ -300,6 +299,9 @@
             formData.categoryId = this.categoryId;
             formData.serviceLabel = this.serviceLabel.join(",");
             formData.designerStatus = designerStatus;
+            formData.designer = this.realName;
+            formData.contactInformation = this.contactInformation;
+            formData.designerDepartment = this.checkedDepartNameString;
             console.log(formData)
             httpAction(httpurl,formData,method).then((res)=>{
               if(res.success){
