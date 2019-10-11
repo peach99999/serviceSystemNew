@@ -67,21 +67,21 @@
           :wrapperCol="wrapperCol"
           label="设计人员"
           hasFeedback >
-          <a-input placeholder="请输入设计人员" v-decorator="['designer', validatorRules.designer]" />
+          <a-input placeholder="请输入设计人员"  v-model="realName"/>
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="单位"
           hasFeedback>
-          <a-input placeholder="请输入单位" v-decorator="['designerDepartment', {}]" />
+          <a-input placeholder="请输入单位" v-model="checkedDepartNameString" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="联系方式"
           hasFeedback >
-          <a-input placeholder="请输入联系方式" v-decorator="['contactInformation', {}]" />
+          <a-input placeholder="请输入联系方式" v-model="contactInformation" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -99,17 +99,17 @@
               <a-input placeholder="请上传接口描述文件" v-decorator="['interfaceDescriptionFileName', validatorRules.interfaceDescriptionFileId]"/>
             </a-col>
             <a-col :span="3">
-              <JUpload @input="handleUploadSuccess"></JUpload>
+              <JSDLUpload @input="handleUploadSuccess"></JSDLUpload>
             </a-col>
           </a-row>
         </a-form-item>
-        <a-form-item
+        <!-- <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
           label="开发人员"
           hasFeedback >
           <a-input placeholder="请输入开发人员" v-decorator="['developer', validatorRules.developer]" />
-        </a-form-item>
+        </a-form-item> -->
 		
       </a-form>
     </a-spin>
@@ -120,13 +120,15 @@
   import { httpAction } from '@/api/manage'
   import pick from 'lodash.pick'
   import moment from "moment"
-  import JUpload from '@/components/jantd/JUpload'
+  import JSDLUpload from '@/components/jantd/JSDLUpload'
   import {querySerciceCategeryById} from '@/api/api'
+  import { mapActions, mapGetters } from 'vuex'
+  import { getAction } from '@/api/manage'
 
   export default {
     name: "ServiceRegisterModal",
     components: {
-      JUpload
+      JSDLUpload
     },
     data () {
       return {
@@ -153,6 +155,7 @@
         url: {
           add: '/serviceInfo/add',
           edit: "/serviceInfo/edit-register",
+          userWithDepart: "/sys/user/userDepartList", // 引入为指定用户查看部门信息需要的url
         },
         validatorRules:{
           name:{
@@ -183,7 +186,13 @@
         categoryId:'',
         uploadFilePath:'',
         loading:false,
-        servicePhoto:''
+        servicePhoto:'',
+        realName:'',
+        contactInformation:'',
+        userId:'',
+        checkedDepartNames:[], // 保存部门的名称 =>title
+        checkedDepartNameString:"", // 保存部门的名称 =>title
+        interfaceDescriptionFilePath:''
       }
     },
     created(){
@@ -191,10 +200,34 @@
     mounted(){
     },
     methods: {
+      ...mapGetters(["userInfo"]),
       add (categoryId) {
+        this.realName = this.userInfo().realname
+        this.contactInformation = this.userInfo().phone
+        this.userId = this.userInfo().id
+        this.checkedDepartNameString = "";
+        console.log(this.userInfo().realname)
+        console.log(this.userInfo().orgCode)
+        console.log(this.userInfo().phone)
         this.categoryId = categoryId
         this.getPhotoUrl(categoryId)
+        this.loadCheckedDeparts();
         this.edit({});
+      },
+      loadCheckedDeparts(){
+        let that = this;
+        if(!that.userId){return}
+        getAction(that.url.userWithDepart,{userId:that.userId}).then((res)=>{
+          that.checkedDepartNames = [];
+          if(res.success){
+            for (let i = 0; i < res.result.length; i++) {
+              that.checkedDepartNames.push(res.result[i].title);
+              this.checkedDepartNameString = this.checkedDepartNames.join(",");
+            }
+          }else{
+            console.log(res.message);
+          }
+        })
       },
       getPhotoUrl(categoryId){
         querySerciceCategeryById({id:categoryId}).then((res) => {
@@ -220,7 +253,7 @@
         this.model = Object.assign({}, record);
         this.visible = true;
         this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.model,'name','interfaceDescriptionFileName','designer','designerDepartment','contactInformation','description','developer'))
+          this.form.setFieldsValue(pick(this.model,'name','interfaceDescriptionFileName','designer','designerDepartment','contactInformation','description'))
           if(record.serviceLabel){
             this.serviceLabel = record.serviceLabel.split(',');
             this.categoryId = record.categoryId;
@@ -240,6 +273,7 @@
         // 触发表单验证
         this.form.validateFields((err, values) => {
           if (!err) {
+            
             that.loading = true;
             that.confirmLoading = true;
             let httpurl = '';
@@ -250,9 +284,18 @@
               method = 'post';
               formData.servicePhoto = this.servicePhoto
               formData.interfaceDescriptionFilePath= this.interfaceDescriptionFilePath;
+              if(this.interfaceDescriptionFilePath == ''){
+                this.$message.warning("请上传服务接口描述文件!");
+                that.loading = false;
+                that.confirmLoading = false;
+                return;
+              }
             }else{
               httpurl+=this.url.edit;
               method = 'put';
+              if(that.interfaceDescriptionFilePath){
+                formData.interfaceDescriptionFilePath= this.interfaceDescriptionFilePath;
+              }
             }
             formData.categoryId = this.categoryId;
             formData.serviceLabel = this.serviceLabel.join(",");

@@ -320,32 +320,35 @@
       // 查询节点明细信息
       getNodeDetail(serviceDetatl){
         if(serviceDetatl.deployed_on_nodes.length > 0){
-          for (let index = 0; index < serviceDetatl.deployed_on_nodes.length; index++) {
-            const element = serviceDetatl.deployed_on_nodes[index];
-            this.fetchNodeDetail(element);
-          }
-          this.loading = false
+          // for (let index = 0; index < serviceDetatl.deployed_on_nodes.length; index++) {
+          //   const element = serviceDetatl.deployed_on_nodes[index];
+          //   this.fetchNodeDetail(element);
+          // }
+          this.fetchNodeDetail(0,serviceDetatl.deployed_on_nodes.length,serviceDetatl.deployed_on_nodes)
+          
         }else{
           this.loading = false
         }
         
       },
-      fetchNodeDetail(nodeId){
+      fetchNodeDetail(i,count,deployedNodes){
+        var nodeId = deployedNodes[i]
         queryNodeDetail({nodeId:nodeId}).then((res)=>{
           if(res.success){
-            this.temp = {}
+            var that = this
+            that.temp = {}
             let runserviceNumber = 0
             let diskSize = 0
             let diskCount = 0
-            this.temp.nodeId = res.result.node_id
-            this.temp.hostName = res.result.host_name
-            this.temp.ip = res.result.ip
-            this.temp.deployedServices = res.result.deployed_services.length
+            that.temp.nodeId = res.result.node_id
+            that.temp.hostName = res.result.host_name
+            that.temp.ip = res.result.ip
+            that.temp.deployedServices = res.result.deployed_services.length
             
             for (var val in res.result.running_services) {
               runserviceNumber++
             }
-            this.temp.runningServices = runserviceNumber
+            that.temp.runningServices = runserviceNumber
             // this.temp.cpuCount = parseInt(res.result.cpu_count)
             // this.temp.memorySize = parseInt(res.result.memory_size)
          
@@ -359,18 +362,23 @@
               if(res.success){
                 let diskSize = 0
                 let diskCount = 0
-                this.temp.cpuAvailable = parseInt(res.result.cpu_available)
-                this.temp.memoryAvalable = parseInt(res.result.memory_avalable)
+                that.temp.cpuAvailable = parseInt(res.result.cpu_available)
+                that.temp.memoryAvalable = parseInt(res.result.memory_avalable)
                 for (var val in res.result.disk_available) {
                   diskCount++
                   diskSize = diskSize + parseInt(res.result.disk_available[val])
                 }
-                this.temp.diskAvailable = Math.round(diskSize/diskCount)
-                this.nodeDataSource.push(this.temp)
+                that.temp.diskAvailable = Math.round(diskSize/diskCount)
+                that.nodeDataSource.push(that.temp)
+                if(i+1<count){
+                   this.fetchNodeDetail(i+1,count,deployedNodes)
+                }else{
+                  this.loading = false
+                }
               }else {
                 this.$message.error(res.message);
               }
-              console.log(this.temp)
+              console.log(that.temp)
             })
           }else {
             this.$message.error(res.message);
