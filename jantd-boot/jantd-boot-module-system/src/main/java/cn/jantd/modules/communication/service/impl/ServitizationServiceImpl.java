@@ -724,12 +724,16 @@ public class ServitizationServiceImpl implements IServitizationService {
         RegisterParam registerParam = new RegisterParam();
         BeanUtils.copyProperties(submitRegisterParam, registerParam);
         result = registerService(registerParam);
+
         if (!ObjectUtils.isEmpty(result.getResult())) {
-            ServiceInfo serviceInfo = new ServiceInfo();
-            serviceInfo.setId(submitRegisterParam.getId());
-            serviceInfo.setDeveloperStatus("1");
-            serviceInfo.setServiceId(String.valueOf(result.getResult()));
-            serviceInfoMapper.updateById(serviceInfo);
+            ServiceInfo serviceInfoEntity = serviceInfoMapper.selectById(submitRegisterParam.getId());
+            if (serviceInfoEntity == null) {
+                result.error500("未找到对应实体");
+            } else {
+                serviceInfoEntity.setDeveloperStatus("1");
+                serviceInfoEntity.setServiceId(String.valueOf(result.getResult()));
+                serviceInfoMapper.updateById(serviceInfoEntity);
+            }
         }
         return Result.ok();
     }

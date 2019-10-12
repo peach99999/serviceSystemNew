@@ -182,11 +182,17 @@ public class ServitizationController {
         // 测试代码
         Result result = ServiceMockDataUtil.submitService(submitRegisterParam);
         if (!ObjectUtils.isEmpty(result.getResult())) {
-            ServiceInfo serviceInfo = new ServiceInfo();
-            serviceInfo.setId(submitRegisterParam.getId());
-            serviceInfo.setDeveloperStatus("1");
-            serviceInfo.setServiceId(String.valueOf(result.getResult()));
-            serviceInfoService.update(serviceInfo,new UpdateWrapper<ServiceInfo>().lambda().eq(ServiceInfo::getId, submitRegisterParam.getId()));
+            ServiceInfo serviceInfoEntity = serviceInfoService.getById(submitRegisterParam.getId());
+            if (serviceInfoEntity == null) {
+                result.error500("未找到对应实体");
+            } else {
+                serviceInfoEntity.setDeveloperStatus("1");
+                serviceInfoEntity.setServiceId(String.valueOf(result.getResult()));
+                boolean ok = serviceInfoService.updateById(serviceInfoEntity);
+                if (ok) {
+                    result.success("修改成功!");
+                }
+            }
         }
         return Result.ok();
     }
