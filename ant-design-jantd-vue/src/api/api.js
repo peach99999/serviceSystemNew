@@ -115,6 +115,8 @@ const deployService = (params)=>postAction("/communication/deploy-service",param
 const individualNodeStatistics = (params)=>getAction("/communication/query-individual-node-Statistics",params);
 // 查询单个节点的单个服务的统计信息
 const individualNodeServiceStatistics = (params)=>getAction("/communication/query-individual-node-service-statistics",params);
+// 部署一个服务
+const removeDeployService = (params)=>postAction("/communication/remove-deploy-service",params);
 
 
 export {
@@ -175,7 +177,8 @@ export {
   queryAllNodes,
   deployService,
   individualNodeStatistics,
-  individualNodeServiceStatistics
+  individualNodeServiceStatistics,
+  removeDeployService,
 }
 
 

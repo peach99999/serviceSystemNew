@@ -29,10 +29,11 @@
           {{"已部署"}}
         </span>
       </a-col>
-      <a-col :span="12">
-        <a-button type="primary" @click="deployedService" style="margin-left:200px">
-          部署
-        </a-button>
+      <a-col :span="3">
+        <a-button type="primary" @click="deployedService" :loading="deployLoading" style="margin-left:200px">部署</a-button>
+      </a-col>
+      <a-col :span="4">
+        <a-button type="primary" @click="removeDeployedService" :loading="removeDeployLoading" style="margin-left:200px">移除部署</a-button>
       </a-col>
     </a-row>
     <a-layout style="margin-top: 5px" id="layoutTable">
@@ -82,7 +83,7 @@
 </template>
 <script>
   import ATableColumn from "ant-design-vue/es/table/Column";
-  import {queryAllNodes,queryNodeDetail,deployService,getServiceDetail} from '@/api/api';
+  import {queryAllNodes,queryNodeDetail,deployService,getServiceDetail,removeDeployService} from '@/api/api';
   import ARow from "ant-design-vue/es/grid/Row";
   import './ServiceManagerModal.less';
   import { httpAction } from '@/api/manage'
@@ -142,6 +143,9 @@
         url: {
           edit: "/serviceInfo/edit-deploy",
         },
+        deployedOnNodes:[],
+        deployLoading:false,
+        removeDeployLoading:false,
       }
     },
     created() {
@@ -159,6 +163,7 @@
           if(res.success){
             console.log(res.result)
             let status = res.result.status
+            this.deployedOnNodes = res.result.deployed_on_nodes
             if(status == 'running'){
               this.deployed = true
             }else if(status == 'not_deployed'){
@@ -223,6 +228,31 @@
         this.selectedRowKeys = selectedRowKeys;
         this.selectionRows = selectionRows;
         console.log(this.selectedRowKeys,this.selectionRows)
+      },
+      // 移除服务部署
+      removeDeployedService(){
+        this.removeDeployLoading = true
+        console.log(this.deployedOnNodes)
+        if(this.deployedOnNodes.length > 0){
+          console.log(this.deployedOnNodes)
+          var param = {
+            serviceId:this.serviceInfo.serviceId,
+            nodes:this.deployedOnNodes
+          }
+          removeDeployService(param).then((res)=>{
+            if(res.success){
+              this.$message.success("服务移除成功!");
+              this.removeDeployLoading = false
+              this.$emit('ok');
+              this.visible = false;
+            }else {
+              this.$message.error(res.message);
+              this.removeDeployLoading = false
+            }
+          })
+        }else{
+          this.$message.warning("部署后方可移除!")
+        }
       },
       // 部署服务
       deployedService(){

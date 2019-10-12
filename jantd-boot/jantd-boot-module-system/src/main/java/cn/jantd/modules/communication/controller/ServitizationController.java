@@ -7,6 +7,7 @@ import cn.jantd.modules.communication.param.*;
 import cn.jantd.modules.communication.service.IServiceInfoService;
 import cn.jantd.modules.communication.service.IServitizationService;
 import cn.jantd.modules.communication.util.ServiceMockDataUtil;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -185,7 +186,7 @@ public class ServitizationController {
             serviceInfo.setId(submitRegisterParam.getId());
             serviceInfo.setDeveloperStatus("1");
             serviceInfo.setServiceId(String.valueOf(result.getResult()));
-            serviceInfoService.updateById(serviceInfo);
+            serviceInfoService.update(serviceInfo,new UpdateWrapper<ServiceInfo>().lambda().eq(ServiceInfo::getId, submitRegisterParam.getId()));
         }
         return Result.ok();
     }

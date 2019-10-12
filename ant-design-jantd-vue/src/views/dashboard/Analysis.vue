@@ -110,7 +110,9 @@
       <a-col :span="11">
         <a-card class="charts">
           <template slot="title">
-            <span style="font-weight: bold">{{'服务统计'}}</span>
+            <a href="#" @click="jumpToServicePreview()" style="font-weight: bold;font-size: 16px; color:rgba(0, 0, 0, 0.65)" >
+              {{'服务统计'}}
+            </a>
           </template>
           <div id="myChartBar" :style="{width:'80%',height:'300px'}"></div>
         </a-card>
@@ -118,7 +120,9 @@
       <a-col :span="11" :offset="1">
         <a-card class="charts">
           <template slot="title">
-            <span style="font-weight: bold">{{'节点统计'}}</span>
+            <a href="#" @click="jumpToNodeManager()" style="font-weight: bold;font-size: 16px; color:rgba(0, 0, 0, 0.65)" >
+              {{'节点统计'}}
+            </a>
           </template>
           <div id="myChartRing" :style="{width:'80%',height:'300px'}"></div>
         </a-card>
@@ -162,6 +166,14 @@
       this.fetchTask()
     },
     methods: {
+      jumpToServicePreview(){
+        console.log("asdfds")
+        this.$router.push({ path:'/iservice/ServicePreview'})
+      },
+      jumpToNodeManager(){
+        console.log("asdfds")
+        this.$router.push({ path:'/iservice/NodeManager'})
+      },
       fetchTask() {
         /* ECharts图表 */
         var myChart = echarts.init(document.getElementById('myChartRing'))

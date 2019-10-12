@@ -222,8 +222,12 @@
       },
       deploy(record){
         // this.$router.push({ path:'/iservice/modules/ServiceManagerModal'})
-          this.$refs.serviceManagerForm.show(record);
-          this.$refs.serviceManagerForm.title = "部署详情";
+        if(record.serviceId == null ){
+          this.$message.error("请先注册服务")
+          return
+        }
+        this.$refs.serviceManagerForm.show(record);
+        this.$refs.serviceManagerForm.title = "部署详情";
       }
 
     },
