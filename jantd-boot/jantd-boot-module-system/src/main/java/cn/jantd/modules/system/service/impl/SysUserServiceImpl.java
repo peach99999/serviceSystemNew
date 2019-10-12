@@ -205,7 +205,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 情况1：根据用户信息查询，该用户不存在
         if (sysUser == null) {
             result.error500("该用户不存在，请注册");
-            sysBaseAPI.addLog("用户登录失败，用户不存在！", CommonConstant.LOG_TYPE_LOGIN, null, sysUser.getUsername(), sysUser.getRealname());
+            sysBaseAPI.addLog("用户登录失败，用户不存在！", CommonConstant.LOG_TYPE_LOGIN, null, null, null);
             return result;
         }
         // 情况2：根据用户信息查询，该用户已注销
