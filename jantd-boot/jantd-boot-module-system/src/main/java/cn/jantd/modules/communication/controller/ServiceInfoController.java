@@ -92,7 +92,12 @@ public class ServiceInfoController {
         Result<IPage<ServiceInfo>> result = new Result<>();
         QueryWrapper<ServiceInfo> queryWrapper = QueryGenerator.initQueryWrapper(serviceInfo, req.getParameterMap());
         LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        queryWrapper.eq("developer", user.getRealname()).or().isNull("developer");
+        if (queryWrapper.getExpression().getNormal().size() > 0){
+            queryWrapper.and(wrapper -> wrapper.eq("developer", user.getRealname()).or().isNull("developer"));
+        }else {
+            queryWrapper.eq("developer", user.getRealname()).or().isNull("developer");
+        }
+
         Page<ServiceInfo> page = new Page<ServiceInfo>(pageNo, pageSize);
         IPage<ServiceInfo> pageList = serviceInfoService.page(page, queryWrapper);
         result.setSuccess(true);
