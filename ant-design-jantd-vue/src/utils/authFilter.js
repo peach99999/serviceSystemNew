@@ -110,3 +110,67 @@ function globalDisabledAuth(code){
     return gFlag;
   }
 }
+
+
+
+export function colAuthFilter(columns,pre) {
+  var authList = getNoAuthCols(pre);
+  const cols = columns.filter(item => {
+    if (hasColoum(item,authList)) {
+      return true
+    }
+    return false
+  })
+  return cols
+}
+
+function hasColoum(item,authList){
+  if (authList.includes(item.dataIndex)) {
+    return false
+  }
+  return true
+}
+
+//权限无效时不做控制，有效时控制，只能控制 显示不显示
+//根据授权码前缀获取未授权的列信息
+function getNoAuthCols(pre){
+  var permissionList = [];
+  var allPermissionList = [];
+
+  //let authList = Vue.ls.get(USER_AUTH);
+  let authList = JSON.parse(sessionStorage.getItem(USER_AUTH) || "[]");
+  for (var auth of authList) {
+    //显示策略，有效状态
+    if(auth.type == '1'&&startWith(auth.action,pre)) {
+      permissionList.push(substrPre(auth.action,pre));
+    }
+  }
+  //console.log("页面禁用权限--Global--",sessionStorage.getItem(SYS_BUTTON_AUTH));
+  let allAuthList = JSON.parse(sessionStorage.getItem(SYS_BUTTON_AUTH) || "[]");
+  for (var gauth of allAuthList) {
+    //显示策略，有效状态
+    if(gauth.type == '1'&&gauth.status == '1'&&startWith(gauth.action,pre)) {
+      allPermissionList.push(substrPre(gauth.action,pre));
+    }
+  }
+  const cols = allPermissionList.filter(item => {
+    if (permissionList.includes(item)) {
+      return false;
+    }
+    return true;
+  })
+  return cols;
+}
+
+function startWith(str,pre) {
+  if (pre == null || pre == "" || str==null|| str==""|| str.length == 0 || pre.length > str.length)
+    return false;
+  if (str.substr(0, pre.length) == pre)
+    return true;
+  else
+    return false;
+}
+
+function substrPre(str,pre) {
+  return str.substr(pre.length);
+}

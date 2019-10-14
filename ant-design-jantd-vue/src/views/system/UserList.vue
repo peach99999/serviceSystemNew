@@ -67,7 +67,7 @@
       <a-button @click="handleAdd" v-has="'user:add'" type="primary" icon="plus">添加用户</a-button>
       <a-button type="primary" icon="download" @click="handleExportXls('用户信息')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
-        <a-button type="primary" icon="import">导入</a-button>
+        <a-button type="primary" v-has="'user:import'" icon="import">导入</a-button>
       </a-upload>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay" @click="handleMenuClick">
@@ -180,6 +180,7 @@
   import {frozenBatch} from '@/api/api'
   import {JantdListMixin} from '@/mixins/JantdListMixin'
   import SysUserAgentModal from "./modules/SysUserAgentModal";
+  import { colAuthFilter } from "@/utils/authFilter"
 
   export default {
     name: "UserList",
@@ -279,6 +280,11 @@
           importExcelUrl: "sys/user/importExcel",
         },
       }
+    },
+    created() {
+      this.columns = colAuthFilter(this.columns,'showRealName:');
+      console.log(this.columns)
+      this.loadData()
     },
     computed: {
       importExcelUrl: function(){
