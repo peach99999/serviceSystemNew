@@ -61,13 +61,13 @@ public class ServiceCategory implements Serializable {
     /**
      * 创建人
      */
+    @Excel(name = "更新人ID", width = 15)
     @ApiModelProperty(value = "创建人")
 	private String createBy;
 
     /**
      * 创建人ID
      */
-    @Excel(name = "创建人ID", width = 15)
     @ApiModelProperty(value = "创建人ID")
 	private Long createUserid;
 
@@ -82,13 +82,13 @@ public class ServiceCategory implements Serializable {
     /**
      * 更新人
      */
+    @Excel(name = "创建人ID", width = 15)
     @ApiModelProperty(value = "更新人")
 	private String updateBy;
 
     /**
      * 更新人ID
      */
-    @Excel(name = "更新人ID", width = 15)
     @ApiModelProperty(value = "更新人ID")
 	private Long updateUserid;
 
