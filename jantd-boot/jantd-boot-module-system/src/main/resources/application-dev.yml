@@ -74,7 +74,7 @@ spring:
         connectionProperties: druid.stat.mergeSql\=true;druid.stat.slowSqlMillis\=5000
       datasource:
         master:
-          url: jdbc:mysql://119.57.73.147:3306/service_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&zeroDateTimeBehavior=convertToNull
+          url: jdbc:mysql://124.193.181.12:3306/service_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&zeroDateTimeBehavior=convertToNull
           username: evaluation
           password: lwq@mysql_Eval_123456
           driver-class-name: com.mysql.jdbc.Driver

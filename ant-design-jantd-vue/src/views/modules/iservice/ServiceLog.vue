@@ -82,6 +82,7 @@
         },
         url: {
           list: "/communication/get-last-log",
+          download: "/communication/download-Log-File"
         },
       }
     },
@@ -142,6 +143,14 @@
       },
       // 下载
       downloadFile(){
+        let param = {}
+        getAction(this.url.download, param).then((res) => {
+          if (res.success) {
+            this.$message.success("下载成功！")
+          }else{
+            this.$message.warning(res.message);
+          }
+        })
         
       },
       // 重置
