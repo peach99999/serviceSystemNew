@@ -13,7 +13,7 @@
     props: {
       title: {
         type: String,
-        default: 'Jantd-Boot Pro',
+        default: '服务管理',
         required: false
       },
       showTitle: {

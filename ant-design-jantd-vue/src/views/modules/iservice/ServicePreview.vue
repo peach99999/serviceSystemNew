@@ -141,7 +141,7 @@
       // 服务详情
       showServiceDetail(record){
         if(record.serviceId == null){
-          this.$message.warning('请先注册服务!');
+          this.$message.warning('请先进行服务开发相关操作后重试!');
         }else{
           this.$refs.modalForm.detail(record);
           this.$refs.modalForm.title = "服务详情";

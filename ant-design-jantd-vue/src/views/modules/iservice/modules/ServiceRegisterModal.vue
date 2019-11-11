@@ -264,10 +264,10 @@
         this.visible = false;
       },
       handleSubmit (designerStatus) {
-        if(this.serviceLabel == ''){
-          this.$message.warning("请输入标签");
-          return;
-        }
+        // if(this.serviceLabel == ''){
+        //   this.$message.warning("请输入标签");
+        //   return;
+        // }
         const that = this;
         // 触发表单验证
         this.form.validateFields((err, values) => {

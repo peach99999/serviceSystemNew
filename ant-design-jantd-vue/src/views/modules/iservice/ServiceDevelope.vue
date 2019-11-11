@@ -35,7 +35,7 @@
               <template  slot-scope="service">
                 <a-row type="flex" justify="space-around" align="middle">
                   <a-col :span="6">
-                    <a href="#" @click="showServiceDetail(service)" style="font-weight: bold;font-size: 16px; color:rgba(0, 0, 0, 0.65)" >
+                    <a href="#" @click="developerService(service)" style="font-weight: bold;font-size: 16px; color:rgba(0, 0, 0, 0.65)" >
                        {{service.name}}
                     </a>
                     <span style="font-size: 10px;color: #cf1322">
@@ -74,7 +74,7 @@
                 </a-row>
                 <div class="divLine"/>
                 <p class="text" >
-                  <a href="#" @click="showServiceDetail(service)">{{service.description}}</a>
+                  <a href="#" @click="developerService(service)">{{service.description}}</a>
                 </p>
                 <div class="can_div">
                   <div class="can_left">标签：
