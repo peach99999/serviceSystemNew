@@ -223,7 +223,7 @@
       deploy(record){
         // this.$router.push({ path:'/iservice/modules/ServiceManagerModal'})
         if(record.serviceId == null ){
-          this.$message.error("请先注册服务")
+          this.$message.warning("请先进行服务开发相关操作后重试!")
           return
         }
         this.$refs.serviceManagerForm.show(record);
