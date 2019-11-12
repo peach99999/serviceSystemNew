@@ -170,10 +170,12 @@
           minInstance:{
             rules: [
               { required: true, message: '请输入最小实例数!' },
+              { validator: this.minInstanceValidate }
             ]},
           maxInstance:{
             rules: [
               { required: true, message: '请输入最大实例数!' },
+              { validator: this.maxInstanceValidate }
             ]},
         },
         serviceImplementationFilePath:'',
@@ -268,6 +270,9 @@
           if(record.serviceLabel){
             this.serviceLabel = record.serviceLabel.split(',');
           }
+          if(!record.minInstance){
+            this.form.setFieldsValue({minInstance:1,maxInstance:4})
+          }
         });
       },
       remove(){
@@ -348,6 +353,28 @@
         this.$emit('close');
         this.visible = false;
       },
+      minInstanceValidate(rule,value,callback){
+        let maxInstance = this.form.getFieldValue("maxInstance")
+        console.log(maxInstance,value)
+        if(!value || !maxInstance){
+          callback()
+        }else if(parseInt(value)<parseInt(maxInstance)){
+          callback()
+        }else{
+          callback("最小实例数不能大于最大实例数!")
+        }
+      },
+      maxInstanceValidate(rule,value,callback){
+        let minInstance = this.form.getFieldValue("minInstance")
+        console.log(minInstance,value)
+        if(!value || !minInstance){
+          callback()
+        }else if(parseInt(minInstance)<parseInt(value)){
+          callback()
+        }else{
+          callback("最大实例数不能小于最小实例数!")
+        }
+      }
     }
   };
 </script>
