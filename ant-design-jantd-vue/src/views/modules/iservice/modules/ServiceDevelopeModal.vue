@@ -264,7 +264,7 @@
         this.userManualFilePath = record.userManualFilePath
         this.demoFilePath = record.demoFilePath
         this.serviceCallFramePath = record.serviceCallFramePath
-        this.serviceImplementFramePath = record.serviceCallFramePath
+        this.serviceImplementFramePath = record.serviceImplementFramePath
         this.$nextTick(() => {
           this.form.setFieldsValue(pick(this.model,'name','developer','serviceImplementationFileName','userManualFileName','demoFileName','minInstance','maxInstance'))
           if(record.serviceLabel){

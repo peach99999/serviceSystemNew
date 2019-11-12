@@ -108,6 +108,8 @@ jantd :
     upload: D://upFiles
     #webapp文件路径
     webapp: D://webapp
+    #调用exe路径
+    exePath: D://xxx.exe
 communication:
   # 服务器地址
   gatewayUrl: https://119.57.73.147:3306

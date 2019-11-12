@@ -96,7 +96,7 @@
           label="接口描述文件">
           <a-row type="flex">
             <a-col :span="21">
-              <a-input placeholder="请上传接口描述文件" v-decorator="['interfaceDescriptionFileName', validatorRules.interfaceDescriptionFileId]"/>
+              <a-input placeholder="请上传接口描述文件" v-decorator="['interfaceDescriptionFileName', validatorRules.interfaceDescriptionFileName]"/>
             </a-col>
             <a-col :span="3">
               <JSDLUpload @input="handleUploadSuccess"></JSDLUpload>

@@ -118,9 +118,10 @@ public class ServiceInfoController {
         Result<ServiceInfo> result = new Result<>();
         try {
             setDesignUser(serviceInfo);
-
+            // 新增服务时调用exe生成生成服务调用代码框架和服务实现代码文件
+//            serviceInfo = serviceInfoService.callExe(serviceInfo);
             serviceInfoService.save(serviceInfo);
-            result.success("添加成功！");
+            result.success("操作成功！");
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             result.error500("操作失败");
