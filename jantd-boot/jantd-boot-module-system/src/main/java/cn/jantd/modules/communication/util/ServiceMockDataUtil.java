@@ -1,14 +1,21 @@
 package cn.jantd.modules.communication.util;
 
 import cn.jantd.core.api.vo.Result;
+import cn.jantd.core.constant.CoreConstant;
 import cn.jantd.modules.communication.dto.communication.*;
+import cn.jantd.modules.communication.entity.ServiceInfo;
 import cn.jantd.modules.communication.param.SubmitRegisterParam;
+import cn.jantd.modules.communication.service.IServiceInfoService;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * <p>
@@ -24,6 +31,9 @@ public class ServiceMockDataUtil {
 
     private ServiceMockDataUtil() {
     }
+
+    @Autowired
+    private IServiceInfoService serviceInfoService;
 
 
     /**
@@ -185,5 +195,46 @@ public class ServiceMockDataUtil {
         Result result = new Result<>();
         result = registerService();
         return result;
+    }
+
+    public static ServiceInfo callExe(ServiceInfo serviceInfo) {
+        String bizPath = "files";
+        String uploadPath = "D://upFiles";
+        // 文件保存路径名
+        String nowDay = new SimpleDateFormat("SDF_YYYYMMDD").format(new Date());
+        String exeCreatPath = uploadPath + File.separator + bizPath + File.separator + nowDay;
+        String callPaht = exeCreatPath + File.separator + "stub.zip";
+        String implementPaht = exeCreatPath + File.separator + "skel.zip";
+        File filePath = new File(exeCreatPath);
+        if (!filePath.exists()) {
+            filePath.mkdirs();
+        }
+        String fileName = "stub.zip";
+        String fileName1 = "skel.zip";
+        creatFile(filePath, fileName);
+
+        creatFile(filePath, fileName1);
+
+        // db保存路径
+        String dbpath = bizPath + File.separator + nowDay + File.separator;
+        if (dbpath.contains(CoreConstant.DOUBLE_SLASH)) {
+            dbpath = dbpath.replace("\\", "/");
+        }
+        serviceInfo.setServiceCallFramePath(dbpath + "stub.zip");
+        serviceInfo.setServiceImplementFramePath(dbpath + "skel.zip");
+        return serviceInfo;
+    }
+
+    private static void creatFile(File filePath, String fileName) {
+        File file = new File(filePath, fileName);
+        if (!file.exists()) {
+            if (!file.exists()) {
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

@@ -12,6 +12,7 @@ import cn.jantd.core.system.vo.LoginUser;
 import cn.jantd.modules.communication.entity.ServiceInfo;
 import cn.jantd.modules.communication.param.SubmitRegisterParam;
 import cn.jantd.modules.communication.service.IServiceInfoService;
+import cn.jantd.modules.communication.util.ServiceMockDataUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -120,6 +121,7 @@ public class ServiceInfoController {
             setDesignUser(serviceInfo);
             // 新增服务时调用exe生成生成服务调用代码框架和服务实现代码文件
 //            serviceInfo = serviceInfoService.callExe(serviceInfo);
+            ServiceMockDataUtil.callExe(serviceInfo);
             serviceInfoService.save(serviceInfo);
             result.success("操作成功！");
         } catch (Exception e) {
