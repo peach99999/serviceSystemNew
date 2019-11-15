@@ -1,5 +1,6 @@
 package cn.jantd.modules.communication.controller;
 
+import cn.jantd.core.annotation.AutoLog;
 import cn.jantd.core.api.vo.Result;
 import cn.jantd.modules.communication.dto.communication.*;
 import cn.jantd.modules.communication.entity.ServiceInfo;
@@ -33,7 +34,7 @@ public class ServitizationController {
     private IServiceInfoService serviceInfoService;
 
 
-
+    @AutoLog(value = "查询所有服务")
     @GetMapping(value = "/query-all-services")
     @ApiOperation("查询所有服务")
     public Result<QueryServicesDTO> queryAllServices() {
@@ -41,6 +42,7 @@ public class ServitizationController {
         return ServiceMockDataUtil.queryAllServices();
     }
 
+    @AutoLog(value = "查询某个节点上的服务")
     @GetMapping(value = "/query-node-services")
     @ApiOperation("查询某个节点上的服务")
     public Result<QueryServicesDTO> queryNodeServices(@RequestParam(name = "nodeId") String nodeId) {
@@ -48,6 +50,7 @@ public class ServitizationController {
         return ServiceMockDataUtil.queryNodeServices();
     }
 
+    @AutoLog(value = "注册一个服务")
     @PostMapping(value = "/register-service")
     @ApiOperation("注册一个服务")
     public Result<String> registerService(@RequestBody @Validated RegisterParam registerParam) {
@@ -55,6 +58,7 @@ public class ServitizationController {
         return ServiceMockDataUtil.registerService();
     }
 
+    @AutoLog(value = "查询单个服务")
     @GetMapping(value = "/get-service-detail")
     @ApiOperation("查询单个服务")
     public Result<ServiceDetailDTO> getServiceDetail(@RequestParam(name = "serviceId") String serviceId) {
@@ -62,6 +66,7 @@ public class ServitizationController {
         return ServiceMockDataUtil.getServiceDetail();
     }
 
+    @AutoLog(value = "删除一个服务")
     @DeleteMapping(value = "/delete-Service")
     @ApiOperation("删除一个服务")
     public Result<Object> deleteService(@RequestParam(name = "serviceId") String serviceId) {
@@ -69,6 +74,7 @@ public class ServitizationController {
         return ServiceMockDataUtil.deleteService();
     }
 
+    @AutoLog(value = "更新服务信息")
     @PutMapping(value = "/update-Service")
     @ApiOperation("更新服务信息")
     public Result<Object> updateService(@RequestBody UpdateServiceParam updateServiceParam) {
@@ -76,6 +82,7 @@ public class ServitizationController {
         return ServiceMockDataUtil.updateService();
     }
 
+    @AutoLog(value = "启动一个服务")
     @PostMapping(value = "/start-service")
     @ApiOperation("启动一个服务")
     public Result<Object> startService(@RequestBody @Validated StartStopServiceParam startStopServiceParam) {
@@ -83,6 +90,7 @@ public class ServitizationController {
         return ServiceMockDataUtil.startService();
     }
 
+    @AutoLog(value = "停止一个服务")
     @PostMapping(value = "/stop-service")
     @ApiOperation("停止一个服务")
     public Result<Object> sstopService(@RequestBody @Validated StartStopServiceParam startStopServiceParam) {
@@ -90,6 +98,7 @@ public class ServitizationController {
         return ServiceMockDataUtil.sstopService();
     }
 
+    @AutoLog(value = "部署一个服务")
     @PostMapping(value = "/deploy-service")
     @ApiOperation("部署一个服务")
     public Result<Object> deployService(@RequestBody @Validated DeployServiceParam deployServiceParam) {
@@ -97,6 +106,7 @@ public class ServitizationController {
         return ServiceMockDataUtil.deployService();
     }
 
+    @AutoLog(value = "移除一个服务的部署")
     @PostMapping(value = "/remove-deploy-service")
     @ApiOperation("移除一个服务的部署")
     public Result<Object> removeDeployService(@RequestBody @Validated RemoveDeployServiceParam removeDeployServiceParam) {
@@ -104,6 +114,7 @@ public class ServitizationController {
         return ServiceMockDataUtil.removeDeployService();
     }
 
+    @AutoLog(value = "服务文件上传")
     @PostMapping(value = "/upload-service-file")
     @ApiOperation("服务文件上传")
     public Result<Object> uploadServiceFile(@RequestBody @Validated UploadServiceFileParam uploadServiceFileParam) {
@@ -111,6 +122,7 @@ public class ServitizationController {
         return ServiceMockDataUtil.uploadServiceFile();
     }
 
+    @AutoLog(value = "查询所有节点")
     @GetMapping(value = "/query-all-node")
     @ApiOperation("查询所有节点")
     public Result<Object> queryAllNodes() {
@@ -119,6 +131,7 @@ public class ServitizationController {
     }
 
 
+    @AutoLog(value = "查询节点信息【缓存信息】")
     @GetMapping(value = "/query-node-detail")
     @ApiOperation("查询节点信息【缓存信息】")
     public Result<QueryNodeDetailDTO> queryNodeDetail(@RequestParam(name = "nodeId") String nodeId) {
@@ -126,6 +139,7 @@ public class ServitizationController {
         return ServiceMockDataUtil.queryNodeDetail(nodeId);
     }
 
+    @AutoLog(value = "总体统计信息")
     @GetMapping(value = "/aggregate-statistics")
     @ApiOperation("总体统计信息")
     public Result<AggregateStatisticsDTO> aggregateStatistics() {
@@ -133,6 +147,7 @@ public class ServitizationController {
         return ServiceMockDataUtil.aggregateStatistics();
     }
 
+    @AutoLog(value = "单个服务统计")
     @GetMapping(value = "/query-individual-service-statistics")
     @ApiOperation("单个服务统计")
     public Result<IndividualServiceStatisticsDTO> individualServiceStatistics(@RequestParam(name = "serviceId") String serviceId) {
@@ -140,6 +155,7 @@ public class ServitizationController {
         return ServiceMockDataUtil.individualServiceStatistics();
     }
 
+    @AutoLog(value = "单个节点统计信息")
     @GetMapping(value = "/query-individual-node-Statistics")
     @ApiOperation("单个节点统计信息")
     public Result<IndividualNodeStatisticsDTO> individualNodeStatistics(@RequestParam(name = "nodeId") String nodeId) {
@@ -147,6 +163,7 @@ public class ServitizationController {
         return ServiceMockDataUtil.individualNodeStatistics();
     }
 
+    @AutoLog(value = "单个节点的单个服务的统计信息")
     @GetMapping(value = "/query-individual-node-service-statistics")
     @ApiOperation("单个节点的单个服务的统计信息")
     public Result<IndividualNodeServiceStatisticsDTO> individualNodeServiceStatistics(@RequestParam(name = "nodeId") String nodeId,
@@ -155,6 +172,7 @@ public class ServitizationController {
         return ServiceMockDataUtil.individualNodeServiceStatistics();
     }
 
+    @AutoLog(value = "获取最近的日志")
     @GetMapping(value = "/get-last-log")
     @ApiOperation("获取最近的日志")
     public Result<LastLogDTO> getLastLogs(@RequestParam(name = "count") String count) {
@@ -162,6 +180,7 @@ public class ServitizationController {
         return ServiceMockDataUtil.getLastLogs(count);
     }
 
+    @AutoLog(value = "下载日志文件")
     @GetMapping(value = "/download-Log-File")
     @ApiOperation("下载日志文件")
     public Result<Object> downloadLogFile() {
@@ -173,6 +192,7 @@ public class ServitizationController {
      * @param submitRegisterParam
      * @return
      */
+    @AutoLog(value = "提交服务")
     @PostMapping(value = "/submit-service")
     @ApiOperation("提交服务")
     public Result<Object> submitService(@RequestBody @Validated SubmitRegisterParam submitRegisterParam){
