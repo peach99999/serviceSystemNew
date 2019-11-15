@@ -5,25 +5,14 @@
         <div class="header">
           <a href="/">
             <img src="~@/assets/logo.svg" class="logo" alt="logo">
-            <span class="title">Jantd Boot</span>
+            <span class="title">服务综合管理系统</span>
           </a>
         </div>
-        <!-- <div class="desc">
-          Jantd Boot 是中国最具影响力的 企业级 快速开发平台
-        </div> -->
       </div>
 
       <route-view></route-view>
 
       <div class="footer">
-        <!-- <div class="links">
-          <a href="http://jantd-boot.mydoc.io" target="_blank">帮助</a>
-          <a href="https://github.com/zhangdaiscott/jantd-boot" target="_blank">隐私</a>
-          <a href="https://github.com/zhangdaiscott/jantd-boot" target="_blank">条款</a>
-        </div>
-        <div class="copyright">
-          Copyright &copy; 2019 <a href="http://www.jantd.org" target="_blank">Jantd开源社区</a> 出品
-        </div> -->
       </div>
     </div>
   </div>
