@@ -1,0 +1,13 @@
+{
+  "code": "0",
+  "error_code":"0",
+  "error_description":"",
+  "node_id":"11",
+  "service_id":"11",
+  "stats_time":"2019-03-24",
+  "cpu_used":"80",
+  "memory_used":"70",
+  "disk_used":"60",
+  "call_count":"20",
+  "average_time_cost":"10"
+}

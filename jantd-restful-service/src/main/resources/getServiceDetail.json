@@ -1,0 +1,15 @@
+{
+  "code": "0",
+  "error_code":"0",
+  "error_description":"",
+  "service_id": "11",
+  "status": "running",
+  "instance_count": "33",
+  "min_instance_count": "11",
+  "max_instance_count": "22",
+  "deployed_on_nodes":["11","22","33","44"],
+  "running_on_nodes":{
+    "NODE_ID_1": "33",
+    "NODE_ID_2": "44"
+  }
+}

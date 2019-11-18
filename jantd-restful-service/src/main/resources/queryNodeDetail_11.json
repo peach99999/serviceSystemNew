@@ -1,0 +1,23 @@
+{
+  "code": "0",
+  "error_code":"0",
+  "error_description":"",
+  "node_id":"11adfwr2515",
+  "host_name":"服务测试",
+  "ip":"192.168.11.11",
+  "cpu_count":"11",
+  "thread_count":"11",
+  "cpu_frequency":"2.4GHz",
+  "memory_size":"11",
+  "disk_size":{
+    "C":"50",
+    "D":"60",
+    "E":"70"
+  },
+  "deployed_services":["11","22","33","44"],
+  "running_services":{
+    "SERVICE_ID1": "33",
+    "SERVICE_ID2":"44",
+    "SERVICE_ID3":"55"
+  }
+}
