@@ -1,6 +1,5 @@
 package cn.jantd;
 
-import cn.jantd.Result;
 import cn.jantd.communication.*;
 import cn.jantd.param.*;
 import cn.jantd.util.ServiceMockDataUtil;
@@ -67,7 +66,6 @@ public class ServiceController {
     @PostMapping(value = "/stop-service")
     @ApiOperation("停止一个服务")
     public Result<Object> sstopService(@RequestBody @Validated StartStopServiceParam startStopServiceParam) {
-//        return servitizationService.stopService(startStopServiceParam);
         return ServiceMockDataUtil.sstopService();
     }
 
