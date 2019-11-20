@@ -120,8 +120,8 @@ public class ServiceInfoController {
         try {
             setDesignUser(serviceInfo);
             // 新增服务时调用exe生成生成服务调用代码框架和服务实现代码文件
-//            serviceInfo = serviceInfoService.callExe(serviceInfo);
-            ServiceMockDataUtil.callExe(serviceInfo);
+            serviceInfo = serviceInfoService.callExe(serviceInfo);
+//            ServiceMockDataUtil.callExe(serviceInfo);
             serviceInfoService.save(serviceInfo);
             result.success("操作成功！");
         } catch (Exception e) {
