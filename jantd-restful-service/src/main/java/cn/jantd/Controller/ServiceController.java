@@ -106,11 +106,11 @@ public class ServiceController {
         return ServiceMockDataUtil.aggregateStatistics();
     }
 
-    @GetMapping(value = "/v1/stats/service/{serviceId}")
-    @ApiOperation("单个服务统计")
-    public Result<IndividualServiceStatisticsDTO> individualServiceStatistics(@PathVariable(value = "serviceId", required = true) String serviceId) {
-        return ServiceMockDataUtil.individualServiceStatistics();
-    }
+//    @GetMapping(value = "/v1/stats/service/{serviceId}")
+//    @ApiOperation("单个服务统计")
+//    public Result<IndividualServiceStatisticsDTO> individualServiceStatistics(@PathVariable(value = "serviceId", required = true) String serviceId) {
+//        return ServiceMockDataUtil.individualServiceStatistics();
+//    }
 
     @GetMapping(value = "/v1/stats/node/{nodeId}")
     @ApiOperation("单个节点统计信息")
@@ -118,10 +118,10 @@ public class ServiceController {
         return ServiceMockDataUtil.individualNodeStatistics();
     }
 
-    @GetMapping(value = "/v1/stats/service/{serviceId}?node_id={nodeId}")
-    @ApiOperation("单个节点的单个服务的统计信息")
+    @GetMapping(value = "/v1/stats/service/{serviceId}")
+    @ApiOperation("单个节点的单个服务的统计信息/单个服务统计")
     public Result<IndividualNodeServiceStatisticsDTO> individualNodeServiceStatistics(@PathVariable(value = "serviceId", required = true) String serviceId,
-                                                                                      @PathVariable(value = "nodeId", required = true) String nodeId) {
+                                                                                      @RequestParam(value = "nodeId", required = false) String nodeId) {
         return ServiceMockDataUtil.individualNodeServiceStatistics();
     }
 
