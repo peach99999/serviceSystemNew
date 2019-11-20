@@ -77,7 +77,7 @@ public class ServiceMockDataUtil {
         }
     }
 
-    public static Result<QueryServicesDTO> queryAllServices() {
+    public static Result<Object> queryAllServices() {
         Result result = new Result();
         String path = ServiceMockDataUtil.class.getClassLoader().getResource("queryAllServices.json").getPath();
         QueryServicesDTO queryServicesDTO = JSON.parseObject(readJsonFile(path), QueryServicesDTO.class);
@@ -86,7 +86,7 @@ public class ServiceMockDataUtil {
     }
 
 
-    public static Result<QueryServicesDTO> queryNodeServices() {
+    public static Result<Object> queryNodeServices() {
         Result result = new Result();
         String path = ServiceMockDataUtil.class.getClassLoader().getResource("queryNodeServices.json").getPath();
         QueryServicesDTO queryServicesDTO = JSON.parseObject(readJsonFile(path), QueryServicesDTO.class);
@@ -184,7 +184,7 @@ public class ServiceMockDataUtil {
         return result;
     }
 
-    public static Result<IndividualServiceStatisticsDTO> individualServiceStatistics() {
+    public static Result<Object> individualServiceStatistics() {
         Result result = new Result();
         String path = ServiceMockDataUtil.class.getClassLoader().getResource("individualServiceStatistics.json").getPath();
         IndividualServiceStatisticsDTO individualServiceStatisticsDTO = JSON.parseObject(readJsonFile(path), IndividualServiceStatisticsDTO.class);
@@ -200,7 +200,7 @@ public class ServiceMockDataUtil {
         return result;
     }
 
-    public static Result<IndividualNodeServiceStatisticsDTO> individualNodeServiceStatistics() {
+    public static Result<Object> individualNodeServiceStatistics() {
         Result result = new Result();
         String path = ServiceMockDataUtil.class.getClassLoader().getResource("individualNodeServiceStatistics.json").getPath();
         IndividualNodeServiceStatisticsDTO individualNodeServiceStatisticsDTO = JSON.parseObject(readJsonFile(path), IndividualNodeServiceStatisticsDTO.class);
@@ -220,7 +220,7 @@ public class ServiceMockDataUtil {
         Result result = new Result();
         result.setMessage("操作成功!下载地址D://upFiles");
         try {
-            downLoadByUrl("http://pic22.nipic.com/20120716/5666670_091558188000_2.jpg","test.jpg","D://upFiles");
+            downLoadByUrl("http://pic22.nipic.com/20120716/5666670_091558188000_2.jpg", "test.jpg", "D://upFiles");
         } catch (IOException e) {
             e.printStackTrace();
         }

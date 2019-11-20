@@ -22,16 +22,21 @@ public class ServiceController {
 
 
     @GetMapping(value = "/v1/services")
-    @ApiOperation("查询所有服务")
-    public Result<QueryServicesDTO> queryAllServices() {
-        return ServiceMockDataUtil.queryAllServices();
+    @ApiOperation("查询所有服务/查询某个节点上的服务")
+    public Result<Object> queryAllServices(@RequestParam(value = "nodeid", required = false) String nodeid) {
+        if (nodeid == null) {
+            return ServiceMockDataUtil.queryAllServices();
+        }else {
+            return ServiceMockDataUtil.queryNodeServices();
+        }
+
     }
 
-    @GetMapping(value = "/v1/services/{nodeId}")
-    @ApiOperation("查询某个节点上的服务")
-    public Result<QueryServicesDTO> queryNodeServices(@PathVariable(value = "nodeId", required = true) String nodeId) {
-        return ServiceMockDataUtil.queryNodeServices();
-    }
+//    @GetMapping(value = "/v1/services/{nodeId}")
+//    @ApiOperation("查询某个节点上的服务")
+//    public Result<QueryServicesDTO> queryNodeServices(@PathVariable(value = "nodeId", required = true) String nodeId) {
+//        return ServiceMockDataUtil.queryNodeServices();
+//    }
 
     @PostMapping(value = "/v1/services/register")
     @ApiOperation("注册一个服务")
@@ -71,13 +76,13 @@ public class ServiceController {
 
     @PostMapping(value = "/v1/service/{serviceId}/deploy")
     @ApiOperation("部署一个服务")
-    public Result<Object> deployService(@RequestBody @Validated DeployServiceParam deployServiceParam,@PathVariable(value = "serviceId", required = true) String serviceId) {
+    public Result<Object> deployService(@RequestBody @Validated DeployServiceParam deployServiceParam, @PathVariable(value = "serviceId", required = true) String serviceId) {
         return ServiceMockDataUtil.deployService();
     }
 
     @PostMapping(value = "/v1/service/{serviceId}/removedeploy")
     @ApiOperation("移除一个服务的部署")
-    public Result<Object> removeDeployService(@RequestBody @Validated RemoveDeployServiceParam removeDeployServiceParam,@PathVariable(value = "serviceId", required = true) String serviceId) {
+    public Result<Object> removeDeployService(@RequestBody @Validated RemoveDeployServiceParam removeDeployServiceParam, @PathVariable(value = "serviceId", required = true) String serviceId) {
         return ServiceMockDataUtil.removeDeployService();
     }
 
@@ -120,9 +125,14 @@ public class ServiceController {
 
     @GetMapping(value = "/v1/stats/service/{serviceId}")
     @ApiOperation("单个节点的单个服务的统计信息/单个服务统计")
-    public Result<IndividualNodeServiceStatisticsDTO> individualNodeServiceStatistics(@PathVariable(value = "serviceId", required = true) String serviceId,
-                                                                                      @RequestParam(value = "nodeId", required = false) String nodeId) {
-        return ServiceMockDataUtil.individualNodeServiceStatistics();
+    public Result<Object> individualNodeServiceStatistics(@PathVariable(value = "serviceId", required = true) String serviceId,
+                                                          @RequestParam(value = "nodeId", required = false) String nodeId) {
+
+        if (nodeId == null) {
+            return ServiceMockDataUtil.individualServiceStatistics();
+        } else {
+            return ServiceMockDataUtil.individualNodeServiceStatistics();
+        }
     }
 
     @GetMapping(value = "/v1/log/{count}")
