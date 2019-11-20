@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @ApiModel("注册一个服务")
 @EqualsAndHashCode(callSuper = false)
-public class RegisterServicesDTO extends BaseDTO {
+public class RegisterServicesDTO {
 
     /**
      * 服务id

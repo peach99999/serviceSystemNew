@@ -61,6 +61,12 @@ public class Result<T> implements Serializable {
         this.success = false;
     }
 
+    public void interfaceError(int code, String message) {
+        this.message = message;
+        this.code = code;
+        this.success = false;
+    }
+
     public void success(String message) {
         this.message = message;
         this.code = CommonConstant.SC_OK_200;

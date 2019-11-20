@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel("总体统计信息")
-public class AggregateStatisticsDTO extends BaseDTO {
+public class AggregateStatisticsDTO{
 
     /**
      * 状态时间

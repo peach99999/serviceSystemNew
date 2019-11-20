@@ -1,7 +1,7 @@
 package cn.jantd.modules.communication.manage;
 
 import cn.jantd.core.api.vo.Result;
-import cn.jantd.modules.communication.dto.communication.BaseDTO;
+import cn.jantd.modules.communication.dto.communication.ErrorDTO;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.http.HttpEntity;
 
@@ -17,12 +17,4 @@ public interface ServitizationManager {
      */
     HttpEntity<String> getStringHttpEntity(JSONObject json);
 
-    /**
-     * 请求结果判断
-     *
-     * @param result
-     * @param baseDTO
-     * @return
-     */
-    boolean requestjudgment(Result result, BaseDTO baseDTO);
 }

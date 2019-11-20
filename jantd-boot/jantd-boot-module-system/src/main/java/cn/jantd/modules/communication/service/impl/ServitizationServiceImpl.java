@@ -76,16 +76,18 @@ public class ServitizationServiceImpl implements IServitizationService {
         ResponseEntity<String> queryAllServicesResult = restTemplate.getForEntity(url, String.class);
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(queryAllServicesResult.getStatusCode())) {
-            result.error500(CommunicationMsgCode.QUERY_ALL_SERVICES_FAILED.getMsg());
-            return result;
-        }
-        // 解析请求返回结果
-        if (isFailed(result, queryAllServicesResult)) {
+            ErrorDTO errorDTO = JSON.parseObject(queryAllServicesResult.getBody(), ErrorDTO.class);
+            result.interfaceError(Integer.parseInt(errorDTO.getError_code()), errorDTO.getError_description());
             return result;
         }
 
+        // 解析请求返回结果
+        QueryServicesDTO queryAllServicesDTO = JSON.parseObject(queryAllServicesResult.getBody(), QueryServicesDTO.class);
+        result.setResult(queryAllServicesDTO);
+        result.success(OPERATION_SUCCESS);
         return result;
     }
+
 
     /**
      * 查询某个节点上的服务
@@ -103,12 +105,14 @@ public class ServitizationServiceImpl implements IServitizationService {
         ResponseEntity<String> queryNodeServicesResult = restTemplate.getForEntity(url, String.class);
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(queryNodeServicesResult.getStatusCode())) {
-            result.error500(CommunicationMsgCode.QUERY_NODE_SERVICES_FAILED.getMsg());
+            ErrorDTO errorDTO = JSON.parseObject(queryNodeServicesResult.getBody(), ErrorDTO.class);
+            result.interfaceError(Integer.parseInt(errorDTO.getError_code()), errorDTO.getError_description());
             return result;
         }
-        if (isFailed(result, queryNodeServicesResult)) {
-            return result;
-        }
+        // 解析请求返回结果
+        QueryServicesDTO queryAllServicesDTO = JSON.parseObject(queryNodeServicesResult.getBody(), QueryServicesDTO.class);
+        result.setResult(queryAllServicesDTO);
+        result.success(OPERATION_SUCCESS);
 
         return result;
     }
@@ -140,20 +144,12 @@ public class ServitizationServiceImpl implements IServitizationService {
 
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(registerServiceResult.getStatusCode())) {
-            result.error500(CommunicationMsgCode.REGISTER_SERVICE_FAILED.getMsg());
+            ErrorDTO errorDTO = JSON.parseObject(registerServiceResult.getBody(), ErrorDTO.class);
+            result.interfaceError(Integer.parseInt(errorDTO.getError_code()), errorDTO.getError_description());
             return result;
         }
         RegisterServicesDTO registerServicesDTO = JSON.parseObject(registerServiceResult.getBody(), RegisterServicesDTO.class);
-        // 结果状态码
-        String code = registerServicesDTO.getCode();
-        // 返回响应结果描述
-        String msg = registerServicesDTO.getError_description();
-        // 若结果状态码不等于0,返回错误信息
-        if (!RESPONSE_CODE_SUCCESS.equals(code)) {
-            log.info("结果状态码:[{}]响应结果描述[{}]", code, msg);
-            result.error500(msg);
-            return result;
-        }
+
         result.setResult(registerServicesDTO.getService_id());
         result.success("操作成功");
         return result;
@@ -174,17 +170,12 @@ public class ServitizationServiceImpl implements IServitizationService {
         ResponseEntity<String> serviceDetailResult = restTemplate.getForEntity(url, String.class, serviceId);
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(serviceDetailResult.getStatusCode())) {
-            result.error500(CommunicationMsgCode.GET_SERVICE_DETAIL_FAILED.getMsg());
+            ErrorDTO errorDTO = JSON.parseObject(serviceDetailResult.getBody(), ErrorDTO.class);
+            result.interfaceError(Integer.parseInt(errorDTO.getError_code()), errorDTO.getError_description());
             return result;
         }
 
         ServiceDetailDTO serviceDetailDTO = JSON.parseObject(serviceDetailResult.getBody(), ServiceDetailDTO.class);
-        BaseDTO baseDTO = new BaseDTO();
-        BeanUtils.copyProperties(serviceDetailDTO, baseDTO);
-        // 返回结果判断
-        if (servitizationManager.requestjudgment(result, baseDTO)) {
-            return result;
-        }
         result.setResult(serviceDetailDTO);
         result.success(OPERATION_SUCCESS);
         return result;
@@ -240,14 +231,11 @@ public class ServitizationServiceImpl implements IServitizationService {
 
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(responseEntity.getStatusCode())) {
-            result.error500(CommunicationMsgCode.UPDATE_SERVICE_FAILED.getMsg());
+            ErrorDTO errorDTO = JSON.parseObject(responseEntity.getBody(), ErrorDTO.class);
+            result.interfaceError(Integer.parseInt(errorDTO.getError_code()), errorDTO.getError_description());
             return result;
         }
-        BaseDTO baseDTO = JSON.parseObject(responseEntity.getBody(), BaseDTO.class);
-        // 返回结果判断
-        if (servitizationManager.requestjudgment(result, baseDTO)) {
-            return result;
-        }
+
         return Result.ok();
     }
 
@@ -271,13 +259,11 @@ public class ServitizationServiceImpl implements IServitizationService {
         ResponseEntity<String> startServiceResult = restTemplate.postForEntity(url, entity, String.class, startStopServiceParam.getServiceId());
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(startServiceResult.getStatusCode())) {
-            return Result.error(CommunicationMsgCode.START_SERVICE_FAILED.getMsg());
-        }
-        BaseDTO baseDTO = JSON.parseObject(startServiceResult.getBody(), BaseDTO.class);
-        // 返回结果判断
-        if (servitizationManager.requestjudgment(result, baseDTO)) {
+            ErrorDTO errorDTO = JSON.parseObject(startServiceResult.getBody(), ErrorDTO.class);
+            result.interfaceError(Integer.parseInt(errorDTO.getError_code()), errorDTO.getError_description());
             return result;
         }
+
         return Result.ok();
     }
 
@@ -301,13 +287,11 @@ public class ServitizationServiceImpl implements IServitizationService {
         ResponseEntity<String> stopServiceResult = restTemplate.postForEntity(url, entity, String.class, startStopServiceParam.getServiceId());
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(stopServiceResult.getStatusCode())) {
-            return Result.error(CommunicationMsgCode.STOP_SERVICE_FAILED.getMsg());
-        }
-        BaseDTO baseDTO = JSON.parseObject(stopServiceResult.getBody(), BaseDTO.class);
-        // 返回结果判断
-        if (servitizationManager.requestjudgment(result, baseDTO)) {
+            ErrorDTO errorDTO = JSON.parseObject(stopServiceResult.getBody(), ErrorDTO.class);
+            result.interfaceError(Integer.parseInt(errorDTO.getError_code()), errorDTO.getError_description());
             return result;
         }
+
         return Result.ok();
     }
 
@@ -336,13 +320,11 @@ public class ServitizationServiceImpl implements IServitizationService {
         ResponseEntity<String> deployServiceResult = restTemplate.postForEntity(url, entity, String.class, startStopServiceParam.getServiceId());
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(deployServiceResult.getStatusCode())) {
-            return Result.error(CommunicationMsgCode.DEPLOY_SERVICE_FAILED.getMsg());
-        }
-        BaseDTO baseDTO = JSON.parseObject(deployServiceResult.getBody(), BaseDTO.class);
-        // 返回结果判断
-        if (servitizationManager.requestjudgment(result, baseDTO)) {
+            ErrorDTO errorDTO = JSON.parseObject(deployServiceResult.getBody(), ErrorDTO.class);
+            result.interfaceError(Integer.parseInt(errorDTO.getError_code()), errorDTO.getError_description());
             return result;
         }
+
         return Result.ok();
     }
 
@@ -367,13 +349,11 @@ public class ServitizationServiceImpl implements IServitizationService {
         ResponseEntity<String> removeDeployServiceResult = restTemplate.postForEntity(url, entity, String.class, removeDeployServiceParam.getServiceId());
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(removeDeployServiceResult.getStatusCode())) {
-            return Result.error(CommunicationMsgCode.REMOVE_DEPLOY_SERVICE_FAILED.getMsg());
-        }
-        BaseDTO baseDTO = JSON.parseObject(removeDeployServiceResult.getBody(), BaseDTO.class);
-        // 返回结果判断
-        if (servitizationManager.requestjudgment(result, baseDTO)) {
+            ErrorDTO errorDTO = JSON.parseObject(removeDeployServiceResult.getBody(), ErrorDTO.class);
+            result.interfaceError(Integer.parseInt(errorDTO.getError_code()), errorDTO.getError_description());
             return result;
         }
+
         return Result.ok();
     }
 
@@ -406,7 +386,7 @@ public class ServitizationServiceImpl implements IServitizationService {
 //            return Result.error(CommunicationMsgCode.UPLOAD_SERVICE_FFILE_FAILED.getMsg());
 //        }
 //        UploadServiceFileDTO uploadServiceFileDTO = JSON.parseObject(uploadServiceFileResult.getBody(), UploadServiceFileDTO.class);
-//        BaseDTO baseDTO = new BaseDTO();
+//        ErrorDTO baseDTO = new ErrorDTO();
 //        BeanUtils.copyProperties(uploadServiceFileDTO, baseDTO);
 //        // 返回结果判断
 //        if (servitizationManager.requestjudgment(result, baseDTO)) {
@@ -462,12 +442,7 @@ public class ServitizationServiceImpl implements IServitizationService {
             }
             reader.close();
             UploadServiceFileDTO uploadServiceFileDTO = JSON.parseObject(returnBuf.toString(), UploadServiceFileDTO.class);
-            BaseDTO baseDTO = new BaseDTO();
-            BeanUtils.copyProperties(uploadServiceFileDTO, baseDTO);
-            // 返回结果判断
-            if (servitizationManager.requestjudgment(result, baseDTO)) {
-                return result;
-            }
+
             Result.ok(uploadServiceFileDTO.getService_id());
         } catch (Exception e) {
             System.out.println("发送POST请求出错。" + uploadServiceFileUrl);
@@ -494,16 +469,12 @@ public class ServitizationServiceImpl implements IServitizationService {
         ResponseEntity<String> queryAllNodesResult = restTemplate.getForEntity(url, String.class);
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(queryAllNodesResult.getStatusCode())) {
-            result.error500(CommunicationMsgCode.QUERY_ALL_NODE_FAILED.getMsg());
+            ErrorDTO errorDTO = JSON.parseObject(queryAllNodesResult.getBody(), ErrorDTO.class);
+            result.interfaceError(Integer.parseInt(errorDTO.getError_code()), errorDTO.getError_description());
             return result;
         }
         QueryAllNodesDTO queryAllNodesDTO = JSON.parseObject(queryAllNodesResult.getBody(), QueryAllNodesDTO.class);
-        BaseDTO baseDTO = new BaseDTO();
-        BeanUtils.copyProperties(queryAllNodesDTO, baseDTO);
-        // 返回结果判断
-        if (servitizationManager.requestjudgment(result, baseDTO)) {
-            return result;
-        }
+
         result.setMessage(OPERATION_SUCCESS);
         result.setResult(queryAllNodesDTO.getNodes());
         return result;
@@ -524,16 +495,12 @@ public class ServitizationServiceImpl implements IServitizationService {
         ResponseEntity<String> queryNodeDetailResult = restTemplate.getForEntity(url, String.class, nodeId);
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(queryNodeDetailResult.getStatusCode())) {
-            result.error500(CommunicationMsgCode.QUERY_NODE_DETAIL_FAILED.getMsg());
+            ErrorDTO errorDTO = JSON.parseObject(queryNodeDetailResult.getBody(), ErrorDTO.class);
+            result.interfaceError(Integer.parseInt(errorDTO.getError_code()), errorDTO.getError_description());
             return result;
         }
         QueryNodeDetailDTO queryNodeDetailDTO = JSON.parseObject(queryNodeDetailResult.getBody(), QueryNodeDetailDTO.class);
-        BaseDTO baseDTO = new BaseDTO();
-        BeanUtils.copyProperties(queryNodeDetailDTO, baseDTO);
-        // 返回结果判断
-        if (servitizationManager.requestjudgment(result, baseDTO)) {
-            return result;
-        }
+
         result.setResult(queryNodeDetailDTO);
         result.success(OPERATION_SUCCESS);
         return result;
@@ -553,16 +520,13 @@ public class ServitizationServiceImpl implements IServitizationService {
         ResponseEntity<String> aggregateStatisticsResult = restTemplate.getForEntity(url, String.class);
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(aggregateStatisticsResult.getStatusCode())) {
-            result.error500(CommunicationMsgCode.AGGREGATE_STATISTICS_FAILED.getMsg());
+            ErrorDTO errorDTO = JSON.parseObject(aggregateStatisticsResult.getBody(), ErrorDTO.class);
+            result.interfaceError(Integer.parseInt(errorDTO.getError_code()), errorDTO.getError_description());
             return result;
         }
         AggregateStatisticsDTO aggregateStatisticsDTO = JSON.parseObject(aggregateStatisticsResult.getBody(), AggregateStatisticsDTO.class);
-        BaseDTO baseDTO = new BaseDTO();
-        BeanUtils.copyProperties(aggregateStatisticsDTO, baseDTO);
-        // 返回结果判断
-        if (servitizationManager.requestjudgment(result, baseDTO)) {
-            return result;
-        }
+        ErrorDTO errorDTO = new ErrorDTO();
+
         result.setMessage(OPERATION_SUCCESS);
         result.setResult(aggregateStatisticsDTO);
         return result;
@@ -583,16 +547,12 @@ public class ServitizationServiceImpl implements IServitizationService {
         ResponseEntity<String> individualServiceStatisticsResult = restTemplate.getForEntity(url, String.class, serviceId);
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(individualServiceStatisticsResult.getStatusCode())) {
-            result.error500(CommunicationMsgCode.INDIVIDUAL_SERVICE_STATISTICS_FAILED.getMsg());
+            ErrorDTO errorDTO = JSON.parseObject(individualServiceStatisticsResult.getBody(), ErrorDTO.class);
+            result.interfaceError(Integer.parseInt(errorDTO.getError_code()), errorDTO.getError_description());
             return result;
         }
         IndividualServiceStatisticsDTO individualServiceStatisticsDTO = JSON.parseObject(individualServiceStatisticsResult.getBody(), IndividualServiceStatisticsDTO.class);
-        BaseDTO baseDTO = new BaseDTO();
-        BeanUtils.copyProperties(individualServiceStatisticsDTO, baseDTO);
-        // 返回结果判断
-        if (servitizationManager.requestjudgment(result, baseDTO)) {
-            return result;
-        }
+
         result.setResult(individualServiceStatisticsDTO);
         result.success(OPERATION_SUCCESS);
         return result;
@@ -607,16 +567,11 @@ public class ServitizationServiceImpl implements IServitizationService {
         ResponseEntity<String> individualNodeStatisticsResult = restTemplate.getForEntity(url, String.class, nodeId);
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(individualNodeStatisticsResult.getStatusCode())) {
-            result.error500(CommunicationMsgCode.INDIVIDUAL_NODE_STATISTICS_FAILED.getMsg());
+            ErrorDTO errorDTO = JSON.parseObject(individualNodeStatisticsResult.getBody(), ErrorDTO.class);
+            result.interfaceError(Integer.parseInt(errorDTO.getError_code()), errorDTO.getError_description());
             return result;
         }
         IndividualNodeStatisticsDTO individualNodeStatisticsDTO = JSON.parseObject(individualNodeStatisticsResult.getBody(), IndividualNodeStatisticsDTO.class);
-        BaseDTO baseDTO = new BaseDTO();
-        BeanUtils.copyProperties(individualNodeStatisticsDTO, baseDTO);
-        // 返回结果判断
-        if (servitizationManager.requestjudgment(result, baseDTO)) {
-            return result;
-        }
         result.setResult(individualNodeStatisticsDTO);
         result.success(OPERATION_SUCCESS);
         return result;
@@ -645,16 +600,12 @@ public class ServitizationServiceImpl implements IServitizationService {
         ResponseEntity<String> individualNodeServiceStatisticsResult = restTemplate.getForEntity(url, String.class, serviceId);
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(individualNodeServiceStatisticsResult.getStatusCode())) {
-            result.error500(CommunicationMsgCode.INDIVIDUAL_NODE_SERVICE_STATISTICS_FAILED.getMsg());
+            ErrorDTO errorDTO = JSON.parseObject(individualNodeServiceStatisticsResult.getBody(), ErrorDTO.class);
+            result.interfaceError(Integer.parseInt(errorDTO.getError_code()), errorDTO.getError_description());
             return result;
         }
         IndividualNodeServiceStatisticsDTO individualNodeServiceStatisticsDTO = JSON.parseObject(individualNodeServiceStatisticsResult.getBody(), IndividualNodeServiceStatisticsDTO.class);
-        BaseDTO baseDTO = new BaseDTO();
-        BeanUtils.copyProperties(individualNodeServiceStatisticsDTO, baseDTO);
-        // 返回结果判断
-        if (servitizationManager.requestjudgment(result, baseDTO)) {
-            return result;
-        }
+
         result.setResult(individualNodeServiceStatisticsDTO);
         result.success(OPERATION_SUCCESS);
         return result;
@@ -676,17 +627,13 @@ public class ServitizationServiceImpl implements IServitizationService {
         ResponseEntity<String> getLastLogsResult = restTemplate.getForEntity(url, String.class);
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(getLastLogsResult.getStatusCode())) {
-            result.error500(CommunicationMsgCode.GRT_LAST_LOG_FAILED.getMsg());
+            ErrorDTO errorDTO = JSON.parseObject(getLastLogsResult.getBody(), ErrorDTO.class);
+            result.interfaceError(Integer.parseInt(errorDTO.getError_code()), errorDTO.getError_description());
             return result;
         }
 
         LastLogDTO lastLogDTO = JSON.parseObject(getLastLogsResult.getBody(), LastLogDTO.class);
-        BaseDTO baseDTO = new BaseDTO();
-        BeanUtils.copyProperties(lastLogDTO, baseDTO);
-        // 返回结果判断
-        if (servitizationManager.requestjudgment(result, baseDTO)) {
-            return result;
-        }
+
         result.setResult(lastLogDTO);
         result.success(OPERATION_SUCCESS);
         return result;
@@ -706,15 +653,11 @@ public class ServitizationServiceImpl implements IServitizationService {
         ResponseEntity<String> downloadLogFileResult = restTemplate.getForEntity(url, String.class);
         // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
         if (!HttpStatus.OK.equals(downloadLogFileResult.getStatusCode())) {
-            result.error500(CommunicationMsgCode.DOWNLOAD_LOG_FILR_FAILED.getMsg());
+            ErrorDTO errorDTO = JSON.parseObject(downloadLogFileResult.getBody(), ErrorDTO.class);
+            result.interfaceError(Integer.parseInt(errorDTO.getError_code()), errorDTO.getError_description());
             return result;
         }
-        BaseDTO baseDTO = JSON.parseObject(downloadLogFileResult.getBody(), BaseDTO.class);
 
-        // 返回结果判断
-        if (servitizationManager.requestjudgment(result, baseDTO)) {
-            return result;
-        }
         return Result.ok();
     }
 
@@ -736,20 +679,6 @@ public class ServitizationServiceImpl implements IServitizationService {
             }
         }
         return Result.ok();
-    }
-
-    private boolean isFailed(Result<QueryServicesDTO> result, ResponseEntity<String> queryNodeServicesResult) {
-        // 解析请求返回结果
-        QueryServicesDTO queryAllServicesDTO = JSON.parseObject(queryNodeServicesResult.getBody(), QueryServicesDTO.class);
-        BaseDTO baseDTO = new BaseDTO();
-        BeanUtils.copyProperties(queryAllServicesDTO, baseDTO);
-        // 返回结果判断
-        if (servitizationManager.requestjudgment(result, queryAllServicesDTO)) {
-            return true;
-        }
-        result.setResult(queryAllServicesDTO);
-        result.success(OPERATION_SUCCESS);
-        return false;
     }
 
 

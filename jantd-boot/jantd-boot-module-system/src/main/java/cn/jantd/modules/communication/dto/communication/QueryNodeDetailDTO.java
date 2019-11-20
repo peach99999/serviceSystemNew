@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel("查询节点信息")
-public class QueryNodeDetailDTO extends BaseDTO {
+public class QueryNodeDetailDTO {
 
     /**
      * 节点Id

@@ -4,23 +4,19 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * BaseDTO 基础DTO
+ * ErrorDTO 错误返回DTO
  *
  * @author xiagf
  * @date 2019/09/11
  */
 @Data
-@ApiModel("基础DTO")
-public class BaseDTO {
-    /**
-     * 结果状态码 1:操作成功 0:操作失败
-     */
-    private String code;
+@ApiModel("错误返回DTO")
+public class ErrorDTO {
 
     /**
      * 错误编码
      */
-    private String errorCode;
+    private String error_code;
 
     /**
      * 响应结果描述

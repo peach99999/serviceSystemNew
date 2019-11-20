@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @ApiModel("查询单个服务")
 @EqualsAndHashCode(callSuper = false)
-public class ServiceDetailDTO extends BaseDTO {
+public class ServiceDetailDTO {
 
     /**
      * 服务id

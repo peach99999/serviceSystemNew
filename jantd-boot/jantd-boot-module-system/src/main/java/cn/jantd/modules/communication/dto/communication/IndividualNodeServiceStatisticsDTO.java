@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel("单个节点的单个服务的统计信息")
-public class IndividualNodeServiceStatisticsDTO extends BaseDTO {
+public class IndividualNodeServiceStatisticsDTO{
 
     /**
      * 节点id

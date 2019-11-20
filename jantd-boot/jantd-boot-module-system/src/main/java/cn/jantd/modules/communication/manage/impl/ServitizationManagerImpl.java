@@ -2,7 +2,7 @@ package cn.jantd.modules.communication.manage.impl;
 
 
 import cn.jantd.core.api.vo.Result;
-import cn.jantd.modules.communication.dto.communication.BaseDTO;
+import cn.jantd.modules.communication.dto.communication.ErrorDTO;
 import cn.jantd.modules.communication.manage.ServitizationManager;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
@@ -42,26 +42,5 @@ public class ServitizationManagerImpl implements ServitizationManager {
         return new HttpEntity<String>(requestJson, headers);
     }
 
-    /**
-     * 请求结果判断
-     *
-     * @param result
-     * @param baseDTO
-     * @return
-     */
-    @Override
-    public boolean requestjudgment(Result result, BaseDTO baseDTO) {
-        // 结果状态码
-        String code = baseDTO.getCode();
-        // 若结果状态码不等于0,返回错误信息
-        if (!RESPONSE_CODE_SUCCESS.equals(code)) {
-            // 返回响应结果描述
-            String msg = baseDTO.getError_description();
-            logger.info("结果状态码:[{}]响应结果描述[{}]", code, msg);
-            result.error500(msg);
-            return true;
-        }
-        return false;
-    }
 
 }

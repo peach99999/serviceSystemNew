@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @ApiModel("查询所有服务")
 @EqualsAndHashCode(callSuper = false)
-public class QueryServicesDTO extends BaseDTO {
+public class QueryServicesDTO {
 
     /**
      * 节点Id
