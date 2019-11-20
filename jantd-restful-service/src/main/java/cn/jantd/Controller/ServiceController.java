@@ -1,5 +1,6 @@
-package cn.jantd;
+package cn.jantd.Controller;
 
+import cn.jantd.Result;
 import cn.jantd.communication.*;
 import cn.jantd.param.*;
 import cn.jantd.util.ServiceMockDataUtil;
@@ -15,123 +16,122 @@ import org.springframework.web.bind.annotation.*;
  * @date 2019-09-11
  */
 @RestController
-@RequestMapping("/communication")
 @Api(tags = "服务化前端通信接口")
 @Slf4j
 public class ServiceController {
 
 
-    @GetMapping(value = "/query-all-services")
+    @GetMapping(value = "/v1/services")
     @ApiOperation("查询所有服务")
     public Result<QueryServicesDTO> queryAllServices() {
         return ServiceMockDataUtil.queryAllServices();
     }
 
-    @GetMapping(value = "/query-node-services")
+    @GetMapping(value = "/v1/services/{nodeId}")
     @ApiOperation("查询某个节点上的服务")
-    public Result<QueryServicesDTO> queryNodeServices(@RequestParam(name = "nodeId") String nodeId) {
+    public Result<QueryServicesDTO> queryNodeServices(@PathVariable(value = "nodeId", required = true) String nodeId) {
         return ServiceMockDataUtil.queryNodeServices();
     }
 
-    @PostMapping(value = "/register-service")
+    @PostMapping(value = "/v1/services/register")
     @ApiOperation("注册一个服务")
     public Result<String> registerService(@RequestBody @Validated RegisterParam registerParam) {
         return ServiceMockDataUtil.registerService();
     }
 
-    @GetMapping(value = "/get-service-detail")
+    @GetMapping(value = "/v1/service/{serviceId}")
     @ApiOperation("查询单个服务")
-    public Result<ServiceDetailDTO> getServiceDetail(@RequestParam(name = "serviceId") String serviceId) {
+    public Result<ServiceDetailDTO> getServiceDetail(@PathVariable(value = "serviceId", required = true) String serviceId) {
         return ServiceMockDataUtil.getServiceDetail();
     }
 
-    @DeleteMapping(value = "/delete-Service")
+    @DeleteMapping(value = "/v1/service/{serviceId}")
     @ApiOperation("删除一个服务")
-    public Result<Object> deleteService(@RequestParam(name = "serviceId") String serviceId) {
+    public Result<Object> deleteService(@PathVariable(value = "serviceId", required = true) String serviceId) {
         return ServiceMockDataUtil.deleteService();
     }
 
-    @PutMapping(value = "/update-Service")
+    @PatchMapping(value = "/v1/service/{serviceId}")
     @ApiOperation("更新服务信息")
-    public Result<Object> updateService(@RequestBody UpdateServiceParam updateServiceParam) {
+    public Result<Object> updateService(@PathVariable(value = "serviceId", required = true) String serviceId) {
         return ServiceMockDataUtil.updateService();
     }
 
-    @PostMapping(value = "/start-service")
+    @PostMapping(value = "/v1/service/{serviceId}/start")
     @ApiOperation("启动一个服务")
-    public Result<Object> startService(@RequestBody @Validated StartStopServiceParam startStopServiceParam) {
+    public Result<Object> startService(@PathVariable(value = "serviceId", required = true) String serviceId) {
         return ServiceMockDataUtil.startService();
     }
 
-    @PostMapping(value = "/stop-service")
+    @PostMapping(value = "/v1/service/{serviceId}/stop")
     @ApiOperation("停止一个服务")
-    public Result<Object> sstopService(@RequestBody @Validated StartStopServiceParam startStopServiceParam) {
+    public Result<Object> sstopService(@PathVariable(value = "serviceId", required = true) String serviceId) {
         return ServiceMockDataUtil.sstopService();
     }
 
-    @PostMapping(value = "/deploy-service")
+    @PostMapping(value = "/v1/service/{serviceId}/deploy")
     @ApiOperation("部署一个服务")
-    public Result<Object> deployService(@RequestBody @Validated DeployServiceParam deployServiceParam) {
+    public Result<Object> deployService(@RequestBody @Validated DeployServiceParam deployServiceParam,@PathVariable(value = "serviceId", required = true) String serviceId) {
         return ServiceMockDataUtil.deployService();
     }
 
-    @PostMapping(value = "/remove-deploy-service")
+    @PostMapping(value = "/v1/service/{serviceId}/removedeploy")
     @ApiOperation("移除一个服务的部署")
-    public Result<Object> removeDeployService(@RequestBody @Validated RemoveDeployServiceParam removeDeployServiceParam) {
+    public Result<Object> removeDeployService(@RequestBody @Validated RemoveDeployServiceParam removeDeployServiceParam,@PathVariable(value = "serviceId", required = true) String serviceId) {
         return ServiceMockDataUtil.removeDeployService();
     }
 
-    @PostMapping(value = "/upload-service-file")
+    @PostMapping(value = "/v1/upload")
     @ApiOperation("服务文件上传")
     public Result<Object> uploadServiceFile(@RequestBody @Validated UploadServiceFileParam uploadServiceFileParam) {
         return ServiceMockDataUtil.uploadServiceFile();
     }
 
-    @GetMapping(value = "/query-all-node")
+    @GetMapping(value = "/v1/nodes")
     @ApiOperation("查询所有节点")
     public Result<Object> queryAllNodes() {
         return ServiceMockDataUtil.queryAllNodes();
     }
 
 
-    @GetMapping(value = "/query-node-detail")
+    @GetMapping(value = "/v1/node/{nodeId}")
     @ApiOperation("查询节点信息【缓存信息】")
-    public Result<QueryNodeDetailDTO> queryNodeDetail(@RequestParam(name = "nodeId") String nodeId) {
+    public Result<QueryNodeDetailDTO> queryNodeDetail(@PathVariable(value = "nodeId", required = true) String nodeId) {
         return ServiceMockDataUtil.queryNodeDetail(nodeId);
     }
 
-    @GetMapping(value = "/aggregate-statistics")
+    @GetMapping(value = "/v1/stats")
     @ApiOperation("总体统计信息")
     public Result<AggregateStatisticsDTO> aggregateStatistics() {
         return ServiceMockDataUtil.aggregateStatistics();
     }
 
-    @GetMapping(value = "/query-individual-service-statistics")
+    @GetMapping(value = "/v1/stats/service/{serviceId}")
     @ApiOperation("单个服务统计")
-    public Result<IndividualServiceStatisticsDTO> individualServiceStatistics(@RequestParam(name = "serviceId") String serviceId) {
+    public Result<IndividualServiceStatisticsDTO> individualServiceStatistics(@PathVariable(value = "serviceId", required = true) String serviceId) {
         return ServiceMockDataUtil.individualServiceStatistics();
     }
 
-    @GetMapping(value = "/query-individual-node-Statistics")
+    @GetMapping(value = "/v1/stats/node/{nodeId}")
     @ApiOperation("单个节点统计信息")
-    public Result<IndividualNodeStatisticsDTO> individualNodeStatistics(@RequestParam(name = "nodeId") String nodeId) {
+    public Result<IndividualNodeStatisticsDTO> individualNodeStatistics(@PathVariable(value = "nodeId", required = true) String nodeId) {
         return ServiceMockDataUtil.individualNodeStatistics();
     }
 
-    @GetMapping(value = "/query-individual-node-service-statistics")
+    @GetMapping(value = "/v1/stats/service/{serviceId}?node_id={nodeId}")
     @ApiOperation("单个节点的单个服务的统计信息")
-    public Result<IndividualNodeServiceStatisticsDTO> individualNodeServiceStatistics(@RequestParam(name = "nodeId") String nodeId,
-                                                                                      @RequestParam(name = "serviceId") String serviceId) {
+    public Result<IndividualNodeServiceStatisticsDTO> individualNodeServiceStatistics(@PathVariable(value = "serviceId", required = true) String serviceId,
+                                                                                      @PathVariable(value = "nodeId", required = true) String nodeId) {
         return ServiceMockDataUtil.individualNodeServiceStatistics();
     }
 
-    @GetMapping(value = "/get-last-log")
+    @GetMapping(value = "/v1/log/{count}")
     @ApiOperation("获取最近的日志")
-    public Result<LastLogDTO> getLastLogs(@RequestParam(name = "count") String count) {
+    public Result<LastLogDTO> getLastLogs(@PathVariable(value = "count", required = true) String count) {
         return ServiceMockDataUtil.getLastLogs(count);
     }
 
-    @GetMapping(value = "/download-Log-File")
+    @GetMapping(value = "/v1/logfile")
     @ApiOperation("下载日志文件")
     public Result<Object> downloadLogFile() {
         return ServiceMockDataUtil.downloadLogFile();
