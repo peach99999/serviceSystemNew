@@ -30,7 +30,6 @@ public class UpdateServiceParam implements Serializable {
     @ApiModelProperty("最大实例数")
     private String maxInstanceCount;
 
-    @NotNull(message = "文件id不能为空")
     @ApiModelProperty("文件id")
     private String fileId;
 }

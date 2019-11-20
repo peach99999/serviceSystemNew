@@ -5,6 +5,7 @@ import cn.jantd.communication.*;
 import cn.jantd.entity.ServiceInfo;
 import cn.jantd.param.SubmitRegisterParam;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 
@@ -77,161 +78,155 @@ public class ServiceMockDataUtil {
         }
     }
 
-    public static Result<Object> queryAllServices() {
-        Result result = new Result();
+    public static Object queryAllServices() {
+//        Result result = new Result();
         String path = ServiceMockDataUtil.class.getClassLoader().getResource("queryAllServices.json").getPath();
-        QueryServicesDTO queryServicesDTO = JSON.parseObject(readJsonFile(path), QueryServicesDTO.class);
-        result.setResult(queryServicesDTO);
-        return result;
+//        QueryServicesDTO queryServicesDTO = JSON.parseObject(readJsonFile(path), QueryServicesDTO.class);
+//        result.setResult(queryServicesDTO);
+        return readJsonFile(path);
     }
 
 
-    public static Result<Object> queryNodeServices() {
-        Result result = new Result();
+    public static Object queryNodeServices() {
+//        Result result = new Result();
         String path = ServiceMockDataUtil.class.getClassLoader().getResource("queryNodeServices.json").getPath();
-        QueryServicesDTO queryServicesDTO = JSON.parseObject(readJsonFile(path), QueryServicesDTO.class);
-        result.setResult(queryServicesDTO);
-        return result;
+//        QueryServicesDTO queryServicesDTO = JSON.parseObject(readJsonFile(path), QueryServicesDTO.class);
+//        result.setResult(queryServicesDTO);
+        return readJsonFile(path);
     }
 
-    public static Result<String> registerService() {
-        Result result = new Result();
-        result.setResult("11");
-        return result;
+    public static Object registerService() {
+        String path = ServiceMockDataUtil.class.getClassLoader().getResource("registerService.json").getPath();
+        return readJsonFile(path);
     }
 
 
-    public static Result<ServiceDetailDTO> getServiceDetail() {
-        Result result = new Result();
+    public static Object getServiceDetail() {
+//        Result result = new Result();
         String path = ServiceMockDataUtil.class.getClassLoader().getResource("getServiceDetail.json").getPath();
-        ServiceDetailDTO serviceDetailDTO = JSON.parseObject(readJsonFile(path), ServiceDetailDTO.class);
-        result.setResult(serviceDetailDTO);
-        return result;
+//        ServiceDetailDTO serviceDetailDTO = JSON.parseObject(readJsonFile(path), ServiceDetailDTO.class);
+//        result.setResult(serviceDetailDTO);
+        return readJsonFile(path);
     }
 
-    public static Result<Object> deleteService() {
-        Result result = new Result();
-        result.setMessage("操作成功!");
-        result.setSuccess(true);
-        return result;
+    public static Object deleteService() {
+//        Result result = new Result();
+//        result.setMessage("操作成功!");
+//        result.setSuccess(true);
+        return new JSONObject();
     }
 
-    public static Result<Object> updateService() {
-        Result result = new Result();
-        result.setMessage("操作成功!");
-        result.setSuccess(true);
-        return result;
+    public static Object updateService() {
+//        Result result = new Result();
+//        result.setMessage("操作成功!");
+//        result.setSuccess(true);
+        return new JSONObject();
     }
 
-    public static Result<Object> startService() {
-        Result result = new Result();
-        result.setMessage("操作成功!");
-        result.setSuccess(true);
-        return result;
+    public static Object startService() {
+//        Result result = new Result();
+//        result.setMessage("操作成功!");
+//        result.setSuccess(true);
+        return new JSONObject();
     }
 
-    public static Result<Object> sstopService() {
-        Result result = new Result();
-        result.setMessage("操作成功!");
-        result.setSuccess(true);
-        return result;
+    public static Object sstopService() {
+//        Result result = new Result();
+//        result.setMessage("操作成功!");
+//        result.setSuccess(true);
+        return new JSONObject();
     }
 
-    public static Result<Object> deployService() {
-        Result result = new Result();
-        result.setMessage("操作成功!");
-        result.setSuccess(true);
-        return result;
+    public static Object deployService() {
+//        Result result = new Result();
+//        result.setMessage("操作成功!");
+//        result.setSuccess(true);
+        return new JSONObject();
     }
 
-    public static Result<Object> removeDeployService() {
-        Result result = new Result();
-        result.setMessage("操作成功!");
-        result.setSuccess(true);
-        return result;
+    public static Object removeDeployService() {
+//        Result result = new Result();
+//        result.setMessage("操作成功!");
+//        result.setSuccess(true);
+        return new JSONObject();
     }
 
-    public static Result<Object> uploadServiceFile() {
-        Result result = new Result();
-        result.setResult("adfadsf");
-        result.setMessage("操作成功!");
-        result.setSuccess(true);
-        return result;
+    public static Object uploadServiceFile() {
+        String path = ServiceMockDataUtil.class.getClassLoader().getResource("uploadFile.json").getPath();
+        return readJsonFile(path);
     }
 
-    public static Result<Object> queryAllNodes() {
-        Result result = new Result();
+    public static Object queryAllNodes() {
+//        Result result = new Result();
         String path = ServiceMockDataUtil.class.getClassLoader().getResource("queryAllNodes.json").getPath();
-        QueryAllNodesDTO queryAllNodesDTO = JSON.parseObject(readJsonFile(path), QueryAllNodesDTO.class);
-        result.setResult(queryAllNodesDTO.getNodes());
-        return result;
+//        QueryAllNodesDTO queryAllNodesDTO = JSON.parseObject(readJsonFile(path), QueryAllNodesDTO.class);
+//        result.setResult(queryAllNodesDTO.getNodes());
+        return readJsonFile(path);
     }
 
 
-    public static Result<QueryNodeDetailDTO> queryNodeDetail(String nodeId) {
-        Result result = new Result();
+    public static Object queryNodeDetail(String nodeId) {
+//        Result result = new Result();
         String path = ServiceMockDataUtil.class.getClassLoader().getResource("queryNodeDetail_" + nodeId + ".json").getPath();
-        QueryNodeDetailDTO queryNodeDetailDTO = JSON.parseObject(readJsonFile(path), QueryNodeDetailDTO.class);
-        result.setResult(queryNodeDetailDTO);
-        return result;
+//        QueryNodeDetailDTO queryNodeDetailDTO = JSON.parseObject(readJsonFile(path), QueryNodeDetailDTO.class);
+//        result.setResult(queryNodeDetailDTO);
+        return readJsonFile(path);
     }
 
-    public static Result<AggregateStatisticsDTO> aggregateStatistics() {
-        Result result = new Result();
+    public static Object aggregateStatistics() {
+//        Result result = new Result();
         String path = ServiceMockDataUtil.class.getClassLoader().getResource("aggregateStatistics.json").getPath();
-        AggregateStatisticsDTO aggregateStatisticsDTO = JSON.parseObject(readJsonFile(path), AggregateStatisticsDTO.class);
-        result.setResult(aggregateStatisticsDTO);
-        return result;
+//        AggregateStatisticsDTO aggregateStatisticsDTO = JSON.parseObject(readJsonFile(path), AggregateStatisticsDTO.class);
+//        result.setResult(aggregateStatisticsDTO);
+        return readJsonFile(path);
     }
 
-    public static Result<Object> individualServiceStatistics() {
-        Result result = new Result();
+    public static Object individualServiceStatistics() {
+//        Result result = new Result();
         String path = ServiceMockDataUtil.class.getClassLoader().getResource("individualServiceStatistics.json").getPath();
-        IndividualServiceStatisticsDTO individualServiceStatisticsDTO = JSON.parseObject(readJsonFile(path), IndividualServiceStatisticsDTO.class);
-        result.setResult(individualServiceStatisticsDTO);
-        return result;
+//        IndividualServiceStatisticsDTO individualServiceStatisticsDTO = JSON.parseObject(readJsonFile(path), IndividualServiceStatisticsDTO.class);
+//        result.setResult(individualServiceStatisticsDTO);
+        return readJsonFile(path);
     }
 
-    public static Result<IndividualNodeStatisticsDTO> individualNodeStatistics() {
-        Result result = new Result();
+    public static Object individualNodeStatistics() {
+//        Result result = new Result();
         String path = ServiceMockDataUtil.class.getClassLoader().getResource("individualNodeStatistics.json").getPath();
-        IndividualNodeStatisticsDTO individualServiceStatisticsDTO = JSON.parseObject(readJsonFile(path), IndividualNodeStatisticsDTO.class);
-        result.setResult(individualServiceStatisticsDTO);
-        return result;
+//        IndividualNodeStatisticsDTO individualServiceStatisticsDTO = JSON.parseObject(readJsonFile(path), IndividualNodeStatisticsDTO.class);
+//        result.setResult(individualServiceStatisticsDTO);
+        return readJsonFile(path);
     }
 
-    public static Result<Object> individualNodeServiceStatistics() {
-        Result result = new Result();
+    public static Object individualNodeServiceStatistics() {
+//        Result result = new Result();
         String path = ServiceMockDataUtil.class.getClassLoader().getResource("individualNodeServiceStatistics.json").getPath();
-        IndividualNodeServiceStatisticsDTO individualNodeServiceStatisticsDTO = JSON.parseObject(readJsonFile(path), IndividualNodeServiceStatisticsDTO.class);
-        result.setResult(individualNodeServiceStatisticsDTO);
-        return result;
+//        IndividualNodeServiceStatisticsDTO individualNodeServiceStatisticsDTO = JSON.parseObject(readJsonFile(path), IndividualNodeServiceStatisticsDTO.class);
+//        result.setResult(individualNodeServiceStatisticsDTO);
+        return readJsonFile(path);
     }
 
-    public static Result<LastLogDTO> getLastLogs(String count) {
-        Result result = new Result();
+    public static Object getLastLogs(String count) {
+//        Result result = new Result();
         String path = ServiceMockDataUtil.class.getClassLoader().getResource("getLastLogs.json").getPath();
-        LastLogDTO lastLogDTO = JSON.parseObject(readJsonFile(path), LastLogDTO.class);
-        result.setResult(lastLogDTO);
-        return result;
+//        LastLogDTO lastLogDTO = JSON.parseObject(readJsonFile(path), LastLogDTO.class);
+//        result.setResult(lastLogDTO);
+        return readJsonFile(path);
     }
 
-    public static Result<Object> downloadLogFile() {
-        Result result = new Result();
-        result.setMessage("操作成功!下载地址D://upFiles");
+    public static Object downloadLogFile() {
+//        Result result = new Result();
+//        result.setMessage("操作成功!下载地址D://upFiles");
         try {
             downLoadByUrl("http://pic22.nipic.com/20120716/5666670_091558188000_2.jpg", "test.jpg", "D://upFiles");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        result.setSuccess(true);
-        return result;
+//        result.setSuccess(true);
+        return new JSONObject();
     }
 
-    public static Result<Object> submitService(SubmitRegisterParam submitRegisterParam) {
-        Result result = new Result<>();
-        result = registerService();
-        return result;
+    public static Object submitService(SubmitRegisterParam submitRegisterParam) {
+        return registerService();
     }
 
     public static ServiceInfo callExe(ServiceInfo serviceInfo) {
