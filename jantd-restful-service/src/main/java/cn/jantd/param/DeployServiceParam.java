@@ -21,7 +21,7 @@ public class DeployServiceParam implements Serializable {
 
     @NotNull(message = "服务id不能为空")
     @ApiModelProperty("服务id")
-    private String serviceId;
+    private String service_id;
 
     @NotNull(message = "节点信息不能为空")
     @ApiModelProperty("节点信息")

@@ -126,9 +126,9 @@ public class ServiceController {
     @GetMapping(value = "/v1/stats/service/{serviceId}")
     @ApiOperation("单个节点的单个服务的统计信息/单个服务统计")
     public Object individualNodeServiceStatistics(@PathVariable(value = "serviceId", required = true) String serviceId,
-                                                  @RequestParam(value = "nodeId", required = false) String nodeId) {
+                                                  @RequestParam(value = "node_id", required = false) String node_id) {
 
-        if (nodeId == null) {
+        if (node_id == null) {
             return ServiceMockDataUtil.individualServiceStatistics();
         } else {
             return ServiceMockDataUtil.individualNodeServiceStatistics();

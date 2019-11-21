@@ -223,8 +223,10 @@ public class ServitizationServiceImpl implements IServitizationService {
         json.put("min_instance_count", updateServiceParam.getMinInstanceCount());
         // 用户id
         json.put("max_instance_count", updateServiceParam.getMaxInstanceCount());
-        // 退款金额
-        json.put("file_id", updateServiceParam.getFileId());
+        // 文件id
+        if (!ObjectUtils.isEmpty(updateServiceParam.getFileId())) {
+            json.put("file_id", updateServiceParam.getFileId());
+        }
         HttpEntity<String> entity = servitizationManager.getStringHttpEntity(json);
         // 请求返回结果
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.PATCH, entity, String.class, updateServiceParam.getServiceId());
@@ -447,6 +449,7 @@ public class ServitizationServiceImpl implements IServitizationService {
         } catch (Exception e) {
             System.out.println("发送POST请求出错。" + uploadServiceFileUrl);
             e.printStackTrace();
+            result.error500("服务文件上传失败");
         } finally {
             if (conn != null) {
                 conn.disconnect();
@@ -525,7 +528,6 @@ public class ServitizationServiceImpl implements IServitizationService {
             return result;
         }
         AggregateStatisticsDTO aggregateStatisticsDTO = JSON.parseObject(aggregateStatisticsResult.getBody(), AggregateStatisticsDTO.class);
-        ErrorDTO errorDTO = new ErrorDTO();
 
         result.setMessage(OPERATION_SUCCESS);
         result.setResult(aggregateStatisticsDTO);

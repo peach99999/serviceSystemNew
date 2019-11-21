@@ -20,13 +20,13 @@ public class RegisterParam implements Serializable {
 
     @NotNull(message = "最小实例数不能为空")
     @ApiModelProperty("最小实例数")
-    private String minInstanceCount;
+    private String min_instance_count;
 
     @NotNull(message = "最大实例数不能为空")
     @ApiModelProperty("最大实例数")
-    private String maxInstanceCount;
+    private String max_instance_count;
 
     @NotNull(message = "文件id不能为空")
     @ApiModelProperty("文件id")
-    private String fileId;
+    private String file_id;
 }

@@ -112,7 +112,7 @@ jantd :
     exePath: D://xxx.exe
 communication:
   # 服务器地址
-  gatewayUrl: https://119.57.73.147:3306
+  gatewayUrl: http://localhost:9090
   # 服务器接口
   # 查询所有服务
   queryAllServices: /v1/services
