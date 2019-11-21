@@ -88,7 +88,7 @@ public class ServiceController {
 
     @PostMapping(value = "/v1/upload")
     @ApiOperation("服务文件上传")
-    public Object uploadServiceFile(@RequestBody @Validated UploadServiceFileParam uploadServiceFileParam) {
+    public Object uploadServiceFile() {
         return ServiceMockDataUtil.uploadServiceFile();
     }
 

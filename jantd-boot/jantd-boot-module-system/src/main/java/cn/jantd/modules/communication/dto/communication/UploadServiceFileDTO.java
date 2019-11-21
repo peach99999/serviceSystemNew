@@ -13,6 +13,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel("服务文件上传")
-public class UploadServiceFileDTO extends RegisterServicesDTO {
+public class UploadServiceFileDTO {
 
+    private String file_id;
 }

@@ -445,7 +445,7 @@ public class ServitizationServiceImpl implements IServitizationService {
             reader.close();
             UploadServiceFileDTO uploadServiceFileDTO = JSON.parseObject(returnBuf.toString(), UploadServiceFileDTO.class);
 
-            Result.ok(uploadServiceFileDTO.getService_id());
+            Result.ok(uploadServiceFileDTO.getFile_id());
         } catch (Exception e) {
             System.out.println("发送POST请求出错。" + uploadServiceFileUrl);
             e.printStackTrace();
