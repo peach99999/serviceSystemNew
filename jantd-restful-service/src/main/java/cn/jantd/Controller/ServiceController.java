@@ -135,10 +135,10 @@ public class ServiceController {
         }
     }
 
-    @GetMapping(value = "/v1/log/{count}")
+    @GetMapping(value = "/v1/log")
     @ApiOperation("获取最近的日志")
-    public Object getLastLogs(@PathVariable(value = "count", required = true) String count) {
-        return ServiceMockDataUtil.getLastLogs(count);
+    public Object getLastLogs(@RequestParam(value = "last", required = true) String last) {
+        return ServiceMockDataUtil.getLastLogs(last);
     }
 
     @GetMapping(value = "/v1/logfile")
