@@ -141,8 +141,10 @@
       // 启动服务
       startService(serviceId){
         let that = this
+        that.loading = true
         console.log(serviceId)
         if(serviceId == null ){
+          that.loading = false
           that.$message.error("请先注册服务")
           return
         }
@@ -151,8 +153,10 @@
         }
         startService(params).then((res)=>{
           if(res.success){
+            that.loading = false
             that.$message.success("服务启用成功!");
           }else {
+            that.loading = false
             that.$message.error(res.message);
           }
         })
@@ -160,7 +164,9 @@
       // 停止服务
       stopService(serviceId){
         let that = this
+        that.loading = true
         if(serviceId == null ){
+          that.loading = false
           that.$message.error("请先注册服务")
           return
         }
@@ -170,8 +176,10 @@
         }
         stopService(params).then((res)=>{
           if(res.success){
+            that.loading = false
             that.$message.success("服务停用成功!");
           }else {
+            that.loading = false
             that.$message.error(res.message);
           }
         })

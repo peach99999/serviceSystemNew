@@ -163,8 +163,10 @@
       // 提交
       submitDeveloperService(record){
         console.log(record.minInstance)
+        this.loading = true
         if(record.minInstance == null){
             this.$message.error("请先设置开发相关内容后再提交！")
+            this.loading = false
             return;
         }
         // 1.上传服务实现文件获取文件id
@@ -187,10 +189,12 @@
                   this.ipagination.current = 1
                   this.getModelList();
                 }else{
+                  this.loading = false
                   this.$message.warning(res.message);
                 }
               })
             }else{
+              this.loading = false
               this.$message.warning(res.message);
           }
         })
