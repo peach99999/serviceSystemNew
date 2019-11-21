@@ -175,6 +175,9 @@ public class ServiceInfoController {
                 setDeveloperUser(serviceInfo);
                 // 判断是否被他人提交
             }
+            if ("1".equals(serviceInfoEntity.getDeveloperStatus())) {
+                serviceInfo.setDeveloperStatus(serviceInfoEntity.getDeveloperStatus());
+            }
             boolean ok = serviceInfoService.updateById(serviceInfo);
             if (ok) {
                 result.success("修改成功!");
