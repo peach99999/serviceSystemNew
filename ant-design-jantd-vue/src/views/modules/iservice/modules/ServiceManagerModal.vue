@@ -183,6 +183,9 @@
         })
       },
       searchReset(){
+        this.deployLoading=false
+        this.removeDeployLoading=false
+        this.dataSource = []
         this.queryParam = {}
         this.getAllNodes()
       },
@@ -246,11 +249,12 @@
               this.$emit('ok');
               this.visible = false;
             }else {
-              this.$message.error(res.message);
               this.removeDeployLoading = false
+              this.$message.error(res.message);
             }
           })
         }else{
+          this.removeDeployLoading = false
           this.$message.warning("部署后方可移除!")
         }
       },
