@@ -7,7 +7,10 @@ import { ACCESS_TOKEN } from "@/store/mutation-types"
 
 // 创建 axios 实例
 const service = axios.create({
-  baseURL: '/jantd-boot', // api base_url
+  // baseURL: 'http://202.226.226.67:8080/jantd-boot', // api base_url
+  // baseURL: 'http://192.168.3.52:8080/jantd-boot', // api base_url
+  // baseURL: '/jantd-boot', // api base_url
+  baseURL: '', // api base_url
   timeout: 6000 // 请求超时时间
 })
 

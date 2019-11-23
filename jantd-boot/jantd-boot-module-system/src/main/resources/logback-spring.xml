@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false">
 	<!--定义日志文件的存储地址 -->
-	<property name="LOG_HOME" value="../logs" />
+	<property name="LOG_HOME" value="d:/logs" />
 
 	<property name="COLOR_PATTERN" value="%black(%contextName-) %red(%d{yyyy-MM-dd HH:mm:ss}) %green([%thread]) %highlight(%-5level) %boldMagenta( %replace(%caller{1}){'\t|Caller.{1}0|\r\n', ''})- %gray(%msg%xEx%n)" />
 	<!-- 控制台输出 -->
@@ -40,7 +40,7 @@
 	<!-- 生成html格式日志开始 -->
 	<appender name="HTML" class="ch.qos.logback.core.FileAppender">
 		<!-- 过滤器，只记录WARN级别的日志 -->
-		<!-- <filter class="ch.qos.logback.classic.filter.LevelFilter"> <level>info</level> 
+		<!-- <filter class="ch.qos.logback.classic.filter.LevelFilter"> <level>info</level>
 			<onMatch>ACCEPT</onMatch> <onMismatch>DENY</onMismatch> </filter> -->
 
 		<encoder
