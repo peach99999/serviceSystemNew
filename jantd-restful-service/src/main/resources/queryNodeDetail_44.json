@@ -1,7 +1,7 @@
 {
   "node_id":"44asdfaf",
   "host_name":"测试名称",
-  "ip":"192.168.44.44",
+  "ip_address":"192.168.44.44",
   "cpu_count":"44",
   "thread_count":"44",
   "cpu_frequency":"2.4GHz",

@@ -1,7 +1,7 @@
 {
   "node_id":"11adfwr2515",
   "host_name":"服务测试",
-  "ip":"192.168.11.11",
+  "ip_address":"192.168.11.11",
   "cpu_count":"11",
   "thread_count":"11",
   "cpu_frequency":"2.4GHz",

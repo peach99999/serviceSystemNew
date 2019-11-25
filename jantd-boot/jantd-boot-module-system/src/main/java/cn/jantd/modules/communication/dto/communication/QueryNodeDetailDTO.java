@@ -29,7 +29,7 @@ public class QueryNodeDetailDTO {
     /**
      * ip
      */
-    private String ip;
+    private String ip_address;
 
     /**
      * cpu数量

@@ -159,7 +159,7 @@
             let diskSize = 0
             temp.nodeId = res.result.node_id
             temp.hostName = res.result.host_name
-            temp.ip = res.result.ip
+            temp.ip = res.result.ip_address
             temp.deployedServiceCount = res.result.deployed_services.length
             temp.deployedServices = res.result.deployed_services
             for (var val in res.result.running_services) {

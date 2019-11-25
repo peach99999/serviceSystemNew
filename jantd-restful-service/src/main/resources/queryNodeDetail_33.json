@@ -1,7 +1,7 @@
 {
   "node_id":"33aerqwe",
   "host_name":"测试服务",
-  "ip":"192.168.33.33",
+  "ip_address":"192.168.33.33",
   "cpu_count":"33",
   "thread_count":"33",
   "cpu_frequency":"2.4GHz",
