@@ -43,12 +43,14 @@ public class ServiceInfoServiceImpl extends ServiceImpl<ServiceInfoMapper, Servi
     @Override
     public ServiceInfo callExe(ServiceInfo serviceInfo) throws InterruptedException, IOException {
         String bizPath = "files";
+        String sdlPrefix = "--sdl ";
+        String outDirPrefix = "--out-dir ";
         // 文件保存路径名
         String nowDay = new SimpleDateFormat("SDF_YYYYMMDD").format(new Date());
         // 接口描述文件sdl文件路径
-        String sdlPath = uploadPath + File.separator + serviceInfo.getInterfaceDescriptionFilePath();
+        String sdlPath = sdlPrefix + uploadPath + File.separator + serviceInfo.getInterfaceDescriptionFilePath();
         // 调用exe生成生成服务调用代码框架和服务实现代码文件路径
-        String exeCreatPath = uploadPath + File.separator + bizPath + File.separator + nowDay;
+        String exeCreatPath = outDirPrefix + uploadPath + File.separator + bizPath + File.separator + nowDay;
         // db保存路径
         String dbpath = bizPath + File.separator + nowDay + File.separator;
         Process process = null;
