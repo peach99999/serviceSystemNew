@@ -5,6 +5,7 @@ import cn.jantd.modules.communication.entity.ServiceInfo;
 import cn.jantd.modules.communication.mapper.ServiceInfoMapper;
 import cn.jantd.modules.communication.service.IServiceInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.Date;
  * @Date: 2019-09-17
  */
 @Service
+@Slf4j
 public class ServiceInfoServiceImpl extends ServiceImpl<ServiceInfoMapper, ServiceInfo> implements IServiceInfoService {
 
     @Value(value = "${jantd.path.upload}")
@@ -52,9 +54,17 @@ public class ServiceInfoServiceImpl extends ServiceImpl<ServiceInfoMapper, Servi
         Process process = null;
         Runtime runtime = Runtime.getRuntime();
         String[] cmds = {exePath, sdlPath, exeCreatPath};
+        System.out.println("ServiceFrameworkGenerator：exePath:" +exePath);
+        log.info("ServiceFrameworkGenerator：exePath:" +exePath);
+        System.out.println("ServiceFrameworkGenerator：参数:" +"sdlPath:"+sdlPath);
+        log.info("ServiceFrameworkGenerator：参数:" +"sdlPath:"+sdlPath);
+        System.out.println("ServiceFrameworkGenerator：参数:" +"exeCreatPath:"+exeCreatPath);
+        log.info("ServiceFrameworkGenerator：参数:" +"exeCreatPath:"+exeCreatPath);
         process = runtime.exec(cmds);
         System.out.println(process.isAlive());
         int exitCode = process.waitFor();
+        System.out.println("ServiceFrameworkGenerator：返回:" +"exitCode:"+exitCode);
+        log.info("ServiceFrameworkGenerator：返回:" +"exitCode:"+exitCode);
         if (dbpath.contains(CoreConstant.DOUBLE_SLASH)) {
             dbpath = dbpath.replace("\\", "/");
         }
