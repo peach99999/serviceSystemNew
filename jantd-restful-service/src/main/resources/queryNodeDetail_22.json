@@ -1,7 +1,7 @@
 {
   "node_id":"22aaewq3r",
   "host_name":"环境模型",
-  "ip_address":"192.168.22.22",
+  "ip":"192.168.22.22",
   "cpu_count":"22",
   "thread_count":"22",
   "cpu_frequency":"2.4GHz",

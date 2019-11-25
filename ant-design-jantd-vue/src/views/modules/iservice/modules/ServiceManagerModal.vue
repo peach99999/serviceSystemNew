@@ -219,7 +219,7 @@
             let temp = {}
             temp.nodeId = res.result.node_id
             temp.hostName = res.result.host_name
-            temp.ip = res.result.ip_address
+            temp.ip = res.result.ip
             temp.instanceCount = ''
             this.dataSource.push(temp)
           }else {
