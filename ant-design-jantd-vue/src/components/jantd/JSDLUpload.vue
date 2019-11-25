@@ -8,6 +8,7 @@
     :data="{'isup':1,'bizPath':bizPath}"
     :fileList="fileList"
     :beforeUpload="beforeUpload"
+    accept=".sdl"
     @change="handleChange">
     <a-button>
       <a-icon type="upload" />{{ text }}
