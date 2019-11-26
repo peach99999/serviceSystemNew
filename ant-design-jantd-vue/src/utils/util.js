@@ -293,7 +293,7 @@ export function millSecondToDate(msd) {
             parseInt((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60)) * 60) + "秒";
         }else if(time >= 60 * 60 * 24 * 30 && time < 60 * 60 * 24 * 30 * 12){
             time = parseInt(time / 3600.0/24/30) + "月" +
-            parseInt((parseFloat(time / 3600.0/24)-parseInt(time / 3600.0/24))*30) + "天" +
+            parseInt(parseFloat(time / 3600.0/24)%30) + "天" +
             parseInt((parseFloat(time / 3600.0/24)-parseInt(time / 3600.0/24))*24) + "小时" + 
             parseInt((parseFloat(time / 3600.0) -parseInt(time / 3600.0)) * 60) + "分钟" +
             parseInt((parseFloat((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60) -
@@ -301,7 +301,7 @@ export function millSecondToDate(msd) {
         }else if(time >= 60 * 60 * 24 * 30 * 12){
           time = parseInt(time / 3600.0/24/30/12) + "年" +
           parseInt((parseFloat(time / 3600.0/24/30)-parseInt(time / 3600.0/24/30))*12) + "月" +
-          parseInt((parseFloat(time / 3600.0/24)-parseInt(time / 3600.0/24))*30) + "天" +
+          parseInt(parseFloat(time / 3600.0/24)%30) + "天" +
           parseInt((parseFloat(time / 3600.0/24)-parseInt(time / 3600.0/24))*24) + "小时" + 
           parseInt((parseFloat(time / 3600.0) -parseInt(time / 3600.0)) * 60) + "分钟" +
           parseInt((parseFloat((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60) -
