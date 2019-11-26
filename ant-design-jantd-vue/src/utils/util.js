@@ -1,5 +1,7 @@
 import { isURL } from '@/utils/validate'
+import moment from 'moment'
 import Vue from 'vue'
+
 
 export function timeFix() {
   const time = new Date()
@@ -261,6 +263,54 @@ export function underLine2CamelCase(string){
   return string.replace( /_([a-z])/g, function( all, letter ) {
     return letter.toUpperCase();
   });
+}
+
+export function formatUtcDate(timeStamp) {
+  console.log(timeStamp)
+  var date = new Date(timeStamp)
+  var time = moment.unix(timeStamp/1000).format('YYYY-MM-DD HH:mm:ss')
+
+  return time;
+}
+
+export function millSecondToDate(msd) {
+    var time = msd /1000
+    console.log(msd)
+    if (null != time && "" != time) {
+        if (time > 60 && time < 60 * 60) {
+            time = parseInt(time / 60.0) + "分钟" + parseInt((parseFloat(time / 60.0) -
+            parseInt(time / 60.0)) * 60) + "秒";
+        }else if (time >= 60 * 60 && time < 60 * 60 * 24) {
+            time = parseInt(time / 3600.0) + "小时" + parseInt((parseFloat(time / 3600.0) -
+            parseInt(time / 3600.0)) * 60) + "分钟" +
+            parseInt((parseFloat((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60) -
+            parseInt((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60)) * 60) + "秒";
+        } else if (time <= 60 * 60 * 24 * 30) {
+            time = parseInt(time / 3600.0/24) + "天" +
+            parseInt((parseFloat(time / 3600.0/24)-parseInt(time / 3600.0/24))*24) + "小时" + 
+            parseInt((parseFloat(time / 3600.0) -parseInt(time / 3600.0)) * 60) + "分钟" +
+            parseInt((parseFloat((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60) -
+            parseInt((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60)) * 60) + "秒";
+        }else if(time >= 60 * 60 * 24 * 30 && time < 60 * 60 * 24 * 30 * 12){
+            time = parseInt(time / 3600.0/24/30) + "月" +
+            parseInt((parseFloat(time / 3600.0/24)-parseInt(time / 3600.0/24))*30) + "天" +
+            parseInt((parseFloat(time / 3600.0/24)-parseInt(time / 3600.0/24))*24) + "小时" + 
+            parseInt((parseFloat(time / 3600.0) -parseInt(time / 3600.0)) * 60) + "分钟" +
+            parseInt((parseFloat((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60) -
+            parseInt((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60)) * 60) + "秒";
+        }else if(time >= 60 * 60 * 24 * 30 * 12){
+          time = parseInt(time / 3600.0/24/30/12) + "年" +
+          parseInt((parseFloat(time / 3600.0/24/30)-parseInt(time / 3600.0/24/30))*12) + "月" +
+          parseInt((parseFloat(time / 3600.0/24)-parseInt(time / 3600.0/24))*30) + "天" +
+          parseInt((parseFloat(time / 3600.0/24)-parseInt(time / 3600.0/24))*24) + "小时" + 
+          parseInt((parseFloat(time / 3600.0) -parseInt(time / 3600.0)) * 60) + "分钟" +
+          parseInt((parseFloat((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60) -
+          parseInt((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60)) * 60) + "秒";
+        }else {
+            time = parseInt(time) + "秒";
+        }
+    }
+    return time;
 }
 
 export default new Vue
