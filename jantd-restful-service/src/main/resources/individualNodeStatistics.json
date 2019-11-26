@@ -1,8 +1,8 @@
 {
   "node_id":"11",
-  "stats_time":"2019-05-06",
-  "host_up_time":"2019-06-08",
-  "agent_up_time":"2019-06-02",
+  "stats_time":"1574735538000",
+  "host_up_time":"20191126",
+  "agent_up_time":"20191126",
   "memory_avalable":"80",
   "cpu_available":"80",
   "disk_available":{

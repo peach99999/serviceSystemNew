@@ -135,7 +135,7 @@
   import ARow from "ant-design-vue/es/grid/Row"
   import './analysis.less'
   import { deleteAction, postAction, getAction } from '@/api/manage'
-  import { timeFromNow, timeToChina} from '@/utils/util'
+  import { timeFromNow, timeToChina,formatUtcDate,millSecondToDate} from '@/utils/util'
 
   export default {
     components: {
@@ -266,8 +266,8 @@
       getAction(this.url.aggregateStatistics).then((res) => {
         if (res.success) {
           console.log(res.result)
-          this.upTime = timeFromNow(res.result.up_time)
-          this.statsTime = timeToChina(res.result.stats_time)
+          this.upTime = millSecondToDate(res.result.up_time)
+          this.statsTime = timeToChina(formatUtcDate(res.result.stats_time))
           this.barData.push(res.result.total_service_count)
           this.barData.push(res.result.deployed_service_count)
           this.barData.push(res.result.running_service_count)

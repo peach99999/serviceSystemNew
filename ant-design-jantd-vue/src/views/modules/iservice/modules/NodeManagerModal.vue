@@ -205,6 +205,7 @@
   
 import {individualNodeStatistics,individualNodeServiceStatistics} from '@/api/api'
 import { deleteAction, postAction, getAction } from '@/api/manage';
+import { formatUtcDate } from '@/utils/util'
   export default {
     name: "NodeManagerModal",
     data() {
@@ -286,7 +287,7 @@ import { deleteAction, postAction, getAction } from '@/api/manage';
             let temp = {}
             let diskSize = 0
             let diskCount = 0
-            temp.statsTime = res.result.stats_time
+            temp.statsTime = formatUtcDate(res.result.stats_time)
             temp.hostUpTime = parseInt(res.result.host_up_time)
             temp.cpuAvailable = parseInt(res.result.cpu_available)
             temp.memoryAvalable = parseInt(res.result.memory_avalable)

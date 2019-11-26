@@ -200,7 +200,7 @@
                   <span class="span-left">{{"统计时间:"}}</span>
                 </a-col>
                 <a-col :span="8">
-                  <span class="span-margin">{{serviceStatistics.stats_time}}</span>
+                  <span class="span-margin">{{statsTime}}</span>
                 </a-col>
                 <a-col :span="4">
                   <span class="span-left">{{"状态:"}}</span>
@@ -265,6 +265,7 @@
 <script>
   
   import {getIndividualServiceStatistics,getServiceDetail,queryNodeDetail,individualNodeStatistics} from '@/api/api'
+  import { formatUtcDate } from '@/utils/util'
   export default {
     name: "ServicePreviewModal",
     data() {
@@ -279,7 +280,8 @@
         },
         serviceStatistics:{},
         serviceDetatl:{},
-        temp:{}
+        temp:{},
+        statsTime:'',
       }
     },
        
@@ -414,6 +416,7 @@
         this.serviceDetatl = {}
         this.nodeDataSource = []
         this.temp = {}
+        this.statsTime = ''
       },
       // 获取服务概览
       getServiceStatistics(serviceId){
@@ -421,6 +424,7 @@
           if(res.success){
             console.log(res.result)
             this.serviceStatistics = res.result
+            this.statsTime = formatUtcDate(res.result.stats_time)
           }else {
             this.$message.error(res.message);
           }
