@@ -35,7 +35,7 @@
             @change="handleTableChange">
             <a-table-column min-width="140px">
               <template slot-scope="scope">
-                <img :src="getAvatarView(scope.servicePhoto)" width="100px" height="130px">
+                <img :src="getAvatarView(scope.servicePhoto)" width="128px" height="128px">
               </template>
             </a-table-column>
             <a-table-column min-width="140px">
@@ -53,14 +53,14 @@
                     <a-icon type="copy"/>
                     <a @click="uploadFile(service.interfaceDescriptionFilePath)" style="color:rgba(0, 0, 0, 0.65)">文件</a>
                   </a-col>
-                  <a-col :span="2" @click="handleEdit(service)">
+                  <a-col :span="2">
                     <a-icon type="form"/>
-                    <span>修改</span>
+                    <a href="#" @click="handleEdit(service)" style="color:rgba(0, 0, 0, 0.65)">修改</a>
                   </a-col>
                   <a-col :span="2">
                     <a-icon type="laptop"/>
                       <a-popconfirm title="确定删除吗?" @confirm="() => removeService(service.id)">
-                        <span>删除</span>
+                        <a style="color:rgba(0, 0, 0, 0.65)">删除</a>
                       </a-popconfirm>
                   </a-col>
                 </a-row>

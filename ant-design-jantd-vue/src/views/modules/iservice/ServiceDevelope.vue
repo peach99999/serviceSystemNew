@@ -28,7 +28,7 @@
             @change="handleTableChange">
             <a-table-column min-width="140px">
               <template slot-scope="scope">
-                <img :src="getAvatarView(scope.servicePhoto)" width="100px" height="130px">
+                <img :src="getAvatarView(scope.servicePhoto)" width="128px" height="128px">
               </template>
             </a-table-column>
             <a-table-column min-width="140px">
