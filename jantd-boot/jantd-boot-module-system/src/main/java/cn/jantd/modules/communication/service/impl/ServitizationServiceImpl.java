@@ -651,16 +651,16 @@ public class ServitizationServiceImpl implements IServitizationService {
         Result result = new Result<>();
         // 查询所有服接口url
         String url = communicationProperties.getDownloadLogFile();
-        log.info("查询所有节点，接口名[{}]:", url);
-        ResponseEntity<String> downloadLogFileResult = restTemplate.getForEntity(url, String.class);
-        // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
-        if (!HttpStatus.OK.equals(downloadLogFileResult.getStatusCode())) {
-            ErrorDTO errorDTO = JSON.parseObject(downloadLogFileResult.getBody(), ErrorDTO.class);
-            result.interfaceError(Integer.parseInt(errorDTO.getError_code()), errorDTO.getError_description());
-            return result;
-        }
-
-        return Result.ok();
+        log.info("下载日志文件，接口名[{}]:", url);
+//        ResponseEntity<String> downloadLogFileResult = restTemplate.getForEntity(url, String.class);
+//        // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
+//        if (!HttpStatus.OK.equals(downloadLogFileResult.getStatusCode())) {
+//            ErrorDTO errorDTO = JSON.parseObject(downloadLogFileResult.getBody(), ErrorDTO.class);
+//            result.interfaceError(Integer.parseInt(errorDTO.getError_code()), errorDTO.getError_description());
+//            return result;
+//        }
+        result.setResult(url);
+        return result;
     }
 
     @Override

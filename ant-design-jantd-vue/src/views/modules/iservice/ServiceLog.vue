@@ -146,11 +146,13 @@
         let param = {}
         getAction(this.url.download, param).then((res) => {
           if (res.success) {
-            this.$message.success("下载成功！")
+            console.log(res.result)
+            window.open(res.result)
           }else{
             this.$message.warning(res.message);
           }
         })
+        
         
       },
       // 重置
