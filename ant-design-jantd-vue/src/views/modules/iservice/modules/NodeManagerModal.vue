@@ -65,7 +65,7 @@
                   <span class="span-left">{{"CPU主频:"}}</span>
                 </a-col>
                 <a-col :span="11">
-                  <span class="span-margin">{{nodeInfo.cpuFrequency}}</span>
+                  <span class="span-margin">{{nodeInfo.cpuFrequency}}MHz</span>
                 </a-col>
               </a-row>
               <a-row type="flex" justify="start" style="margin-top: 10px">

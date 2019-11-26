@@ -7,7 +7,7 @@
   "ip":"192.168.12.30",
   "cpu_count":"50",
   "thread_count":"1283",
-  "cpu_frequency":"2.4GHz",
+  "cpu_frequency":"2.4",
   "memory_size":"60",
   "disk_size":{
     "C":"50",
