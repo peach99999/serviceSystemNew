@@ -8,7 +8,7 @@
   "cpu_count":"50",
   "thread_count":"1283",
   "cpu_frequency":"2.4",
-  "memory_size":"60",
+  "memory_size":"0.1",
   "disk_size":{
     "C":"50",
     "D":"60",

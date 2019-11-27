@@ -117,7 +117,7 @@
                 </a-col>
                 <a-col :span="14" :offset="2">
                   <span>
-                    <a-progress :percent=individualNodeStatisticsInfo.memoryAvalable status="active"/>
+                    <a-progress :percent=50 status="active"/>
                   </span>
                 </a-col>
               </a-row>
@@ -127,7 +127,7 @@
                 </a-col>
                 <a-col :span="14" :offset="2">
                   <span>
-                    <a-progress :percent=individualNodeStatisticsInfo.diskAvailable status="active" />
+                    <a-progress :percent=50 status="active" />
                   </span>
                 </a-col>
               </a-row>
@@ -261,15 +261,17 @@ import { formatUtcDate } from '@/utils/util'
             if(res.success){
               this.temp = {}
               this.temp.serviceId = res.result.service_id
-              this.temp.cpuUsed = parseInt(res.result.cpu_used)
-              this.temp.memoryUsed = parseInt(res.result.memory_used)
-              this.temp.diskUsed = parseInt(res.result.disk_used)
+              this.temp.cpuUsed = parseInt(parseFloat(res.result.cpu_used)*100)
+              this.temp.memoryUsed = parseInt(parseFloat(res.result.memory_used)*100)
+              this.temp.diskUsed = parseInt(parseFloat(res.result.disk_used)*100)
               this.temp.callCount = parseInt(res.result.call_count)
               this.temp.averageTimeCost =parseInt(res.result.average_time_cost)
               // 查询部署时间
               getAction(this.url.serviceDetail, {serviceId:res.result.service_id}).then((res) => {
                 if (res.success) {
                   this.temp.deploySubmissionTime = res.result.deploySubmissionTime
+                  this.data.push(this.temp)
+                }else{
                   this.data.push(this.temp)
                 }
               })
@@ -289,7 +291,7 @@ import { formatUtcDate } from '@/utils/util'
             let diskCount = 0
             temp.statsTime = formatUtcDate(res.result.stats_time)
             temp.hostUpTime = parseInt(res.result.host_up_time)
-            temp.cpuAvailable = parseInt(res.result.cpu_available)
+            temp.cpuAvailable = parseInt(parseFloat(res.result.cpu_available)*100)
             temp.memoryAvalable = parseInt(res.result.memory_avalable)
             for (var val in res.result.disk_available) {
               diskCount++

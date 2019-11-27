@@ -2,9 +2,9 @@
   "node_id":"11",
   "service_id":"7e9fd67172240333090899dcb9a721f2",
   "stats_time":"1574735538000",
-  "cpu_used":"80",
-  "memory_used":"70",
-  "disk_used":"60",
+  "cpu_used":"0.5",
+  "memory_used":"0.7",
+  "disk_used":"0.6",
   "call_count":"20",
   "average_time_cost":"10"
 }

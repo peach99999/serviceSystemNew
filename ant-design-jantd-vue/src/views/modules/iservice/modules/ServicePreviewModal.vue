@@ -171,12 +171,12 @@
             </a-table-column>
             <a-table-column min-width="140px" title="内存使用率">
               <template slot-scope="scope">
-                <a-progress status="active" :percent=scope.memoryAvalable :showInfo="false" />
+                <a-progress status="active" :percent=50 :showInfo="false" />
               </template>
             </a-table-column>
             <a-table-column min-width="140px" title="磁盘使用率">
               <template slot-scope="scope">
-                <a-progress status="active" :percent=scope.diskAvailable :showInfo="false" />
+                <a-progress status="active" :percent=50 :showInfo="false" />
               </template>
             </a-table-column>
           </a-table>
@@ -229,7 +229,7 @@
                 </a-col>
                 <a-col :span="4">
                   <span >
-                    <a-progress :percent=parseInt(serviceStatistics.total_cpu_used) status="active"/>
+                    <a-progress :percent=parseInt(serviceStatistics.total_cpu_used*100) status="active"/>
                   </span>
                 </a-col>
                 <a-col :span="4" :offset="4">
@@ -245,7 +245,7 @@
                 </a-col>
                 <a-col :span="4">
                   <span>
-                    <a-progress :percent=parseInt(serviceStatistics.total_memory_used) status="active"/>
+                    <a-progress :percent=parseInt(serviceStatistics.total_memory_used*100) status="active"/>
                   </span>
                 </a-col>
                 <a-col :span="4" :offset="4">
@@ -387,7 +387,7 @@
               if(res.success){
                 let diskSize = 0
                 let diskCount = 0
-                that.temp.cpuAvailable = parseInt(res.result.cpu_available)
+                that.temp.cpuAvailable = parseInt(parseFloat(res.result.cpu_available)*100)
                 that.temp.memoryAvalable = parseInt(res.result.memory_avalable)
                 for (var val in res.result.disk_available) {
                   diskCount++

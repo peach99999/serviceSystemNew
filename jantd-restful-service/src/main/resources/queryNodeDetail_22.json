@@ -5,7 +5,7 @@
   "cpu_count":"22",
   "thread_count":"22",
   "cpu_frequency":"2.4",
-  "memory_size":"22",
+  "memory_size":"0.2",
   "disk_size":{
     "C":"50",
     "D":"60",

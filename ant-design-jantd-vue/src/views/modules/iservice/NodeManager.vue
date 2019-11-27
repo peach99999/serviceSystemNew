@@ -167,7 +167,7 @@
             }
             temp.runningServices = runserviceNumber
             temp.cpuCount = parseInt(res.result.cpu_count)
-            temp.memorySize = parseInt(res.result.memory_size)
+            temp.memorySize = parseInt(parseFloat(res.result.memory_size)*100)
             // 线程数
             temp.threadCount = parseInt(res.result.thread_count)
             // cpu主频

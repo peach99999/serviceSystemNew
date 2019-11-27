@@ -5,7 +5,7 @@
   "cpu_count":"33",
   "thread_count":"33",
   "cpu_frequency":"2.4",
-  "memory_size":"33",
+  "memory_size":"0.3",
   "disk_size":{
     "C":"50",
     "D":"60",
