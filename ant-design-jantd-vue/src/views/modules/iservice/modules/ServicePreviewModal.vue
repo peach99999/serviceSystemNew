@@ -310,7 +310,7 @@
       handleDownload(path){
         console.log(path)
         if(!path){
-        this.$message.warning("文件路径不存在，请确认是否上传后重试!")
+        this.$message.warning("无文件!")
           return;
         }
         if(path.indexOf(",")>0){

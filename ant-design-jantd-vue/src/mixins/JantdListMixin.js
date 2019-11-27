@@ -273,7 +273,7 @@ export const JantdListMixin = {
     /* 文件下载 */
     uploadFile(text){
       if(!text){
-        this.$message.warning("未知的文件")
+        this.$message.warning("无文件")
         return;
       }
       if(text.indexOf(",")>0){
