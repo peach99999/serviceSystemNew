@@ -636,6 +636,9 @@ public class ServitizationServiceImpl implements IServitizationService {
 
         LastLogDTO lastLogDTO = JSON.parseObject(getLastLogsResult.getBody(), LastLogDTO.class);
 
+        String downloadUrl = communicationProperties.getDownloadLogFile();
+        // 增加下载日志url返回
+        lastLogDTO.setDownloadUrl(downloadUrl);
         result.setResult(lastLogDTO);
         result.success(OPERATION_SUCCESS);
         return result;

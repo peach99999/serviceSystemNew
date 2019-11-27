@@ -84,6 +84,7 @@
           list: "/communication/get-last-log",
           download: "/communication/download-Log-File"
         },
+        downloadUrl:'',
       }
     },
     created() {
@@ -107,6 +108,7 @@
           if (res.success) {
             this.lastQueryData = []
             console.log(res.result.logs)
+            this.downloadUrl = res.result.downloadUrl
             for (let i = 0; i < res.result.logs.length; i++) {
               this.lastQueryData.push({"logContent":res.result.logs[i]})
             }
@@ -144,15 +146,16 @@
       // 下载
       downloadFile(){
         let param = {}
-        getAction(this.url.download, param).then((res) => {
-          if (res.success) {
-            console.log(res.result)
-            window.open(res.result)
-          }else{
-            this.$message.warning(res.message);
-          }
-        })
-        
+        // getAction(this.url.download, param).then((res) => {
+        //   if (res.success) {
+        //     console.log(res.result)
+        //     window.open(res.result)
+        //   }else{
+        //     this.$message.warning(res.message);
+        //   }
+        // })
+        console.log(this.downloadUrl)
+        window.open(this.downloadUrl)
         
       },
       // 重置

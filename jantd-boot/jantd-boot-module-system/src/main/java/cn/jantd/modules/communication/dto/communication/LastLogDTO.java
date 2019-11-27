@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @ApiModel("获取最近的日志")
 @EqualsAndHashCode(callSuper = false)
-public class LastLogDTO{
+public class LastLogDTO {
 
     /**
      * 节点Id
@@ -24,4 +24,9 @@ public class LastLogDTO{
      * 服务id数组
      */
     private String[] logs;
+
+    /**
+     * 下载日志rue
+     */
+    private String downloadUrl;
 }
