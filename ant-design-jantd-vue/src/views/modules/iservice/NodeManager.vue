@@ -40,12 +40,12 @@
         </a-table-column>
         <a-table-column min-width="140px" align = "center" title="内存占用率">
           <template slot-scope="scope">
-            <a-progress status="active" :percent=scope.cpuCount :showInfo="false" />
+            <a-progress status="active" :percent=scope.cpuCount :showInfo="true" />
           </template>
         </a-table-column>
         <a-table-column min-width="140px" align = "center" title="CPU占用率">
           <template slot-scope="scope">
-            <a-progress status="active" :percent=scope.memorySize :showInfo="false" />
+            <a-progress status="active" :percent=scope.memorySize :showInfo="true" />
           </template>
         </a-table-column>
       </a-table>

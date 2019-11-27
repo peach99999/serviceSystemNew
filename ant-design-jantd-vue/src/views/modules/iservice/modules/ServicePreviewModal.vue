@@ -166,17 +166,17 @@
             </a-table-column>
             <a-table-column min-width="140px" title="CPU占用率">
               <template slot-scope="scope">
-                <a-progress status="active" :percent=scope.cpuAvailable :showInfo="false" />
+                <a-progress status="active" :percent=scope.cpuAvailable :showInfo="true" />
               </template>
             </a-table-column>
             <a-table-column min-width="140px" title="内存使用率">
               <template slot-scope="scope">
-                <a-progress status="active" :percent=50 :showInfo="false" />
+                <a-progress status="active" :percent=50 :showInfo="true" />
               </template>
             </a-table-column>
             <a-table-column min-width="140px" title="磁盘使用率">
               <template slot-scope="scope">
-                <a-progress status="active" :percent=50 :showInfo="false" />
+                <a-progress status="active" :percent=50 :showInfo="true" />
               </template>
             </a-table-column>
           </a-table>
@@ -195,6 +195,14 @@
         <a-col :span="15">
           <template v-bind="serviceStatistics">
             <a-card style="height: 240px">
+              <a-row  type="flex" justify="start" style="margin-top: 15px">
+                <a-col :span="4">
+                  <span class="span-left">{{"服务ID:"}}</span>
+                </a-col>
+                <a-col :span="8">
+                  <span class="span-margin">{{serviceInfo.serviceId}}</span>
+                </a-col>
+              </a-row>
               <a-row type="flex" justify="start" style="margin-top: 15px">
                 <a-col :span="4">
                   <span class="span-left">{{"统计时间:"}}</span>

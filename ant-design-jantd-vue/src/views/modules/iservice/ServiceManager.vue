@@ -39,6 +39,9 @@
                     <a href="#" @click="showServiceDetail(service)" style="font-weight: bold;font-size: 16px; color:rgba(0, 0, 0, 0.65)" >
                        {{service.name}}
                     </a>
+                    <span style="font-size: 10px;color: #cf1322">
+                      {{service.developerStatus_dictText}}
+                    </span>
                   </a-col>
                   <a-col :span="2" :offset="12">
                     <a-button type="primary" style="margin-left:5px" @click="deploy(service)">部署</a-button>
@@ -131,8 +134,8 @@
       },
       // 服务详情
       showServiceDetail(record){
-        if(record.serviceId == null){
-          this.$message.warning('请先注册服务!');
+        if(!record.serviceId){    
+          this.$message.warning('请先进行服务开发相关操作后重试!');
         }else{
           this.$refs.servicePreviewDetailForm.detail(record);
           this.$refs.servicePreviewDetailForm.title = "服务详情";

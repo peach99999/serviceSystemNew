@@ -140,7 +140,7 @@
       },
       // 服务详情
       showServiceDetail(record){
-        if(record.serviceId == null){
+        if(!record.serviceId){
           this.$message.warning('请先进行服务开发相关操作后重试!');
         }else{
           this.$refs.modalForm.detail(record);
