@@ -15,12 +15,12 @@
             <a-col :span="10" :offset="2">
               <a-row type="flex">
                 <a-col :span="24">
-                  <span style="font-weight: bold; font-size: large">统计时间</span>
+                  <span style="font-weight: bold; font-size: large">本地服务数</span>
                 </a-col>
               </a-row>
               <a-row type="flex" justify="center">
                 <a-col :span="24">
-                  <span>{{statsTime}}</span>
+                  <span>{{localServiceCount}}</span>
                 </a-col>
               </a-row>
             </a-col>
@@ -41,12 +41,12 @@
             <a-col :span="10" :offset="2">
               <a-row type="flex">
                 <a-col :span="24">
-                  <span style="font-weight: bold; font-size: large">服务</span>
+                  <span style="font-weight: bold; font-size: large">运行服务数</span>
                 </a-col>
               </a-row>
               <a-row type="flex" justify="center">
                 <a-col :span="24">
-                  <span>{{serverNum}}</span>
+                  <span>{{runningServerNumber}}</span>
                 </a-col>
               </a-row>
             </a-col>
@@ -67,12 +67,12 @@
             <a-col :span="10" :offset="2">
               <a-row type="flex">
                 <a-col :span="24">
-                  <span style="font-weight: bold;font-size: large">节点</span>
+                  <span style="font-weight: bold;font-size: large">部署服务数</span>
                 </a-col>
               </a-row>
               <a-row type="flex" justify="center">
                 <a-col :span="24">
-                  <span>{{nodeNumber}}</span>
+                  <span>{{deployedServicNumber}}</span>
                 </a-col>
               </a-row>
             </a-col>
@@ -93,7 +93,7 @@
             <a-col :span="10" :offset="2">
               <a-row type="flex">
                 <a-col :span="24">
-                  <span style="font-weight: bold ;font-size: large">上线时间</span>
+                  <span style="font-weight: bold ;font-size: large">上线时长</span>
                 </a-col>
               </a-row>
               <a-row type="flex">
@@ -144,8 +144,9 @@
     },
     data() {
       return {
-        serverNum: '',
-        nodeNumber:'',
+        runningServerNumber: '',
+        deployedServicNumber:'',
+        localServiceCount:'',
         upTime:'',
         statsTime:'',
         barData:[],
@@ -153,6 +154,7 @@
           aggregateStatistics: "/communication/aggregate-statistics",
           queryAllServices: "/communication/query-all-services",
           queryAllNodes: "/communication/query-all-node",
+          getServiceCount: "serviceInfo/get-service-count"
         }
       }
     
@@ -160,12 +162,25 @@
     created() {
     },
     mounted() {
-      this.getServiceNumber()
-      this.getNodeNumber()
+      // this.getServiceNumber()
+      // this.getNodeNumber()
+      this.getServiceCount();
       this.getAggregateStatistics()
       this.fetchTask()
+      
     },
     methods: {
+      getServiceCount(){
+        if (!this.url.getServiceCount) {
+          this.$message.error('请设置url.getServiceCount!')
+          return
+        }
+        getAction(this.url.getServiceCount).then((res) => {
+          if (res.success) {
+            this.localServiceCount = (res.result)
+          }
+        })
+      },
       jumpToServicePreview(){
         console.log("asdfds")
         this.$router.push({ path:'/iservice/ServicePreview'})
@@ -267,7 +282,9 @@
         if (res.success) {
           console.log(res.result)
           this.upTime = millSecondToDate(res.result.up_time)
-          this.statsTime = timeToChina(formatUtcDate(res.result.stats_time))
+          // this.statsTime = timeToChina(formatUtcDate(res.result.stats_time))
+          this.runningServerNumber = res.result.running_service_count
+          this.deployedServicNumber = res.result.deployed_service_count
           this.barData.push(res.result.total_service_count)
           this.barData.push(res.result.deployed_service_count)
           this.barData.push(res.result.running_service_count)

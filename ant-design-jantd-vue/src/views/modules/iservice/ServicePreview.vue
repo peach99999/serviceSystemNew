@@ -331,4 +331,7 @@
     margin-bottom: 10px;
 		border-bottom: 1px solid #f1f1f1;
   }
+  .ant-tree li {
+    display: flex;
+  }
 </style>

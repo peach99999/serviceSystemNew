@@ -406,4 +406,12 @@ public class ServiceInfoController {
         return Result.ok("文件导入失败！");
     }
 
+    @GetMapping(value = "/get-service-count")
+    public Result<Object> getServiceCount(){
+        Result result = new Result();
+        int count = serviceInfoService.count();
+        result.setResult(count);
+        return result;
+    }
+
 }
