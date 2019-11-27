@@ -136,6 +136,7 @@
   import './analysis.less'
   import { deleteAction, postAction, getAction } from '@/api/manage'
   import { timeFromNow, timeToChina,formatUtcDate,millSecondToDate} from '@/utils/util'
+  import {queryNodeDetail} from '@/api/api'
 
   export default {
     components: {
@@ -150,24 +151,27 @@
         upTime:'',
         statsTime:'',
         barData:[],
+        parData:[],
         url: {
           aggregateStatistics: "/communication/aggregate-statistics",
           queryAllServices: "/communication/query-all-services",
           queryAllNodes: "/communication/query-all-node",
           getServiceCount: "serviceInfo/get-service-count"
-        }
+        },
+        allNodeCount:0,
+        usedNodeCount:0,
       }
     
     },
     created() {
+      
     },
     mounted() {
       // this.getServiceNumber()
-      // this.getNodeNumber()
+      this.getNodeNumber()
       this.getServiceCount();
       this.getAggregateStatistics()
-      this.fetchTask()
-      
+           
     },
     methods: {
       getServiceCount(){
@@ -182,11 +186,9 @@
         })
       },
       jumpToServicePreview(){
-        console.log("asdfds")
         this.$router.push({ path:'/iservice/ServicePreview'})
       },
       jumpToNodeManager(){
-        console.log("asdfds")
         this.$router.push({ path:'/iservice/NodeManager'})
       },
       fetchTask() {
@@ -215,10 +217,7 @@
               type: 'pie',
               radius: '55%',
               center: ['50%', '50%'],
-              data: [
-                {value: 60, name: '未用节点数'},
-                {value: 40, name: '已用节点数'},
-              ],
+              data:this.parData,
               itemStyle: {
                 emphasis: {
                   shadowBlur: 10,
@@ -317,10 +316,42 @@
       }
       getAction(this.url.queryAllNodes).then((res) => {
         if (res.success) {
-          this.nodeNumber = (res.result.length)
+          this.allNodeCount = (res.result.length)
+          var count = 0
+          console.log(this.allNodeCount)
+          if(res.result.length > 0){
+              // for (let index = 0; index < res.result.length; index++) {
+              //   count ++
+              //   const element = res.result[index];
+                this.fetchNodeDetail(0,res.result.length,res.result);
+              // }
+          }
         }
+        
       })
-    }
+      
+    },
+  
+    // 查询节点明细信息统计使用的节点数
+      fetchNodeDetail(i,count,data){
+        console.log(i,count,data)
+        var nodeId = data[i]
+        queryNodeDetail({nodeId:nodeId}).then((res)=>{
+          if(res.success){
+            var arr = Object.keys(res.result.running_services)
+            if(arr.length > 0){
+              this.usedNodeCount++
+            }
+            if(i+1<count){
+              this.fetchNodeDetail(i+1,count,data);
+            }else{
+                this.parData.push({value:this.allNodeCount-this.usedNodeCount,name:"未用节点数"},{value:this.usedNodeCount,name:"已用节点数"})
+                console.log(this.parData)
+                this.fetchTask() 
+            }
+          }
+        })
+      },
     }
   }
 </script>
