@@ -119,9 +119,11 @@ public class ServiceInfoController {
         Result<ServiceInfo> result = new Result<>();
         try {
             setDesignUser(serviceInfo);
-            // 新增服务时调用exe生成生成服务调用代码框架和服务实现代码文件
-            serviceInfo = serviceInfoService.callExe(serviceInfo);
-//            ServiceMockDataUtil.callExe(serviceInfo);
+            // 新增服务提交时调用exe生成生成服务调用代码框架和服务实现代码文件
+            if ("1".equals(serviceInfo.getDesignerStatus())) {
+                serviceInfo = serviceInfoService.callExe(serviceInfo);
+//                ServiceMockDataUtil.callExe(serviceInfo);
+            }
             serviceInfoService.save(serviceInfo);
             result.success("操作成功！");
         } catch (Exception e) {
@@ -140,13 +142,18 @@ public class ServiceInfoController {
     @AutoLog(value = "服务基本信息-编辑服务相关信息")
     @ApiOperation(value = "服务基本信息-编辑服务相关信息")
     @PutMapping(value = "/edit-register")
-    public Result<ServiceInfo> editRegister(@RequestBody ServiceInfo serviceInfo) {
+    public Result<ServiceInfo> editRegister(@RequestBody ServiceInfo serviceInfo) throws IOException, InterruptedException {
         Result<ServiceInfo> result = new Result<>();
         ServiceInfo serviceInfoEntity = serviceInfoService.getById(serviceInfo.getId());
         if (serviceInfoEntity == null) {
             result.error500("未找到对应实体");
         } else {
             setDesignUser(serviceInfo);
+            // 新增服务提交时调用exe生成生成服务调用代码框架和服务实现代码文件
+            if ("1".equals(serviceInfo.getDesignerStatus())) {
+                serviceInfo = serviceInfoService.callExe(serviceInfo);
+//                ServiceMockDataUtil.callExe(serviceInfo);
+            }
             boolean ok = serviceInfoService.updateById(serviceInfo);
             if (ok) {
                 result.success("修改成功!");
