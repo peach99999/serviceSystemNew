@@ -43,30 +43,30 @@ public class ServiceInfoServiceImpl extends ServiceImpl<ServiceInfoMapper, Servi
     @Override
     public ServiceInfo callExe(ServiceInfo serviceInfo) throws InterruptedException, IOException {
         String bizPath = "files";
-        String sdlPrefix = "--sdl ";
-        String outDirPrefix = "--out-dir ";
+        String sdlPrefix = "--sdl";
+        String outDirPrefix = "--out-dir";
         // 文件保存路径名
         String nowDay = new SimpleDateFormat("SDF_YYYYMMDD").format(new Date());
         // 接口描述文件sdl文件路径
-        String sdlPath = sdlPrefix + uploadPath + File.separator + serviceInfo.getInterfaceDescriptionFilePath();
+        String sdlPath = uploadPath + File.separator + serviceInfo.getInterfaceDescriptionFilePath();
         // 调用exe生成生成服务调用代码框架和服务实现代码文件路径
-        String exeCreatPath = outDirPrefix + uploadPath + File.separator + bizPath + File.separator + nowDay;
+        String exeCreatPath = uploadPath + File.separator + bizPath + File.separator + nowDay;
         // db保存路径
         String dbpath = bizPath + File.separator + nowDay + File.separator;
         Process process = null;
         Runtime runtime = Runtime.getRuntime();
-        String[] cmds = {exePath, sdlPath, exeCreatPath};
-        System.out.println("ServiceFrameworkGenerator：exePath:" +exePath);
-        log.info("ServiceFrameworkGenerator：exePath:" +exePath);
-        System.out.println("ServiceFrameworkGenerator：参数:" +"sdlPath:"+sdlPath);
-        log.info("ServiceFrameworkGenerator：参数:" +"sdlPath:"+sdlPath);
-        System.out.println("ServiceFrameworkGenerator：参数:" +"exeCreatPath:"+exeCreatPath);
-        log.info("ServiceFrameworkGenerator：参数:" +"exeCreatPath:"+exeCreatPath);
+        String[] cmds = {exePath, sdlPrefix, sdlPath, outDirPrefix, exeCreatPath};
+        System.out.println("ServiceFrameworkGenerator：exePath:" + exePath);
+        log.info("ServiceFrameworkGenerator：exePath:" + exePath);
+        System.out.println("ServiceFrameworkGenerator：参数:" + "sdlPath:" + sdlPath);
+        log.info("ServiceFrameworkGenerator：参数:" + "sdlPath:" + sdlPath);
+        System.out.println("ServiceFrameworkGenerator：参数:" + "exeCreatPath:" + exeCreatPath);
+        log.info("ServiceFrameworkGenerator：参数:" + "exeCreatPath:" + exeCreatPath);
         process = runtime.exec(cmds);
         System.out.println(process.isAlive());
         int exitCode = process.waitFor();
-        System.out.println("ServiceFrameworkGenerator：返回:" +"exitCode:"+exitCode);
-        log.info("ServiceFrameworkGenerator：返回:" +"exitCode:"+exitCode);
+        System.out.println("ServiceFrameworkGenerator：返回:" + "exitCode:" + exitCode);
+        log.info("ServiceFrameworkGenerator：返回:" + "exitCode:" + exitCode);
         if (dbpath.contains(CoreConstant.DOUBLE_SLASH)) {
             dbpath = dbpath.replace("\\", "/");
         }
