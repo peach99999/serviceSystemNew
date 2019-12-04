@@ -107,7 +107,7 @@
                 </a-col>
                 <a-col :span="14" :offset="2">
                   <span>
-                    <a-progress :percent= individualNodeStatisticsInfo.cpuAvailable status="active" />
+                    <a-progress :percent= 100-individualNodeStatisticsInfo.cpuAvailable status="active" />
                   </span>
                 </a-col>
               </a-row>
@@ -172,17 +172,17 @@
             </a-table-column>
             <a-table-column min-width="140px" title="CPU占用率" align = "center">
               <template slot-scope="scope">
-                <a-progress status="active" :percent=scope.cpuUsed :showInfo="false" />
+                <a-progress status="active" :percent=scope.cpuUsed :showInfo="true" />
               </template>
             </a-table-column>
             <a-table-column min-width="140px" title="内存使用率" align = "center">
               <template slot-scope="scope">
-                <a-progress status="active" :percent=scope.memoryUsed :showInfo="false" />
+                <a-progress status="active" :percent=scope.memoryUsed :showInfo="true" />
               </template>
             </a-table-column>
             <a-table-column min-width="140px" title="磁盘使用率" align = "center">
               <template slot-scope="scope">
-                <a-progress status="active" :percent=scope.diskUsed :showInfo="false" />
+                <a-progress status="active" :percent=scope.diskUsed :showInfo="true" />
               </template>
             </a-table-column>
             <a-table-column min-width="140px" title="调用次数" align = "center">

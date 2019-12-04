@@ -166,7 +166,7 @@
             </a-table-column>
             <a-table-column min-width="140px" title="CPU占用率">
               <template slot-scope="scope">
-                <a-progress status="active" :percent=scope.cpuAvailable :showInfo="true" />
+                <a-progress status="active" :percent=100-scope.cpuAvailable :showInfo="true" />
               </template>
             </a-table-column>
             <a-table-column min-width="140px" title="内存使用率">
