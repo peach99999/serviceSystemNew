@@ -40,12 +40,12 @@
         </a-table-column>
         <!-- <a-table-column min-width="140px" align = "center" title="内存占用率">
           <template slot-scope="scope">
-            <a-progress status="active" :percent=scope.cpuCount :showInfo="true" />
+            <a-progress status="active" :percent=scope.memorySize :showInfo="true" />
           </template>
         </a-table-column> -->
         <a-table-column min-width="140px" align = "center" title="CPU占用率">
           <template slot-scope="scope">
-            <a-progress status="active" :percent=scope.memorySize :showInfo="true" />
+            <a-progress status="active" :percent=100-scope.cpuAvailable :showInfo="true" />
           </template>
         </a-table-column>
       </a-table>
@@ -55,7 +55,7 @@
 <script>
   import ATableColumn from "ant-design-vue/es/table/Column";
   import ARow from "ant-design-vue/es/grid/Row";
-  import {queryAllNodes,queryNodeDetail} from '@/api/api';
+  import {queryAllNodes,queryNodeDetail,individualNodeStatistics} from '@/api/api';
   import NodeManagerModal from './modules/NodeManagerModal'
 
   export default {
@@ -135,11 +135,12 @@
             this.serviceDetatl = res.result;
             // 查询节点明细信息
             if(res.result.length > 0){
-              for (let index = 0; index < res.result.length; index++) {
-                const element = res.result[index];
-                this.fetchNodeDetail(element);
-              }
-              this.loading = false
+              // for (let index = 0; index < res.result.length; index++) {
+              //   const element = res.result[index];
+                // this.fetchNodeDetail(element);
+                this.fetchNodeDetail(0,res.result.length,res.result)
+              // }
+              // this.loading = false
             }else{
               this.loading = false
             }
@@ -149,9 +150,13 @@
           }
         })
       },
+      queryIndividualNodeStatisticsInfo(nodeId){
+        
+      },
 
       // 查询节点明细信息
-      fetchNodeDetail(nodeId){
+      fetchNodeDetail(i,count,nodesArr){
+        var nodeId = nodesArr[i]
         queryNodeDetail({nodeId:nodeId}).then((res)=>{
           if(res.success){
             let temp = {}
@@ -176,7 +181,21 @@
               diskSize = diskSize + parseInt(res.result.disk_size[val])
             }
             temp.diskSize = diskSize
+
+            individualNodeStatistics({nodeId:nodeId}).then((res)=>{
+              if(res.success){
+                temp.cpuAvailable = parseInt(parseFloat(res.result.cpu_available)*100)
+                if(i+1<count){
+                   this.fetchNodeDetail(i+1,count,nodesArr)
+                }else{
+                  this.loading = false
+                }
+              }else {
+                this.$message.error(res.message);
+              }
+            })
             this.dataSource.push(temp)
+            console.log(this.dataSource)
           }else {
             this.$message.error(res.message);
           }
