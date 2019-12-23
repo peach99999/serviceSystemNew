@@ -1,9 +1,9 @@
 {
   "node_id":"11",
-  "service_id":"11",
+  "service_id":"111",
   "stats_time":"1574735538000",
   "cpu_used":"0.5",
-  "memory_used":"0.7",
+  "memory_used":"0.8",
   "disk_used":"0.6",
   "call_count":"20",
   "average_time_cost":"10"

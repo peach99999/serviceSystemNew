@@ -165,6 +165,11 @@
                 {{scope.serviceId}}
               </template>
             </a-table-column>
+            <a-table-column min-width="140px" align = "center" title="服务名称">
+              <template slot-scope="scope">
+                {{scope.serviceName}}
+              </template>
+            </a-table-column>
             <a-table-column min-width="140px" align = "center" title="上线时间">
               <template slot-scope="scope">
                 {{scope.deploySubmissionTime}}
@@ -282,6 +287,7 @@ import { formatUtcDate } from '@/utils/util'
           const serviceId = record.deployedServices[index];
           individualNodeServiceStatistics({nodeId:record.nodeId,serviceId:serviceId}).then((res)=>{
             if(res.success){
+              console.log(res.result)
               this.temp = {}
               this.temp.serviceId = res.result.service_id
               this.temp.cpuUsed = parseInt(parseFloat(res.result.cpu_used)*100)
@@ -294,6 +300,7 @@ import { formatUtcDate } from '@/utils/util'
               getAction(this.url.serviceDetail, {serviceId:res.result.service_id}).then((res) => {
                 if (res.success) {
                   this.temp.deploySubmissionTime = res.result.deploySubmissionTime
+                  this.temp.serviceName = res.result.name
                   this.data.push(this.temp)
                 }else{
                   this.data.push(this.temp)

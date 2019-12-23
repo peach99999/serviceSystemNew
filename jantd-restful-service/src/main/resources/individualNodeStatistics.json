@@ -4,7 +4,7 @@
   "host_up_time":"20191126",
   "agent_up_time":"20191126",
   "memory_avalable":"0.7",
-  "cpu_available":"0.7",
+  "cpu_available":"0.5",
   "disk_available":{
     "C":"80",
     "D":"60"
