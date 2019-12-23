@@ -23,11 +23,11 @@
             {{scope.hostName}}
           </template>
         </a-table-column>
-        <a-table-column min-width="140px" align = "center" title="IP">
+        <!-- <a-table-column min-width="140px" align = "center" title="IP">
           <template slot-scope="scope">
             {{scope.ip}}
           </template>
-        </a-table-column>
+        </a-table-column> -->
         <a-table-column min-width="140px" align = "center" title="部署服务数">
           <template slot-scope="scope">
             {{scope.deployedServiceCount}}
@@ -38,11 +38,11 @@
             {{scope.runningServices}}
           </template>
         </a-table-column>
-        <a-table-column min-width="140px" align = "center" title="内存占用率">
+        <!-- <a-table-column min-width="140px" align = "center" title="内存占用率">
           <template slot-scope="scope">
             <a-progress status="active" :percent=scope.cpuCount :showInfo="true" />
           </template>
-        </a-table-column>
+        </a-table-column> -->
         <a-table-column min-width="140px" align = "center" title="CPU占用率">
           <template slot-scope="scope">
             <a-progress status="active" :percent=scope.memorySize :showInfo="true" />

@@ -149,11 +149,11 @@
                 {{scope.hostName}}
               </template>
             </a-table-column>
-            <a-table-column min-width="140px" title="IP">
+            <!-- <a-table-column min-width="140px" title="IP">
               <template slot-scope="scope">
                 {{scope.ip}}
               </template>
-            </a-table-column>
+            </a-table-column> -->
             <a-table-column min-width="140px" align = "center" title="本服务部署数">
               <template slot-scope="scope">
                 {{scope.deployedServices}}
@@ -169,16 +169,16 @@
                 <a-progress status="active" :percent=100-scope.cpuAvailable :showInfo="true" />
               </template>
             </a-table-column>
-            <a-table-column min-width="140px" title="内存使用率">
+            <!-- <a-table-column min-width="140px" title="内存使用率">
               <template slot-scope="scope">
                 <a-progress status="active" :percent=50 :showInfo="true" />
               </template>
-            </a-table-column>
-            <a-table-column min-width="140px" title="磁盘使用率">
+            </a-table-column> -->
+            <!-- <a-table-column min-width="140px" title="磁盘使用率">
               <template slot-scope="scope">
                 <a-progress status="active" :percent=50 :showInfo="true" />
               </template>
-            </a-table-column>
+            </a-table-column> -->
           </a-table>
         </a-col>
       </a-row>
@@ -248,20 +248,20 @@
                 </a-col>
               </a-row>
               <a-row type="flex" justify="start" style="margin-top: 15px">
-                <a-col :span="4">
+                <!-- <a-col :span="4">
                   <span class="span-left">{{"内存占用率:"}}</span>
                 </a-col>
                 <a-col :span="4">
                   <span>
                     <a-progress :percent=parseInt(serviceStatistics.total_memory_used*100) status="active"/>
                   </span>
-                </a-col>
-                <a-col :span="4" :offset="4">
+                </a-col> -->
+                <!-- <a-col :span="4" :offset="4">
                   <span class="span-left">{{"平均耗时:"}}</span>
                 </a-col>
                 <a-col :span="8">
                   <span class="span-margin">{{serviceStatistics.average_time_cost}}ms</span>
-                </a-col>
+                </a-col> -->
               </a-row>
             </a-card>
           </template>
@@ -301,7 +301,7 @@
       // 状态转换
       transferStatus(status){
         if(status == 'running'){
-          return '运行中'
+          return '正在运行'
         }else if(status == 'not_deployed'){
           return '未部署'
         }else if(status == 'deploying'){

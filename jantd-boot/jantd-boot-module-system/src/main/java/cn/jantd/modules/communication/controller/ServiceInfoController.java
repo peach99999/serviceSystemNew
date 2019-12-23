@@ -121,6 +121,8 @@ public class ServiceInfoController {
             setDesignUser(serviceInfo);
             // 新增服务提交时调用exe生成生成服务调用代码框架和服务实现代码文件
             if ("1".equals(serviceInfo.getDesignerStatus())) {
+                serviceInfo.setDeveloperStatus("0");
+                serviceInfo.setDeployStatus("0");
                 serviceInfo = serviceInfoService.callExe(serviceInfo);
 //                ServiceMockDataUtil.callExe(serviceInfo);
             }
@@ -151,6 +153,8 @@ public class ServiceInfoController {
             setDesignUser(serviceInfo);
             // 新增服务提交时调用exe生成生成服务调用代码框架和服务实现代码文件
             if ("1".equals(serviceInfo.getDesignerStatus())) {
+                serviceInfo.setDeveloperStatus("0");
+                serviceInfo.setDeployStatus("0");
                 serviceInfo = serviceInfoService.callExe(serviceInfo);
 //                ServiceMockDataUtil.callExe(serviceInfo);
             }

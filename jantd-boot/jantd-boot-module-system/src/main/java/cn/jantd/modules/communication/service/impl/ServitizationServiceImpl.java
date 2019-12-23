@@ -12,6 +12,7 @@ import cn.jantd.modules.communication.service.IServitizationService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -179,6 +180,39 @@ public class ServitizationServiceImpl implements IServitizationService {
         result.setResult(serviceDetailDTO);
         result.success(OPERATION_SUCCESS);
         return result;
+    }
+
+    public String getServiceStatus(String serviceId){
+        // 查询所有服接口url
+        String url = communicationProperties.getGetServiceDetail();
+        log.info("查询单个服务，接口名[{}]:", url);
+        ResponseEntity<String> serviceDetailResult = restTemplate.getForEntity(url, String.class, serviceId);
+        // 若返回HTTP状态码不等于200,则抛出业务异常,返回错误信息
+        if (!HttpStatus.OK.equals(serviceDetailResult.getStatusCode())) {
+            ErrorDTO errorDTO = JSON.parseObject(serviceDetailResult.getBody(), ErrorDTO.class);
+            return "";
+        }
+        ServiceDetailDTO serviceDetailDTO = JSON.parseObject(serviceDetailResult.getBody(), ServiceDetailDTO.class);
+        /**
+         * 服务状态定义：
+         * not_deployed：未部署
+         * deploying：部署中
+         * not_running：未运行
+         * starting：启动中
+         * running：正在运行
+         */
+        if("not_deployed".equals(serviceDetailDTO.getStatus())){
+            return "未部署";
+        }else if("deploying".equals(serviceDetailDTO.getStatus())){
+            return "部署中";
+        }else if("not_running".equals(serviceDetailDTO.getStatus())){
+            return "未运行";
+        }else if("starting".equals(serviceDetailDTO.getStatus())){
+            return "启动中";
+        }else if("running".equals(serviceDetailDTO.getStatus())){
+            return "正在运行";
+        }
+        return "" ;
     }
 
     /**
@@ -607,7 +641,11 @@ public class ServitizationServiceImpl implements IServitizationService {
             return result;
         }
         IndividualNodeServiceStatisticsDTO individualNodeServiceStatisticsDTO = JSON.parseObject(individualNodeServiceStatisticsResult.getBody(), IndividualNodeServiceStatisticsDTO.class);
-
+        //lwq 添加服务状态
+        if(!StringUtils.isEmpty(individualNodeServiceStatisticsDTO.getService_id())){
+            //设置服务状态
+            individualNodeServiceStatisticsDTO.setStatus(getServiceStatus(individualNodeServiceStatisticsDTO.getService_id()));
+        }
         result.setResult(individualNodeServiceStatisticsDTO);
         result.success(OPERATION_SUCCESS);
         return result;

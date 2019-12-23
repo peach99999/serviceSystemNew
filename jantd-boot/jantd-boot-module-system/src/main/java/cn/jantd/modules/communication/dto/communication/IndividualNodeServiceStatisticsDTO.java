@@ -55,5 +55,9 @@ public class IndividualNodeServiceStatisticsDTO{
      */
     private String average_time_cost;
 
+    /**
+     * 服务状态，接口中没有的字段
+     */
+    private  String status ;
 
 }

@@ -36,14 +36,14 @@
                   <span class="span-margin">{{nodeInfo.hostName}}</span>
                 </a-col>
               </a-row>
-              <a-row type="flex" justify="start" style="margin-top: 10px">
+              <!-- <a-row type="flex" justify="start" style="margin-top: 10px">
                 <a-col :span="7">
                   <span class="span-left">{{"IP:"}}</span>
                 </a-col>
                 <a-col :span="11">
                   <span class="span-margin">{{nodeInfo.ip}}</span>
                 </a-col>
-              </a-row>
+              </a-row> -->
               <a-row type="flex" justify="start" style="margin-top: 10px">
                 <a-col :span="7">
                   <span class="span-left">{{"CPU数:"}}</span>
@@ -52,38 +52,38 @@
                   <span class="span-margin">{{nodeInfo.cpuCount}}</span>
                 </a-col>
               </a-row>
-              <a-row type="flex" justify="start" style="margin-top: 10px">
+              <!-- <a-row type="flex" justify="start" style="margin-top: 10px">
                 <a-col :span="7">
                   <span class="span-left">{{"线程数:"}}</span>
                 </a-col>
                 <a-col :span="11">
                   <span class="span-margin">{{nodeInfo.threadCount}}</span>
                 </a-col>
-              </a-row>
-              <a-row type="flex" justify="start" style="margin-top: 10px">
+              </a-row> -->
+              <!-- <a-row type="flex" justify="start" style="margin-top: 10px">
                 <a-col :span="7">
                   <span class="span-left">{{"CPU主频:"}}</span>
                 </a-col>
                 <a-col :span="11">
                   <span class="span-margin">{{nodeInfo.cpuFrequency}}MHz</span>
                 </a-col>
-              </a-row>
-              <a-row type="flex" justify="start" style="margin-top: 10px">
+              </a-row> -->
+              <!-- <a-row type="flex" justify="start" style="margin-top: 10px">
                 <a-col :span="7">
                   <span class="span-left">{{"内存:"}}</span>
                 </a-col>
                 <a-col :span="11">
                   <span class="span-margin">{{nodeInfo.memorySize}}</span>
                 </a-col>
-              </a-row>
-              <a-row type="flex" justify="start" style="margin-top: 10px">
+              </a-row> -->
+              <!-- <a-row type="flex" justify="start" style="margin-top: 10px">
                 <a-col :span="7">
                   <span class="span-left">{{"磁盘:"}}</span>
                 </a-col>
                 <a-col :span="11">
                   <span class="span-margin">{{nodeInfo.diskSize}}G</span>
                 </a-col>
-              </a-row>
+              </a-row> -->
             </a-card>
           </template>
         </a-col>
@@ -111,7 +111,7 @@
                   </span>
                 </a-col>
               </a-row>
-              <a-row type="flex" justify="start" style="margin-top: 10px">
+              <!-- <a-row type="flex" justify="start" style="margin-top: 10px">
                 <a-col :span="7">
                   <span class="span-left">{{"已用内存"}}</span>
                 </a-col>
@@ -120,8 +120,8 @@
                     <a-progress :percent=50 status="active"/>
                   </span>
                 </a-col>
-              </a-row>
-              <a-row type="flex" justify="start" style="margin-top: 10px">
+              </a-row> -->
+              <!-- <a-row type="flex" justify="start" style="margin-top: 10px">
                 <a-col :span="7">
                   <span class="span-left">{{"磁盘使用"}}</span>
                 </a-col>
@@ -130,7 +130,7 @@
                     <a-progress :percent=50 status="active" />
                   </span>
                 </a-col>
-              </a-row>
+              </a-row> -->
               <a-row type="flex" justify="start" style="margin-top: 10px">
                 <a-col :span="7">
                   <span class="span-left">{{"运行服务数:"}}</span>
@@ -175,26 +175,31 @@
                 <a-progress status="active" :percent=scope.cpuUsed :showInfo="true" />
               </template>
             </a-table-column>
-            <a-table-column min-width="140px" title="内存使用率" align = "center">
+            <!-- <a-table-column min-width="140px" title="内存使用率" align = "center">
               <template slot-scope="scope">
                 <a-progress status="active" :percent=scope.memoryUsed :showInfo="true" />
               </template>
-            </a-table-column>
-            <a-table-column min-width="140px" title="磁盘使用率" align = "center">
+            </a-table-column> -->
+            <!-- <a-table-column min-width="140px" title="磁盘使用率" align = "center">
               <template slot-scope="scope">
                 <a-progress status="active" :percent=scope.diskUsed :showInfo="true" />
               </template>
-            </a-table-column>
+            </a-table-column> -->
             <a-table-column min-width="140px" title="调用次数" align = "center">
               <template slot-scope="scope">
                 {{scope.callCount}}
               </template>
             </a-table-column>
-            <a-table-column min-width="140px" title="平均耗时(ms)" align = "center">
+             <a-table-column min-width="140px" title="服务状态" align = "center">
+              <template slot-scope="scope">
+                {{scope.status}}
+              </template>
+            </a-table-column>
+            <!-- <a-table-column min-width="140px" title="平均耗时(ms)" align = "center">
               <template slot-scope="scope">
                 {{scope.averageTimeCost}}
               </template>
-            </a-table-column>
+            </a-table-column> -->
           </a-table>
         </a-col>
       </a-row>
@@ -266,6 +271,7 @@ import { formatUtcDate } from '@/utils/util'
               this.temp.diskUsed = parseInt(parseFloat(res.result.disk_used)*100)
               this.temp.callCount = parseInt(res.result.call_count)
               this.temp.averageTimeCost =parseInt(res.result.average_time_cost)
+              this.temp.status = res.result.status
               // 查询部署时间
               getAction(this.url.serviceDetail, {serviceId:res.result.service_id}).then((res) => {
                 if (res.success) {
