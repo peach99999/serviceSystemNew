@@ -93,9 +93,15 @@
     },
     methods: {
       trick(){
-        this.timer =  setInterval(()=>{
+        const self = this;
+        const timer =  setInterval(()=>{
           this.getAllNodes();
         }, this.interval)
+        // 通过$once来监听定时器，在beforeDestroy钩子可以被清除。
+        self.$once('hook:beforeDestroy', () => { 
+            console.log("页面销毁")           
+            clearInterval(timer);                                    
+        })
       },
       handleTableChange(pagination){
         console.log(pagination)
@@ -209,15 +215,15 @@
         })
       },
     },
-    watch:{
-      $route(to,from){
-        if(from.path == '/iservice/NodeManager'){
-          console.log("页面销毁")
-          this.timer && clearInterval(this.timer)
-          this.timer = null
-        }
-      }
-    },
+    // watch:{
+    //   $route(to,from){
+    //     if(from.path == '/iservice/NodeManager'){
+    //       console.log("页面销毁")
+    //       this.timer && clearInterval(this.timer)
+    //       this.timer = null
+    //     }
+    //   }
+    // },
       
   }
 </script>
