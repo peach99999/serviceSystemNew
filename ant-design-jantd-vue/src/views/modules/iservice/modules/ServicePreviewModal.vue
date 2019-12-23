@@ -154,7 +154,7 @@
                 {{scope.ip}}
               </template>
             </a-table-column> -->
-            <a-table-column min-width="140px" align = "center" title="本服务部署数">
+            <a-table-column min-width="140px" align = "center" title="部署服务数">
               <template slot-scope="scope">
                 {{scope.deployedServices}}
               </template>
