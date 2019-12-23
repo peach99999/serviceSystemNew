@@ -109,11 +109,11 @@
             align:"center",
             dataIndex: 'hostName'
           },
-          {
-            title: 'IP',
-            align:"center",
-            dataIndex: 'ip'
-          },
+          // {
+          //   title: 'IP',
+          //   align:"center",
+          //   dataIndex: 'ip'
+          // },
           {
             title: '实例数',
             align:"center",
