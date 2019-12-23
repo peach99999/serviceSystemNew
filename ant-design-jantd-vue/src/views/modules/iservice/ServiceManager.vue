@@ -160,7 +160,7 @@
             that.$message.success("服务启用成功!");
           }else {
             that.loading = false
-            that.$message.error(res.message);
+            that.$message.error("服务启用失败!");
           }
         })
       },
@@ -183,7 +183,7 @@
             that.$message.success("服务停用成功!");
           }else {
             that.loading = false
-            that.$message.error(res.message);
+            that.$message.error("服务停用失败!");
           }
         })
       },
