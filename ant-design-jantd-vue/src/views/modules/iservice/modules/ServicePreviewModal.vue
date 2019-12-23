@@ -232,15 +232,15 @@
                 </a-col>
               </a-row>
               <a-row type="flex" justify="start" style="margin-top: 15px">
-                <a-col :span="4">
+                <!-- <a-col :span="4">
                   <span class="span-left">{{"CPU占用率:"}}</span>
                 </a-col>
                 <a-col :span="4">
                   <span >
                     <a-progress :percent=parseInt(serviceStatistics.total_cpu_used*100) status="active"/>
                   </span>
-                </a-col>
-                <a-col :span="4" :offset="4">
+                </a-col> -->
+                <a-col :span="4">
                   <span class="span-left">{{"调用次数:"}}</span>
                 </a-col>
                 <a-col :span="8">
@@ -290,6 +290,10 @@
         serviceDetatl:{},
         temp:{},
         statsTime:'',
+        getServiceStatisticsTimer: null,
+        getNodeListTimer: null,
+        serviceStatisticsInterval: 10000,
+        NodeListInterval: 60000,
       }
     },
        
@@ -297,7 +301,21 @@
     },
     computed:{
     },
+    
     methods: {
+      timerFetchServiceStatistics(){
+         this.getServiceStatisticsTimer =  setInterval(()=>{
+          this.getServiceStatistics(this.serviceInfo.serviceId);
+        }, this.serviceStatisticsInterval)
+      },
+
+      timerFetchNodelists(){
+        this.getNodeListTimer =  setInterval(()=>{
+          this.loading = true
+          this.nodeDataSource = []
+          this.queryServiceDetail(this.serviceInfo.serviceId);
+        }, this.NodeListInterval)
+      },
       // 状态转换
       transferStatus(status){
         if(status == 'running'){
@@ -336,6 +354,10 @@
         that.getServiceStatistics(that.serviceInfo.serviceId);
         // 查询单个单个服务信息获取部署节点获取节点列表
         that.queryServiceDetail(record.serviceId);
+        // 定时获取服务统计信息
+        that.timerFetchServiceStatistics()
+        //定时获取节点列表信息
+        that.timerFetchNodelists()
       },
       // 查询单个单个服务信息获取部署节点获取节点列表
       queryServiceDetail(serviceId){
@@ -439,11 +461,18 @@
         })
       },
       handleCancel () {
+        this.timerDestroy()
         this.close()
       },
       close () {
         this.$emit('close');
         this.visible = false;
+      },
+      timerDestroy() {
+        clearInterval(this.getServiceStatisticsTimer)
+        clearInterval(this.getNodeListTimer)
+        this.getServiceStatisticsTimer = null
+        this.getNodeListTimer = null
       },
     }
   }

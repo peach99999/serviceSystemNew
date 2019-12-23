@@ -222,7 +222,7 @@
       this.listServiceCategory();
     },
     watch: {
-      '$route': 'getParams'
+      // '$route': 'getParams'
     },
     created: function () {
     }

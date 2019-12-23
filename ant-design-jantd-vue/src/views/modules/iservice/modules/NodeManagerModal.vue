@@ -236,6 +236,10 @@ import { formatUtcDate } from '@/utils/util'
         url: {
           serviceDetail: '/serviceInfo/query-by-service-id',
         },
+        getIndividualNodeStatisticsTimer: null,
+        getServiceLsitsTimer: null,
+        individualNodeStatisticsInterval: 10000,
+        serviceListInterval: 60000,
       }
       
     },
@@ -247,6 +251,18 @@ import { formatUtcDate } from '@/utils/util'
     computed:{
     },
     methods: {
+      timerFetchIndividualNodeStatistics(){
+         this.getIndividualNodeStatisticsTimer =  setInterval(()=>{
+          this.queryIndividualNodeStatisticsInfo(this.nodeInfo.nodeId);
+        }, this.individualNodeStatisticsInterval)
+      },
+
+      timerServiceLsits(){
+        this.getServiceLsitsTimer =  setInterval(()=>{
+          this.data = []
+          this.queryIndividualNodeServiceStatistics(this.nodeInfo);
+        }, this.serviceListInterval)
+      },
       detail(record){
         let that = this;
         that.refresh();
@@ -257,6 +273,8 @@ import { formatUtcDate } from '@/utils/util'
         that.queryIndividualNodeStatisticsInfo(record.nodeId);
         // 获取服务列表详情
         that.queryIndividualNodeServiceStatistics(record)
+        that.timerFetchIndividualNodeStatistics()
+        that.timerServiceLsits()
       },
       queryIndividualNodeServiceStatistics(record){
         console.log(record)
@@ -317,11 +335,19 @@ import { formatUtcDate } from '@/utils/util'
         this.individualNodeStatisticsInfo = {}
       },
       handleCancel () {
+        this.timerDestroy()
         this.close()
       },
       close () {
         this.$emit('close');
         this.visible = false;
+      },
+      timerDestroy() {
+        console.log("页面销毁")
+        clearInterval(this.getServiceLsitsTimer)
+        clearInterval(this.getIndividualNodeStatisticsTimer)
+        this.getServiceLsitsTimer = null
+        this.getIndividualNodeStatisticsTimer = null
       },
     },
   }

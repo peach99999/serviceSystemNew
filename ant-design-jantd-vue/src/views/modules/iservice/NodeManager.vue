@@ -76,13 +76,15 @@
         //   total: 0
         // },
         queryParam: {},
-        currentPageData: []
+        currentPageData: [],
+        timer:null,
+        interval:60000,
       
       }
     },
  
     created() {
-      
+      this.trick();
     },
     mounted(){
       this.getAllNodes();
@@ -90,6 +92,11 @@
     computed:{
     },
     methods: {
+      trick(){
+        this.timer =  setInterval(()=>{
+          this.getAllNodes();
+        }, this.interval)
+      },
       handleTableChange(pagination){
         console.log(pagination)
         this.pagination = pagination
@@ -201,6 +208,15 @@
           }
         })
       },
+    },
+    watch:{
+      $route(to,from){
+        if(from.path == '/iservice/NodeManager'){
+          console.log("页面销毁")
+          this.timer && clearInterval(this.timer)
+          this.timer = null
+        }
+      }
     },
       
   }
