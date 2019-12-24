@@ -379,20 +379,19 @@
           //   const element = serviceDetatl.deployed_on_nodes[index];
           //   this.fetchNodeDetail(element);
           // }
-          this.fetchNodeDetail(0,serviceDetatl.deployed_on_nodes.length,serviceDetatl.deployed_on_nodes)
+          this.fetchNodeDetail(0,serviceDetatl.deployed_on_nodes.length,serviceDetatl.deployed_on_nodes,serviceDetatl.running_on_nodes)
           
         }else{
           this.loading = false
         }
         
       },
-      fetchNodeDetail(i,count,deployedNodes){
+      fetchNodeDetail(i,count,deployedNodes,runningOnNodes){
         var nodeId = deployedNodes[i]
         queryNodeDetail({nodeId:nodeId}).then((res)=>{
           if(res.success){
             var that = this
             that.temp = {}
-            let runserviceNumber = 0
             let diskSize = 0
             let diskCount = 0
             that.temp.nodeId = res.result.node_id
@@ -400,10 +399,15 @@
             that.temp.ip = res.result.ip
             that.temp.deployedServices = res.result.deployed_services.length
             
-            for (var val in res.result.running_services) {
-              runserviceNumber++
+            for (var key in runningOnNodes) {
+              console.log(key,runningOnNodes[key])
+              if(nodeId == key){
+                // 获取本服务运行数
+                that.temp.runningServices = runningOnNodes[key]
+                break
+              }
             }
-            that.temp.runningServices = runserviceNumber
+            
             // this.temp.cpuCount = parseInt(res.result.cpu_count)
             // this.temp.memorySize = parseInt(res.result.memory_size)
          
@@ -426,7 +430,7 @@
                 that.temp.diskAvailable = Math.round(diskSize/diskCount)
                 that.nodeDataSource.push(that.temp)
                 if(i+1<count){
-                   this.fetchNodeDetail(i+1,count,deployedNodes)
+                   this.fetchNodeDetail(i+1,count,deployedNodes,runningOnNodes)
                 }else{
                   this.loading = false
                 }
