@@ -17,12 +17,25 @@
 
     <a-layout style="margin-top: 10px">
       <a-layout-sider>
-        <a-tree
+        <!-- <a-tree
           showLine
           :treeData="treeData"
           @select="this.onSelect"
           >
-        </a-tree>
+        </a-tree> -->
+        <a-list itemLayout="horizontal" :dataSource="treeData">
+          <a-list-item slot="renderItem" slot-scope="item">
+            <a-list-item-meta >
+              <a slot="title" href="#" @click="handleClick(item.key)">{{item.title}}</a>
+              <img
+                slot="avatar"
+                width="50px" height="50px"
+                :src="getAvatarView(item.url)"
+                @click="handleClick(item.key)"
+              />
+            </a-list-item-meta>
+          </a-list-item>
+        </a-list>
       </a-layout-sider>
       <a-layout>
         <a-layout-content>
@@ -145,6 +158,13 @@
 
     },
     methods: {
+      handleClick(categoryId){
+        console.log(categoryId)
+        this.categoryId = categoryId;
+        this.queryParam.categoryId = categoryId
+        this.ipagination.current = 1
+        this.getModelList();
+      },
       getAvatarView(url){
         return this.url.imgerver +"/"+ url
       },
@@ -179,7 +199,7 @@
           if (res.success) {
             console.log(res.result)
             res.result.forEach(data => {
-              this.treeData.push({"title": data.name, "key": data.id})
+              this.treeData.push({"title":data.name,"key":data.id,"url":data.servicePhoto})
             })
           }
         })
@@ -212,7 +232,7 @@
 
       },
       addService(){
-        if(this.categoryId == ""  ||  this.categoryId  == undefined){
+        if(this.queryParam.categoryId == ""  ||  this.queryParam.categoryId  == undefined){
           this.$message.warning('请选择服务分类！');
           return;
         }
@@ -234,6 +254,10 @@
 
 </script>
 <style>
+  .ant-list-item-meta-content {
+    display: flex;
+    align-self: center;
+  }
   #components-layout-demo-basic {
     text-align: center;
     background-color: #fff;
