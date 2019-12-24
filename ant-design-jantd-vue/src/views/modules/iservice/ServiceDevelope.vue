@@ -38,8 +38,11 @@
                     <a href="#" @click="developerService(service)" style="font-weight: bold;font-size: 16px; color:rgba(0, 0, 0, 0.65)" >
                        {{service.name}}
                     </a>
-                    <span style="font-size: 10px;color: #cf1322">
-                      {{service.developerStatus_dictText}}
+                    <span v-if="service.serviceStates" style="font-size: 10px;color: #cf1322">
+                      {{service.serviceStates}}
+                    </span>
+                    <span v-else style="font-size: 10px;color: #cf1322">
+                      {{service.designerStatus_dictText}}
                     </span>
                   </a-col>
                   <a-col :span="2" :offset="4">

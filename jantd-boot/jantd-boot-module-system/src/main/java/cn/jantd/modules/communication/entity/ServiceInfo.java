@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.beans.Transient;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -322,6 +323,12 @@ public class ServiceInfo implements Serializable {
      */
     @ApiModelProperty(value = "服务实现代码框架路径")
     private String serviceImplementFramePath;
+
+    /**
+     * 服务状态
+     */
+    @TableField(exist = false)
+    private String serviceStates;
 
 
 

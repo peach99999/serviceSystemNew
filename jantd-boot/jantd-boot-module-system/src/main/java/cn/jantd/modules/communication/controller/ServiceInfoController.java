@@ -9,9 +9,11 @@ import cn.jantd.core.poi.excel.entity.ImportParams;
 import cn.jantd.core.poi.view.JantdEntityExcelViewBase;
 import cn.jantd.core.system.query.QueryGenerator;
 import cn.jantd.core.system.vo.LoginUser;
+import cn.jantd.modules.communication.dto.communication.ServiceDetailDTO;
 import cn.jantd.modules.communication.entity.ServiceInfo;
 import cn.jantd.modules.communication.param.SubmitRegisterParam;
 import cn.jantd.modules.communication.service.IServiceInfoService;
+import cn.jantd.modules.communication.service.IServitizationService;
 import cn.jantd.modules.communication.util.ServiceMockDataUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -22,6 +24,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,10 +34,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Description: 服务基本信息
@@ -48,6 +48,9 @@ import java.util.Map;
 public class ServiceInfoController {
     @Autowired
     private IServiceInfoService serviceInfoService;
+
+    @Autowired
+    private IServitizationService servitizationService;
 
     /**
      * 分页列表查询
@@ -69,6 +72,8 @@ public class ServiceInfoController {
         QueryWrapper<ServiceInfo> queryWrapper = QueryGenerator.initQueryWrapper(serviceInfo, req.getParameterMap());
         Page<ServiceInfo> page = new Page<ServiceInfo>(pageNo, pageSize);
         IPage<ServiceInfo> pageList = serviceInfoService.page(page, queryWrapper);
+        // 查询服务状态
+        getServiceStates(pageList);
         result.setSuccess(true);
         result.setResult(pageList);
         return result;
@@ -93,17 +98,36 @@ public class ServiceInfoController {
         Result<IPage<ServiceInfo>> result = new Result<>();
         QueryWrapper<ServiceInfo> queryWrapper = QueryGenerator.initQueryWrapper(serviceInfo, req.getParameterMap());
         LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        if (queryWrapper.getExpression().getNormal().size() > 0){
+        if (queryWrapper.getExpression().getNormal().size() > 0) {
             queryWrapper.and(wrapper -> wrapper.eq("developer", user.getRealname()).or().isNull("developer"));
-        }else {
+        } else {
             queryWrapper.eq("developer", user.getRealname()).or().isNull("developer");
         }
 
         Page<ServiceInfo> page = new Page<ServiceInfo>(pageNo, pageSize);
         IPage<ServiceInfo> pageList = serviceInfoService.page(page, queryWrapper);
+        // 查询服务状态
+        getServiceStates(pageList);
+
         result.setSuccess(true);
         result.setResult(pageList);
         return result;
+    }
+
+    /**
+     * 查询服务状态
+     *
+     * @param pageList
+     */
+    private void getServiceStates(IPage<ServiceInfo> pageList) {
+        // 查询服务状态
+        pageList.getRecords().forEach(serviceInfo -> {
+            if (!ObjectUtils.isEmpty(serviceInfo.getServiceId())) {
+                // 查询服务状态
+                Result<ServiceDetailDTO> serviceDetailResult = servitizationService.getServiceDetail(serviceInfo.getServiceId());
+                serviceInfo.setServiceStates(serviceDetailResult.getResult().getStatesName());
+            }
+        });
     }
 
     /**
@@ -182,7 +206,7 @@ public class ServiceInfoController {
         if (serviceInfoEntity == null) {
             result.error500("未找到对应实体");
         } else {
-            if(serviceInfo.getMinInstance() != null){
+            if (serviceInfo.getMinInstance() != null) {
                 setDeveloperUser(serviceInfo);
                 // 判断是否被他人提交
             }
@@ -197,7 +221,6 @@ public class ServiceInfoController {
 
         return result;
     }
-
 
 
     /**
@@ -232,7 +255,7 @@ public class ServiceInfoController {
      */
     private void setDeployUser(ServiceInfo serviceInfo) {
         LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        if(serviceInfo.getDeploySubmissionTime() == null){
+        if (serviceInfo.getDeploySubmissionTime() == null) {
             serviceInfo.setDeploySubmissionTime(new Date());
         }
         serviceInfo.setDeploySubmissionUser(user.getRealname());
@@ -246,7 +269,7 @@ public class ServiceInfoController {
      */
     private void setDeveloperUser(ServiceInfo serviceInfo) {
         LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        if(serviceInfo.getDeveloperSubmissionTime() == null){
+        if (serviceInfo.getDeveloperSubmissionTime() == null) {
             serviceInfo.setDeveloperSubmissionTime(new Date());
         }
         serviceInfo.setDeveloperSubmissionUser(user.getRealname());
@@ -260,7 +283,7 @@ public class ServiceInfoController {
      */
     private void setDesignUser(@RequestBody ServiceInfo serviceInfo) {
         LoginUser user = (LoginUser) SecurityUtils.getSubject().getPrincipal();
-        if(serviceInfo.getDesignSubmissionTime() == null){
+        if (serviceInfo.getDesignSubmissionTime() == null) {
             serviceInfo.setDesignSubmissionTime(new Date());
         }
         serviceInfo.setDesignSubmissionUser(user.getRealname());
@@ -418,7 +441,7 @@ public class ServiceInfoController {
     }
 
     @GetMapping(value = "/get-service-count")
-    public Result<Object> getServiceCount(){
+    public Result<Object> getServiceCount() {
         Result result = new Result();
         int count = serviceInfoService.count();
         result.setResult(count);

@@ -177,6 +177,25 @@ public class ServitizationServiceImpl implements IServitizationService {
         }
 
         ServiceDetailDTO serviceDetailDTO = JSON.parseObject(serviceDetailResult.getBody(), ServiceDetailDTO.class);
+        /**
+         * 服务状态定义：
+         * not_deployed：未部署
+         * deploying：部署中
+         * not_running：未运行
+         * starting：启动中
+         * running：正在运行
+         */
+        if("not_deployed".equals(serviceDetailDTO.getStatus())){
+            serviceDetailDTO.setStatesName("未部署");
+        }else if("deploying".equals(serviceDetailDTO.getStatus())){
+            serviceDetailDTO.setStatesName("部署中");
+        }else if("not_running".equals(serviceDetailDTO.getStatus())){
+            serviceDetailDTO.setStatesName("未运行");
+        }else if("starting".equals(serviceDetailDTO.getStatus())){
+            serviceDetailDTO.setStatesName("启动中");
+        }else if("running".equals(serviceDetailDTO.getStatus())){
+            serviceDetailDTO.setStatesName("正在运行");
+        }
         result.setResult(serviceDetailDTO);
         result.success(OPERATION_SUCCESS);
         return result;

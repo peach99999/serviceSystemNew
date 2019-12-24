@@ -56,4 +56,9 @@ public class ServiceDetailDTO {
      */
     private JSONObject running_on_nodes;
 
+    /**
+     * 服务状态名称
+     */
+    private String statesName;
+
 }

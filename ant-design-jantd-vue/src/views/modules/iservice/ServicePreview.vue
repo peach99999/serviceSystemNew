@@ -38,12 +38,10 @@
                     <a href="#" @click="showServiceDetail(service)" style="font-weight: bold;font-size: 16px; color:rgba(0, 0, 0, 0.65)" >
                        {{service.name}}
                     </a>
+                    <span style="font-size: 10px;color: #cf1322">
+                      {{service.serviceStates}}
+                    </span>
                   </a-col>
-                  <!--<a-col :span="2">-->
-                    <!--<span style="font-size: 12px">-->
-                       <!--{{scope.row.designerStatus}}-->
-                    <!--</span>-->
-                  <!--</a-col>-->
                   <a-col :span="2" :offset="12">
                     <a-icon type="copy"/>
                     <a @click="uploadFile(service.userManualFilePath)" style="color:rgba(0, 0, 0, 0.65)">文档</a>
