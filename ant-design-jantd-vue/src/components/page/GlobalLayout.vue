@@ -74,7 +74,7 @@
       </a-layout-footer>
     </a-layout>
 
-    <setting-drawer></setting-drawer>
+    <!-- <setting-drawer></setting-drawer> -->
   </a-layout>
 </template>
 
