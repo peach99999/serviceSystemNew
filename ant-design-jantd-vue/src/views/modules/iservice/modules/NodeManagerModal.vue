@@ -287,26 +287,27 @@ import { formatUtcDate } from '@/utils/util'
           const serviceId = record.deployedServices[index];
           individualNodeServiceStatistics({nodeId:record.nodeId,serviceId:serviceId}).then((res)=>{
             if(res.success){
-              console.log(res.result)
-              this.temp = {}
-              this.temp.serviceId = res.result.service_id
-              this.temp.cpuUsed = parseInt(parseFloat(res.result.cpu_used)*100)
-              this.temp.memoryUsed = parseInt(parseFloat(res.result.memory_used)*100)
-              this.temp.diskUsed = parseInt(parseFloat(res.result.disk_used)*100)
-              this.temp.callCount = parseInt(res.result.call_count)
-              this.temp.averageTimeCost =parseInt(res.result.average_time_cost)
-              this.temp.status = res.result.status
+              // console.log(res.result)
+              let individualData = {};
+              individualData.serviceId = res.result.service_id
+
+              individualData.cpuUsed = parseInt(parseFloat(res.result.cpu_used)*100)
+              individualData.memoryUsed = parseInt(parseFloat(res.result.memory_used)*100)
+              individualData.diskUsed = parseInt(parseFloat(res.result.disk_used)*100)
+              individualData.callCount = parseInt(res.result.call_count)
+              individualData.averageTimeCost =parseInt(res.result.average_time_cost)
+              individualData.status = res.result.status
               // 查询部署时间
               getAction(this.url.serviceDetail, {serviceId:res.result.service_id}).then((res) => {
                 if (res.success) {
-                  this.temp.deploySubmissionTime = res.result.deploySubmissionTime
-                  this.temp.serviceName = res.result.name
-                  this.data.push(this.temp)
+                  individualData.deploySubmissionTime = res.result.deploySubmissionTime
+                  individualData.serviceName = res.result.name
+                  this.data.push(individualData)
                 }else{
-                  this.data.push(this.temp)
+                  this.data.push(individualData)
                 }
               })
-              console.log(this.data)
+             console.log(this.data)
             }else {
               this.$message.error(res.message);
             }
