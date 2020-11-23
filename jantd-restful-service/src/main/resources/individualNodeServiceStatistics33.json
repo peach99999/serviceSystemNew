@@ -1,0 +1,10 @@
+{
+  "node_id":"11adfwr2515",
+  "service_id":"33",
+  "stats_time":"1574735538000",
+  "cpu_used":"0.5",
+  "memory_used":"0.8",
+  "disk_used":"0.6",
+  "call_count":"20",
+  "average_time_cost":"10"
+}

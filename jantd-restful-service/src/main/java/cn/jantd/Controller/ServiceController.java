@@ -131,7 +131,7 @@ public class ServiceController {
         if (node_id == null) {
             return ServiceMockDataUtil.individualServiceStatistics();
         } else {
-            return ServiceMockDataUtil.individualNodeServiceStatistics();
+            return ServiceMockDataUtil.individualNodeServiceStatistics(serviceId);
         }
     }
 

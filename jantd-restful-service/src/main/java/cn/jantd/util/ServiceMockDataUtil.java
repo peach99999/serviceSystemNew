@@ -1,10 +1,7 @@
 package cn.jantd.util;
 
-import cn.jantd.Result;
-import cn.jantd.communication.*;
 import cn.jantd.entity.ServiceInfo;
 import cn.jantd.param.SubmitRegisterParam;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -197,9 +194,10 @@ public class ServiceMockDataUtil {
         return readJsonFile(path);
     }
 
-    public static Object individualNodeServiceStatistics() {
+    public static Object individualNodeServiceStatistics(String serviceId) {
 //        Result result = new Result();
-        String path = ServiceMockDataUtil.class.getClassLoader().getResource("individualNodeServiceStatistics.json").getPath();
+        String mockName= "individualNodeServiceStatistics"+serviceId+".json";
+        String path = ServiceMockDataUtil.class.getClassLoader().getResource(mockName).getPath();
 //        IndividualNodeServiceStatisticsDTO individualNodeServiceStatisticsDTO = JSON.parseObject(readJsonFile(path), IndividualNodeServiceStatisticsDTO.class);
 //        result.setResult(individualNodeServiceStatisticsDTO);
         return readJsonFile(path);
