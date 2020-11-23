@@ -66,7 +66,7 @@
                     <a-button type="primary" style="margin-left:5px" @click="startService(service.serviceId)">启动</a-button>
                   </a-col>
                   <a-col :span="2">
-                    <a-button type="primary" style="margin-left:5px" @click="stopService(service.serviceId)">停用</a-button>
+                    <a-button type="primary" style="margin-left:5px" @click="stopService(service.serviceId)">停止</a-button>
                   </a-col>
 
                 </a-row>
@@ -179,10 +179,14 @@
         startService(params).then((res)=>{
           if(res.success){
             that.loading = false
-            that.$message.success("服务启用成功!");
+            that.$message.success("服务动成功!");
+            that.ipagination.current = 1
+            that.getModelList();
           }else {
             that.loading = false
-            that.$message.error("服务启用失败!");
+            that.$message.error("服务启动失败!");
+            that.ipagination.current = 1
+            that.getModelList();
           }
         })
       },
@@ -202,10 +206,14 @@
         stopService(params).then((res)=>{
           if(res.success){
             that.loading = false
-            that.$message.success("服务停用成功!");
+            that.$message.success("服务停止成功!");
+            that.ipagination.current = 1
+            that.getModelList();
           }else {
             that.loading = false
-            that.$message.error("服务停用失败!");
+            that.$message.error("服务停止失败!");
+            that.ipagination.current = 1
+            that.getModelList();
           }
         })
       },

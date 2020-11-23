@@ -216,11 +216,13 @@
         this.checkedDepartNameString = "";
         this.loadCheckedDeparts();
         this.visible = true;
+        if(record.categoryId){
+           this.categoryId = record.categoryId;
+        }
         this.$nextTick(() => {
           this.form.setFieldsValue(pick(this.model,'name','interfaceDescriptionFileName','designer','designerDepartment','contactInformation','description'))
           if(record.serviceLabel){
             this.serviceLabel = record.serviceLabel.split(',');
-            this.categoryId = record.categoryId;
           }
         });
       },
