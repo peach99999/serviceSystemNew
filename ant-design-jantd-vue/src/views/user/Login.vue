@@ -28,7 +28,7 @@
             </a-input>
           </a-form-item>
 
-          <a-row :gutter="0">
+          <!-- <a-row :gutter="0">
             <a-col :span="14">
               <a-form-item>
                 <a-input
@@ -45,7 +45,7 @@
             <a-col  :span="10">
               <j-graphic-code @success="generateCode" style="float: right"></j-graphic-code>
             </a-col>
-          </a-row>
+          </a-row> -->
         </a-tab-pane>
         <!-- <a-tab-pane key="tab2" tab="手机号登陆">
           <a-form-item>
@@ -91,6 +91,7 @@
 
       <a-form-item style="margin-top:24px">
         <a-button
+          id="singleLogin"
           size="large"
           type="primary"
           htmlType="submit"
@@ -202,8 +203,8 @@
           username:{rules: [{ required: true, message: '请输入用户名!',validator: 'click'}]},
           password:{rules: [{ required: true, message: '请输入密码!',validator: 'click'}]},
           mobile:{rules: [{validator:this.validateMobile}]},
-          captcha:{rule: [{ required: true, message: '请输入验证码!'}]},
-          inputCode:{rules: [{ required: true, message: '请输入验证码!'},{validator: this.validateInputCode}]}
+          captcha:{rule: [{ required: true, message: '请输入验证码!'}]}
+          // inputCode:{rules: [{ required: true, message: '请输入验证码!'},{validator: this.validateInputCode}]}
         },
         verifiedCode:"",
         inputCodeContent:"",
@@ -253,7 +254,8 @@
 
         // 使用账户密码登陆
         if (that.customActiveKey === 'tab1') {
-          that.form.validateFields([ 'username', 'password','inputCode' ], { force: true }, (err, values) => {
+           that.form.validateFields([ 'username', 'password'], { force: true }, (err, values) => {
+          // that.form.validateFields([ 'username', 'password','inputCode' ], { force: true }, (err, values) => {
             if (!err) {
               getAction("/sys/getEncryptedString",{}).then((res)=>{
                 loginParams.username = values.username

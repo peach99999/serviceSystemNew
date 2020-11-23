@@ -25,6 +25,10 @@ import cn.jantd.core.util.oConvertUtils;
  **/
 public class JwtUtil {
 
+
+	public static void main(String[] args) {
+
+	}
 	/**
 	 * 过期时间30分钟
 	 */
@@ -59,6 +63,20 @@ public class JwtUtil {
 		try {
 			DecodedJWT jwt = JWT.decode(token);
 			return jwt.getClaim("username").asString();
+		} catch (JWTDecodeException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * 获得token中的信息无需secret解密也能获得
+	 *
+	 * @return token中包含的单点登录用户名
+	 */
+	public static  String getSingleName(String token){
+		try {
+			DecodedJWT jwt = JWT.decode(token);
+			return jwt.getClaim("userName").asString();
 		} catch (JWTDecodeException e) {
 			return null;
 		}

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>服务综合管理系统</title>
+  <title>服务化与虚拟化管理系统</title>
   <link rel="icon" href="<%= BASE_URL %>logo.png">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.2.5/polyfill.js"></script>
   <style>
@@ -230,6 +230,27 @@
     // window._CONFIG['pdfDomainURL'] = 'http://192.168.3.52:8080/jantd-boot/sys/common/pdf/pdfPreviewIframe';
 
   </script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"></script>
+    <script>
+    $(function(){
+        var href = window.location.href ;
+    if(href.indexOf("token=")>0){
+      var tokenStart = href.indexOf("token=");
+      var tokenEnd = href.indexOf("#");
+      var token = href.substring(tokenStart,tokenEnd);
+      if(token){
+        alert(token);
+        setTimeout(function(){
+          $("#username").val("service");
+          $("#username")[0].dispatchEvent(new Event('input'));
+          $("#password").val(token);
+          $("#password")[0].dispatchEvent(new Event('input'));
+          $("#singleLogin")[0].dispatchEvent(new Event('click'));
+          },3000);
+      }
+     }   
+    });
+</script>
 </head>
 
 <body>
@@ -239,7 +260,7 @@
     <div id="loader"></div>
     <div class="loader-section section-left"></div>
     <div class="loader-section section-right"></div>
-    <div class="load_title">正在加载 服务综合管理系统,请耐心等待!
+    <div class="load_title">正在加载 服务化与虚拟化管理系统,请耐心等待!
 
     </div>
   </div>
